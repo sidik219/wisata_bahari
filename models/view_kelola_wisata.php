@@ -185,7 +185,7 @@ $rowPaket = $stmt->fetchAll();
                                             </td>
                                             <td>
                                                 <button class="modol-btn button-kelola-detail">
-                                                    <a href="detail_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Detail</a></button>
+                                                    <a href="detail_data_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Detail</a></button>
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">

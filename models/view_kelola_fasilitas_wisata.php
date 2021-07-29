@@ -197,8 +197,8 @@ function ageCalculator($dob){
                                                 <small style="color: rgba(0, 0, 0, 0.5);"><?=strftime('%A, %d %B %Y', $truedate).'<br> ('.ageCalculator($fasilitas->update_terakhir).' yang lalu)';?></small>
                                             </td>
                                             <td>
-                                                <button class="button-kelola-edit">Edit</button>
-                                                <button class="button-kelola-hapus">Hapus</button>
+                                                <button class="button-kelola-edit">
+                                                    <a href="edit_fasilitas?id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Edit</a></button>
                                             </td>
                                         </tr>
                                         <?php } ?>
