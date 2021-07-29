@@ -131,7 +131,7 @@ $rowLokasi = $stmt->fetchAll();
                 <div class="card-single">
                     <div>
                         <?php 
-                            foreach ($rowReservasi as $reservasi) {
+                        foreach ($rowReservasi as $reservasi) {
                         ?>
                         <h1><?=$reservasi->total_reservasi?></h1>
                         <?php } ?>
@@ -146,7 +146,7 @@ $rowLokasi = $stmt->fetchAll();
                 <div class="card-single">
                     <div>
                         <?php 
-                            foreach ($rowStatus1 as $status) {
+                        foreach ($rowStatus1 as $status) {
                         ?>
                             <?php
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
@@ -174,7 +174,7 @@ $rowLokasi = $stmt->fetchAll();
                 <div class="card-single">
                     <div>
                         <?php 
-                            foreach ($rowStatus2 as $status) {
+                        foreach ($rowStatus2 as $status) {
                         ?>
                             <?php
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
@@ -227,7 +227,7 @@ $rowLokasi = $stmt->fetchAll();
 
                         <div class="card-body">
                             <?php 
-                                foreach ($rowLokasi as $lokasi) {
+                            foreach ($rowLokasi as $lokasi) {
                             ?>
                             <div class="list-lokasi">
                                 <div class="info-wisata">

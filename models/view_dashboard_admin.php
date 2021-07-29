@@ -1,6 +1,60 @@
 <?php 
 include '../app/database/koneksi.php';
 session_start();
+
+// Select Reservasi "Total Reservasi Wisata"
+$sqlreservasiSelect = "SELECT COUNT(id_reservasi_wisata) 
+                        AS total_reservasi
+                        FROM t_reservasi_wisata";
+
+$stmt = $pdo->prepare($sqlreservasiSelect);
+$stmt->execute();
+$rowReservasi = $stmt->fetchAll();
+
+// Select Asuransi "Total Asuransi"
+$sqlasuransiSelect = "SELECT COUNT(id_asuransi) 
+                        AS total_asuransi
+                        FROM t_asuransi";
+
+$stmt = $pdo->prepare($sqlasuransiSelect);
+$stmt->execute();
+$rowAsuransi = $stmt->fetchAll();
+
+// Select Paket "Total Paket Wisata"
+$sqlpaketSelect = "SELECT COUNT(id_paket_wisata) 
+                        AS total_paket
+                        FROM t_paket_wisata";
+
+$stmt = $pdo->prepare($sqlpaketSelect);
+$stmt->execute();
+$rowPaket = $stmt->fetchAll();
+
+// Select Wisata "Total Wisata"
+$sqlwisataSelect = "SELECT COUNT(id_wisata) 
+                        AS total_wisata
+                        FROM t_wisata";
+
+$stmt = $pdo->prepare($sqlwisataSelect);
+$stmt->execute();
+$rowWisata = $stmt->fetchAll();
+
+// Select Fasilitas "Total Fasilitas"
+$sqlfasilitasSelect = "SELECT COUNT(id_fasilitas_wisata) 
+                        AS total_fasilitas
+                        FROM t_fasilitas_wisata";
+
+$stmt = $pdo->prepare($sqlfasilitasSelect);
+$stmt->execute();
+$rowFasilitas = $stmt->fetchAll();
+
+// Select User "Total User"
+$sqluserSelect = "SELECT COUNT(id_user) 
+                        AS total_user
+                        FROM t_user";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute();
+$rowUser = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -118,7 +172,11 @@ session_start();
                 <!-- Reservasi Wisata -->
                 <div class="card-single">
                     <div>
-                        <h1>3</h1>
+                        <?php 
+                        foreach ($rowReservasi as $reservasi) {
+                        ?>
+                        <h1><?=$reservasi->total_reservasi?></h1>
+                        <?php } ?>
                         <span>Mentoring Data Reservasi wisata</span>
                     </div>
                     <div>
@@ -129,7 +187,11 @@ session_start();
                 <!-- Asuransi -->
                 <div class="card-single">
                     <div>
-                        <h1>2</h1>
+                        <?php 
+                        foreach ($rowAsuransi as $asuransi) {
+                        ?>
+                        <h1><?=$asuransi->total_asuransi?></h1>
+                        <?php } ?>
                         <span>Mentoring Data Asuransi</span>
                     </div>
                     <div>
@@ -140,7 +202,11 @@ session_start();
                 <!-- Paket Wisata -->
                 <div class="card-single">
                     <div>
-                        <h1>1</h1>
+                        <?php 
+                        foreach ($rowPaket as $paket) {
+                        ?>
+                        <h1><?=$paket->total_paket?></h1>
+                        <?php } ?>
                         <span>Mentoring Data Paket Wisata</span>
                     </div>
                     <div>
@@ -151,7 +217,11 @@ session_start();
                 <!-- Wisata -->
                 <div class="card-single">
                     <div>
-                        <h1>2</h1>
+                        <?php 
+                        foreach ($rowWisata as $wisata) {
+                        ?>
+                        <h1><?=$wisata->total_wisata?></h1>
+                        <?php } ?>
                         <span>Mentoring Data Wisata</span>
                     </div>
                     <div>
@@ -162,7 +232,11 @@ session_start();
                 <!-- Fasilitas Wisata -->
                 <div class="card-single">
                     <div>
-                        <h1>9</h1>
+                        <?php 
+                        foreach ($rowFasilitas as $fasilitas) {
+                        ?>
+                        <h1><?=$fasilitas->total_fasilitas?></h1>
+                        <?php } ?>
                         <span>Mentoring Data Fasilitas Wisata</span>
                     </div>
                     <div>
@@ -173,7 +247,11 @@ session_start();
                 <!-- User -->
                 <div class="card-single">
                     <div>
-                        <h1>2</h1>
+                        <?php 
+                        foreach ($rowUser as $user) {
+                        ?>
+                        <h1><?=$user->total_user?></h1>
+                        <?php } ?>
                         <span>Mentoring Data User</span>
                     </div>
                     <div>
