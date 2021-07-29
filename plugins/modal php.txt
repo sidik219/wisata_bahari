@@ -1,0 +1,121 @@
+POP UP
+POP UP
+                                    <div class="modol-bg">
+                                        <div class="modol">
+                                            <div class="modol-header">
+                                                <h2 class="modol-title">Detail Data Wisata</h2>
+                                            </div>
+                                            
+                                            <div class="modol-body">
+                                                <div class="modol-input">
+                                                    <label for="">Deskripsi Lengkap Paket</label>
+                                                    <input type="text" value="<?=$paket->deskripsi_lengkap_paket?>" readonly>
+                                                </div>
+                                                <div class="modol-input">
+                                                    <label for="">Foto Paket Wisata</label>
+                                                    <br><img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+                                                </div>
+
+                                                <!-- Select Lokasi Wisata -->
+                                                <div class="modol-input">
+                                                    <label for="">Nama Lokasi</label>
+                                                    <?php
+                                                    $sqllokasiSelect = 'SELECT nama_lokasi FROM t_paket_wisata
+                                                                        LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                                                                        WHERE t_lokasi.id_lokasi = :id_lokasi';
+
+                                                    $stmt = $pdo->prepare($sqllokasiSelect);
+                                                    $stmt->execute(['id_lokasi' => $paket->id_lokasi]);
+                                                    $rowLokasi = $stmt->fetchAll();
+
+                                                    foreach ($rowLokasi as $lokasi) { ?>
+                                                    <div class="modol-isi">
+                                                        <i class="modol-logo-duid fas fa-umbrella-beach"></i>
+                                                        <?=$lokasi->nama_lokasi?>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <!-- Select data biaya fasilitas untuk menentukan total sesuai harga wisata yang terdapat di paket wisata -->
+                                                <div class="modol-input">
+                                                    <label for="">Biaya Wisata</label>
+                                                    <?php
+                                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas
+                                                                        FROM t_fasilitas_wisata 
+                                                                        LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                                        LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                        WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                                        AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
+
+                                                    $stmt = $pdo->prepare($sqlfasilitasSelect);
+                                                    $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
+                                                    $rowFasilitas = $stmt->fetchAll();
+
+                                                    foreach ($rowFasilitas as $fasilitas) { ?>
+                                                    <div class="modol-isi">
+                                                        <i class="modol-logo-duid fas fa-money-bill-wave"></i>
+                                                        Rp. <?=number_format($fasilitas->total_biaya_fasilitas, 0)?>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <!-- Select seluruh data wisata -->
+                                                <div class="modol-input">
+                                                    <label for="">Wisata</label>
+                                                    <?php
+                                                    $sqlwisataSelect = 'SELECT * FROM t_wisata
+                                                                    WHERE id_paket_wisata = :id_paket_wisata';
+
+                                                    $stmt = $pdo->prepare($sqlwisataSelect);
+                                                    $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
+                                                    $rowWisata = $stmt->fetchAll();
+
+                                                    foreach ($rowWisata as $wisata) { ?>
+                                                    <div class="modol-isi">
+                                                        <i class="modol-logo-wisata fas fa-luggage-cart"></i>
+                                                        <?=$wisata->judul_wisata?><br>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+
+                                                <!-- Select seluruh data Fasilitas -->
+                                                <div class="modol-input">
+                                                    <label for="">Fasilitas Wisata</label>
+                                                    <?php
+                                                    $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata 
+                                                                        LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                                        LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                        WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                                        AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
+
+                                                    $stmt = $pdo->prepare($sqlfasilitasSelect);
+                                                    $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
+                                                    $rowFasilitas = $stmt->fetchAll();
+
+                                                    foreach ($rowFasilitas as $fasilitas) { ?>
+                                                    <div class="modol-isi">
+                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
+                                                        <?=$fasilitas->nama_fasilitas?><br>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            
+                                            <span class="modol-keluar">X</span>
+                                        </div>
+                                    </div>
+
+
+    <!-- Modal -->
+    <script>
+        var modolBtn    = document.querySelector('.modol-btn');
+        var modolBg     = document.querySelector('.modol-bg');
+        var modolKeluar = document.querySelector('.modol-keluar');
+
+        modolBtn.addEventListener('click', function(){
+            modolBg.classList.add('modol-aktif');
+        })
+        modolKeluar.addEventListener('click', function(){
+            modolBg.classList.remove('modol-aktif');
+        })
+    </script>
