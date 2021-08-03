@@ -28,9 +28,9 @@ if (isset($_POST['submit'])) {
             
             $affectedrows = $stmt->rowCount();
             if ($affectedrows == '0') {
-                header("Location: view_kelola_fasilitas_wisata?status=tambahGagal");
+                header("Location: create_data_fasilitas_wisata?status=tambahGagal");
             } else {
-                header("Location: view_kelola_fasilitas_wisata?status=tambahBerhasil");
+                header("Location: create_data_fasilitas_wisata?status=tambahBerhasil");
             }
             $i++;
         }
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -143,6 +143,19 @@ if (isset($_POST['submit'])) {
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
             <a href="view_kelola_fasilitas_wisata" style="color: white;">Kembali</a></button>
             </div>
+
+            <!-- Notifikasi -->
+            <?php
+                if (!empty($_GET['status'])) {
+                    if ($_GET['status'] == 'tambahBerhasil') {
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data baru berhasil ditambahkan
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -150,8 +163,14 @@ if (isset($_POST['submit'])) {
                     <div class="card">
                         <div class="card-header">
                             <h2>Input Data Fasilitas wisata</h2>
-                            <button class="button-map"><a href="create_data_wisata" style="color: white;">
-                            Selanjutnya Input Wisata</a> <span class="fas fa-plus"></span></button>
+                            <?php 
+                                if(!empty($_GET['status'])){
+                                    if($_GET['status'] == 'tambahBerhasil'){
+                                        echo '<button class="button-map"><a href="create_data_wisata" style="color: white;">
+                                        Selanjutnya Input Wisata</a> <span class="fas fa-plus"></span></button>';
+                                    }
+                                }
+                            ?>  
                         </div>
 
                         <div class="card-body">
@@ -162,11 +181,11 @@ if (isset($_POST['submit'])) {
                                     <div class="kelola-detail fieldGroup">
                                         <div class="input-box">
                                             <span class="details">Nama Fasilitas</span>
-                                            <input type="text" name="nama_fasilitas[]" placeholder="Nama Fasilitas" required>
+                                            <input type="text" name="nama_fasilitas[]" value="-"  placeholder="Nama Fasilitas" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Biaya Fasilitas</span>
-                                            <input type="number" name="biaya_fasilitas[]" placeholder="Biaya Fasilitas" required>
+                                            <input type="number" name="biaya_fasilitas[]" value="0" min="0" placeholder="Biaya Fasilitas" required>
                                         </div>
                                         <div class="input-box">
                                             <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
@@ -185,11 +204,11 @@ if (isset($_POST['submit'])) {
                                 <div class="kelola-detail fieldGroupCopy" style="display: none;">
                                     <div class="input-box">
                                         <span class="details">Nama Fasilitas</span>
-                                        <input type="text" name="nama_fasilitas[]" placeholder="Nama Fasilitas" required>
+                                        <input type="text" name="nama_fasilitas[]" value="-" placeholder="Nama Fasilitas" required>
                                     </div>
                                     <div class="input-box">
                                         <span class="details">Biaya Fasilitas</span>
-                                        <input type="number" name="biaya_fasilitas[]" placeholder="Biaya Fasilitas" required>
+                                        <input type="number" name="biaya_fasilitas[]" value="0" min="0" placeholder="Biaya Fasilitas" required>
                                     </div>
                                     <div class="input-box">
                                         <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">

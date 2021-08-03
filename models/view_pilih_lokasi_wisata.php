@@ -6,7 +6,7 @@ if($_GET['id_lokasi']){
     $_SESSION['id_lokasi'] = $_GET['id_lokasi'];
 }
 else if(!$_GET['id_lokasi' && !$_SESSION['id_lokasi']]){
-    header("Location: view_dashboard_admin");
+    header("Location: view_dashboard_user");
 }
 
 // Select Paket Wisata
@@ -101,7 +101,6 @@ $rowPaket = $stmt->fetchAll();
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
                 <a href="view_dashboard_user" style="color: white;">Kembali</a></button>
             </div>
-
             
             <!-- Full Area -->
             <div class="full-area-kelola">
@@ -111,12 +110,13 @@ $rowPaket = $stmt->fetchAll();
 
                         <div class="cards-reservasi">
                             <?php 
-                                foreach ($rowPaket as $paket) {
+                            foreach ($rowPaket as $paket) {
                             ?>
+                            <?php if ($paket->status_paket == "Aktif") { ?>
                             <div class="card-paket">
                                 <div class="paket-header">
                                     <span class="paket-foto">
-                                        <img src="../views/img/foto_lokasi/LOK_94daa4e.jpg" class="foto" alt="">
+                                        <img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
                                     </span>
                                 </div>
                                 <div class="paket-body">
@@ -136,7 +136,8 @@ $rowPaket = $stmt->fetchAll();
                                      foreach ($rowLokasi as $lokasi) {
                                     ?>
                                     <h4 class="paket-text">
-                                        <i class="fas fa-map-marked-alt"></i> <?=$lokasi->nama_lokasi?>
+                                        <i class="fas fa-map-marked-alt"></i>
+                                        <?=$lokasi->nama_lokasi?>
                                     </h4>
                                     <?php } ?>
 
@@ -154,7 +155,8 @@ $rowPaket = $stmt->fetchAll();
                                     ?>
                                     <ol start="1" class="paket-isi">
                                         <li>
-                                            <i class="fas fa-circle"></i> <?=$wisata->judul_wisata?>
+                                            <i class="fas fa-chevron-circle-right"></i>
+                                            <?=$wisata->judul_wisata?>
                                         </li>
                                     </ol>
                                     <?php } ?>
@@ -180,10 +182,11 @@ $rowPaket = $stmt->fetchAll();
 
                                     <div>
                                     <button class="btn-detail-paket">
-                                        <a href="view_detail_lokasi_wisata" style="color: white;">Rincian Reservasi</a></button>
+                                        <a href="view_detail_lokasi_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: white;">Rincian Reservasi</a></button>
                                     </div>
                                 </div>
                             </div>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>

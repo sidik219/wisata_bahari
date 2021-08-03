@@ -56,6 +56,17 @@ if (empty($type)) {
 
     header('Location: view_kelola_wisata?status=hapusBerhasil');
     // Jarak Paket Wisata
+} elseif ($type == 'fasilitas') {
+    $id_fasilitas_wisata = $_GET['id_fasilitas_wisata'];
+
+    $sql = 'DELETE FROM t_fasilitas_wisata
+            WHERE id_fasilitas_wisata = :id_fasilitas_wisata';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_fasilitas_wisata' => $id_fasilitas_wisata]);
+    
+    header('Location: view_kelola_fasilitas_wisata?status=hapusBerhasil');
+    // Jarak Asuransi
 } elseif ($type == 'asuransi') {
     $id_asuransi = $_GET['id_asuransi'];
 

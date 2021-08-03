@@ -32,7 +32,7 @@ $rowWilayah = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -115,7 +115,7 @@ $rowWilayah = $stmt->fetchAll();
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif fas fa-exclamation" role="alert">
+                        echo '<div class="notif role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
@@ -151,6 +151,9 @@ $rowWilayah = $stmt->fetchAll();
                                             <td>ID Wilayah</td>
                                             <td>Nama Provinsi</td>
                                             <td>Nama Wilayah</td>
+                                            <td>Deskripsi Wilayah</td>
+                                            <td>Foto Wilayah</td>
+                                            <td>Sisi Pantai</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
@@ -163,45 +166,20 @@ $rowWilayah = $stmt->fetchAll();
                                             <td><?=$wilayah->id_wilayah?></td>
                                             <td><?=$wilayah->nama_provinsi?></td>
                                             <td><?=$wilayah->nama_wilayah?></td>
+                                            <td><?=$wilayah->deskripsi_wilayah?></td>
                                             <td>
-                                                <button class="modol-btn button-kelola-detail">
-                                                    <a href="detail_wilayah?id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Detail</button>
+                                                <img src="<?=$wilayah->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+                                            </td>
+                                            <td><?=$wilayah->sisi_pantai?></td>
+                                            <td>
                                                 <button class="button-kelola-edit">
-                                                    <a href="edit_wilayah?id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Edit</a></button>
+                                                    <a href="edit_data_wilayah?id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">
                                                     <a href="all_hapus?type=wilayah&id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Hapus</button>
                                             </td>
                                         </tr>
-
-                                        <!-- POP UP -->
-                                        <div class="modol-bg">
-                                            <div class="modol">
-                                                <div class="modol-header">
-                                                    <h2 class="modol-title">Detail Data Wilayah</h2>
-                                                </div>
-                                                
-                                                <div class="modol-body">
-                                                    <div class="modol-input">
-                                                        <label for="">Deskripsi Wilayah</label>
-                                                        <input type="text" value="<?=$wilayah->deskripsi_wilayah?>" readonly>
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Foto Wilayah</label>
-                                                        <br><img src="<?=$wilayah->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Sisi Pantai</label>
-                                                        <input type="text" value="<?=$wilayah->sisi_pantai?>" readonly>
-                                                    </div>
-                                                </div>
-                                                
-                                                <span class="modol-keluar">X</span>
-                                            </div>
-                                        </div>
                                         <?php } ?>
                                     </tbody>
-
-                                    
                                 </table>
                             </div>
                         </div>
@@ -221,21 +199,6 @@ $rowWilayah = $stmt->fetchAll();
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
-    <!-- All Javascript -->
-    <!-- Modal -->
-    <script>
-        var modolBtn    = document.querySelector('.modol-btn');
-        var modolBg     = document.querySelector('.modol-bg');
-        var modolKeluar = document.querySelector('.modol-keluar');
-
-        modolBtn.addEventListener('click', function(){
-            modolBg.classList.add('modol-aktif');
-        })
-        modolKeluar.addEventListener('click', function(){
-            modolBg.classList.remove('modol-aktif');
-        })
-    </script>
 
 </body>
 </html>

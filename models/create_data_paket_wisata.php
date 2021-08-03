@@ -38,10 +38,9 @@ if (isset($_POST['submit'])) {
         // image Uploads
         $randomstring = substr(md5(rand()), 0, 7);
 
-        if($_FILES["image_uploads"]["size"] == 0) {
+        if ($_FILES["image_uploads"]["size"] == 0) {
             $foto_paket_wisata = "../views/img/image_default.jpg";
-        }
-        else if (isset($_FILES['image_uploads'])) {
+        } else if (isset($_FILES['image_uploads'])) {
             $target_dir  = "../views/img/foto_wisata/";
             $foto_paket_wisata = $target_dir .'WIS_'. $randomstring .'.jpg';
             move_uploaded_file($_FILES["image_uploads"]["tmp_name"], $foto_paket_wisata);
@@ -127,7 +126,7 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -245,7 +244,7 @@ if (isset($_POST['submit'])) {
                                             <!-- upload Image -->
                                             <div>
                                                 <br>
-                                                <img id="preview"  width="100px" src="#" alt="Preview Gambar"/>
+                                                <img src="#" id="preview" width="100px" alt="Preview Gambar"/>
 
                                                 <script>
                                                     window.onload = function() {
@@ -301,25 +300,25 @@ if (isset($_POST['submit'])) {
                                         <!-- Paket Wisata Untuk Membelah Diri :v -->
                                         <div class="input-box">
                                             <div class="fieldGroup">
-                                            <div class="">
-                                                <span class="details">Paket Wisata</span>
-                                                <select name="paket_wisata[]">
-                                                    <option>Pilih Wisata</option>
-                                                    <?php 
-                                                        foreach ($rowWisata as $wisata) {
-                                                    ?>
-                                                    <option value="<?=$wisata->id_wisata?>">
-                                                        <?=$wisata->id_wisata?> - <?=$wisata->judul_wisata?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                            <div class="input-box">
-                                                <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
-                                                    <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah Fasilitas
-                                                </a>
+                                                <div class="">
+                                                    <span class="details">Paket Wisata</span>
+                                                    <select name="paket_wisata[]">
+                                                        <option>Pilih Wisata</option>
+                                                        <?php 
+                                                            foreach ($rowWisata as $wisata) {
+                                                        ?>
+                                                        <option value="<?=$wisata->id_wisata?>">
+                                                            <?=$wisata->id_wisata?> - <?=$wisata->judul_wisata?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="input-box">
+                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
+                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah Fasilitas
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     </div>
                                     <div class="detail-pilihan">
                                         <input type="radio" name="status_paket" value="Aktif" id="dot-1">

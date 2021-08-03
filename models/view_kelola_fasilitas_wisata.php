@@ -51,7 +51,7 @@ function ageCalculator($dob){
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -142,18 +142,13 @@ function ageCalculator($dob){
 
             <!-- Notifikasi -->
             <?php
-                if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif fas fa-exclamation" role="alert">
+                if (!empty($_GET['status'])) {
+                    if ($_GET['status'] == 'updateBerhasil') {
+                        echo '<div class="notif role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
-                    } else if($_GET['status'] == 'tambahBerhasil'){
-                        echo '<div class="notif" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
-                        </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil'){
+                    } else if($_GET['status'] == 'hapusBerhasil') {
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil dihapus
@@ -161,6 +156,7 @@ function ageCalculator($dob){
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -198,7 +194,9 @@ function ageCalculator($dob){
                                             </td>
                                             <td>
                                                 <button class="button-kelola-edit">
-                                                    <a href="edit_fasilitas?id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Edit</a></button>
+                                                    <a href="edit_data_fasilitas_wisata?id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Edit</a></button>
+                                                <button class="button-kelola-hapus">
+                                                    <a href="all_hapus?type=fasilitas&id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Hapus</a></button>
                                             </td>
                                         </tr>
                                         <?php } ?>

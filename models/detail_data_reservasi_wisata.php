@@ -2,12 +2,23 @@
 include '../app/database/koneksi.php';
 session_start();
 
-$sqlprovinsiSelect = "SELECT * FROM t_provinsi
-                    ORDER BY id_provinsi DESC";
+if($_GET['id_reservasi_wisata']){
+    $_SESSION['id_reservasi_wisata'] = $_GET['id_reservasi_wisata'];
+}
+else if(!$_GET['id_reservasi_wisata' && !$_SESSION['id_reservasi_wisata']]){
+    header("Location: view_kelola_wisata");
+}
 
-$stmt = $pdo->prepare($sqlprovinsiSelect);
-$stmt->execute();
-$rowProvinsi = $stmt->fetchAll();
+$sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
+                    LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                    LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
+                    LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                    WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata';
+
+$stmt = $pdo->prepare($sqlreservasiSelect);
+$stmt->execute(['id_reservasi_wisata' => $_GET['id_reservasi_wisata']]);
+$rowReservasi = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +54,7 @@ $rowProvinsi = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_reservasi_wisata">
+                    <a href="view_kelola_reservasi_wisata" class="paimon-active">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
@@ -68,7 +79,7 @@ $rowProvinsi = $stmt->fetchAll();
                         <span>Kelola Wilayah</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_provinsi" class="paimon-active">
+                    <a href="view_kelola_provinsi">
                     <span class="fas fa-globe-asia"></span>
                         <span>Kelola Provinsi</span></a>
                 </li>
@@ -110,66 +121,61 @@ $rowProvinsi = $stmt->fetchAll();
 
         <!-- Main -->
         <main>
-            <!-- Notifikasi -->
-            <?php
-                if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate
-                        </div>';
-                    } else if($_GET['status'] == 'tambahBerhasil'){
-                        echo '<div class="notif" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
-                        </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus
-                        </div>';
-                    }
-                }
-            ?>
+            <!-- Button Kembali -->
+            <div>
+            <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
+            <a href="view_kelola_reservasi_wisata" style="color: white;">Kembali</a></button>
+            </div>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Data Provinsi</h2>
-                            <button class="button-kelola-kembali"><a href="create_data_provinsi" style="color: white;">
-                            Input Data Baru</a> <span class="fas fa-plus"></span></button>
+                            <h2>Detail Data Reservasi wisata</h2>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <td>ID Provinsi</td>
-                                            <td>Nama Provinsi</td>
-                                            <td>Aksi</td>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <?php 
-                                            foreach ($rowProvinsi as $provinsi) {
-                                        ?>
-                                        <tr>
-                                            <td><?=$provinsi->id_provinsi?></td>
-                                            <td><?=$provinsi->nama_provinsi?></td>
-                                            <td>
-                                                <button class="button-kelola-edit">
-                                                    <a href="edit_data_provinsi?id_provinsi=<?=$provinsi->id_provinsi?>" style="color: #fff">Edit</a></button>
-                                                <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=provinsi&id_provinsi=<?=$provinsi->id_provinsi?>" style="color: #fff">Hapus</button>
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
+                                <form action="#" method="POST" enctype="multipart/form-data">
+                                    <?php 
+                                        foreach ($rowReservasi as $reservasi) {
+                                    ?>
+                                    <!-- Form Create Fasilitas Wisata -->
+                                    <div class="kelola-detail-paket">
+                                        <div class="input-box">
+                                            <span class="details">Jumlah Reservasi</span>
+                                            <input type="text" value="<?=$reservasi->jumlah_reservasi?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Total Reservasi</span>
+                                            <input type="text" value="Rp. <?=number_format($reservasi->total_reservasi, 0)?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Keterangan Reservasi</span>
+                                            <input type="text" value="<?=$reservasi->keterangan_reservasi?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Bukti Reservasi</span>
+                                            <br><img src="<?=$reservasi->bukti_reservasi?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Nama Bank Wisatawan</span>
+                                            <input type="text" value="<?=$reservasi->nama_bank_wisatawan?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Nama Rekening Wisatawan</span>
+                                            <input type="text" value="<?=$reservasi->nama_rekening_wisatawan?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Nomor Rekening Wisatawan</span>
+                                            <input type="text" value="<?=$reservasi->nomor_rekening_wisatawan?>" readonly>
+                                        </div>
+                                    </div>
+                                    <!-- End Form -->
+                                    <?php } ?>
+                                </form>
                             </div>
                         </div>
                     </div>

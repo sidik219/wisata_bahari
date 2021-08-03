@@ -235,21 +235,26 @@ main {
 }
 
 .card-single div:last-child span.paimon-3 {
-  color: #2999ff;
+  color: #32025a;
   font-size: 3rem;
 }
 
 .card-single div:last-child span.paimon-4 {
-  color: #fea1ff;
+  color: #2999ff;
   font-size: 3rem;
 }
 
 .card-single div:last-child span.paimon-5 {
-  color: #f01c58;
+  color: #fea1ff;
   font-size: 3rem;
 }
 
 .card-single div:last-child span.paimon-6 {
+  color: #f01c58;
+  font-size: 3rem;
+}
+
+.card-single div:last-child span.paimon-7 {
   color: #333333;
   font-size: 3rem;
 }
@@ -277,6 +282,14 @@ main {
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: 100% auto;
+}
+
+/* Kelola Reservasi Wisata */
+.full-area-reservasi {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: 66% auto;
 }
 
 .card {
@@ -414,6 +427,46 @@ main {
   transform: translateY(2px);
 }
 
+/* Update Bukti Reservasi */
+.button-kelola-reservasi {
+  background: #f2825a;
+  color: #fff;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  margin-right: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-kelola-reservasi:hover {
+  background-color: #ff8686;
+}
+
+.button-kelola-reservasi:active {
+  background-color: #ff8686;
+  transform: translateY(2px);
+}
+
+.jarak-desk {
+  background: var(--sidebar-active);
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  outline: none;
+  margin-right: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+}
+
 /* Laporan */
 a.btn-kelola-laporan {
   display: block;
@@ -538,6 +591,10 @@ tr td:last-child {
   padding: 0.5rem 1.3rem;
 }
 
+.center {
+  width: 100%;
+}
+
 .info-wisata {
   display: flex;
   align-items: center;
@@ -621,6 +678,10 @@ footer h2.footer-paimon {
   .full-area {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  .full-area-reservasi {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -629,6 +690,10 @@ footer h2.footer-paimon {
   }
 
   .full-area {
+    grid-template-columns: 100%;
+  }
+
+  .full-area-reservasi {
     grid-template-columns: 100%;
   }
 
@@ -771,6 +836,16 @@ footer h2.footer-paimon {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+/* Reservasi Wisata */
+.full-area-reservasi form .kelola-detail-reservasi {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 /* ada bug */
 form .kelola-detail .input-box {
   width: calc(100% / 1 - 20px);
@@ -778,6 +853,11 @@ form .kelola-detail .input-box {
 }
 
 .kelola-detail-paket .input-box {
+  width: calc(100% / 1 - 20px);
+  margin: 20px 0 12px 0;
+}
+
+.kelola-detail-reservasi .input-box {
   width: calc(100% / 1 - 20px);
   margin: 20px 0 12px 0;
 }
@@ -859,6 +939,12 @@ form .btn-kelola-koordinat:hover {
   margin-bottom: 5px;
 }
 
+.kelola-detail-reservasi .input-box .details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
 /* Input */
 .kelola-detail .input-box input {
   height: 45px;
@@ -873,6 +959,18 @@ form .btn-kelola-koordinat:hover {
 
 /* Kelola Detail Paket */
 .kelola-detail-paket .input-box input {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding-left: 15px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+/* Kelola Reservasi Wisata */
+.kelola-detail-reservasi .input-box input {
   height: 45px;
   width: 100%;
   outline: none;
@@ -904,6 +1002,7 @@ form .detail-pilihan .pilihan-title {
   font-size: 20px;
   font-weight: 200; /*ada bug*/
   margin-left: 1rem;
+  margin-top: 1rem;
 }
 
 form .detail-pilihan .kategori {
@@ -931,6 +1030,11 @@ form .detail-pilihan .kategori {
 #dot-1:checked ~ .kategori .satu,
 #dot-2:checked ~ .kategori .dua,
 #dot-3:checked ~ .kategori .tiga {
+  border-color: var(--sidebar-active);
+  background: #fba442;
+}
+
+#all-1:checked ~ .kategori .all {
   border-color: var(--sidebar-active);
   background: #fba442;
 }
@@ -972,12 +1076,19 @@ form .button-kelola-form input:hover {
     width: 100%;
   }
 
-  form .detail-pilihan .kategori {
+  .kelola-detail-reservasi .input-box {
+    margin: 15px;
     width: 100%;
   }
 
+  form .detail-pilihan .kategori {
+    width: 100%;
+    display: grid;
+  }
+
   .full-area-kelola form .kelola-detail,
-  .full-area-kelola form .kelola-detail-paket {
+  .full-area-kelola form .kelola-detail-paket,
+  .full-area-kelola form .kelola-detail-reservasi {
     max-height: 400px;
     overflow: scroll;
   }
@@ -987,6 +1098,10 @@ form .button-kelola-form input:hover {
   }
 
   .kelola-detail-paket::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .kelola-detail-reservasi::-webkit-scrollbar {
     width: 0;
   }
 }
@@ -1360,4 +1475,300 @@ form .button-kelola-form input:hover {
 *
 *
 /
-/* Login */
+/* card detail reservasi */
+.cards-detail {
+  width: 100%;
+  max-width: 98rem;
+  padding: 5rem;
+  background-color: #fff;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  border-radius: 1rem;
+}
+
+hr.jarak {
+  border: 0;
+  height: 1px;
+  width: 100%;
+  margin-top: 1rem;
+  background-color: var(--sidebar-active);
+}
+
+.cards-detail__img {
+  min-width: 35rem;
+  max-width: 35rem;
+  height: 30rem;
+  transform: translateX(-6rem);
+  position: relative;
+}
+
+.cards-detail__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 1rem;
+}
+
+.cards-detail__img::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+}
+
+.cards-detail__date span {
+  display: block;
+  color: var(--sidebar-color);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+.cards-detail__title {
+  font-size: 2.5rem;
+  margin: 1.5rem 0 2rem;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.cards-detail__text {
+  margin-bottom: 3rem;
+  font-size: 1.4rem;
+  color: rgba(0, 0, 0, 7);
+}
+
+/* icon color detail reservasi */
+.cards-detail__text .detail-paket-bitch {
+  color: var(--sidebar-color);
+}
+
+.cards-detail__text .detail-paket-duid {
+  color: #0ec7a3;
+}
+
+.cards-detail__text .detail-paket-wisata {
+  color: #fea1ff;
+}
+
+.cards-detail__text .detail-paket-asuransi {
+  color: #0ec7a3;
+}
+
+.cards-detail__text .detail-paket-fasilitas {
+  color: #f01c58;
+}
+
+.cards-detail__text .detail-paket-deskripsi {
+  color: var(--sidebar-active);
+}
+
+/* icon color reservasi wisata */
+.input-box .detail-reservasi-bitch {
+  color: var(--sidebar-color);
+}
+
+.input-box .detail-reservasi-duid {
+  color: #0ec7a3;
+}
+
+.input-box .detail-reservasi-wisata {
+  color: #fea1ff;
+}
+
+.input-box .detail-reservasi-asuransi {
+  color: #0ec7a3;
+}
+
+.input-box .detail-reservasi-fasilitas {
+  color: #f01c58;
+}
+
+.input-box .detail-reservasi-deskripsi {
+  color: var(--sidebar-active);
+}
+
+.input-box .detail-reservasi-metode {
+  color: var(--sidebar-color);
+}
+
+.input-box .detail-reservasi-bank {
+  color: #a6b2d7;
+}
+
+.input-box .detail-reservasi-nama {
+  color: #000;
+}
+
+.input-box .detail-reservasi-nomor {
+  color: #85464f;
+}
+
+/* icon color reservasi Saya */
+.cards-detail__text .detail-reservasi-bitch {
+  color: var(--sidebar-color);
+}
+
+.cards-detail__text .detail-reservasi-tanggal {
+  color: #f01c58;
+}
+
+.cards-detail__text .detail-reservasi-peserta {
+  color: #fea1ff;
+}
+
+.cards-detail__text .detail-reservasi-total {
+  color: #0ec7a3;
+}
+
+.cards-detail__text .detail-reservasi-status {
+  color: #f2825a;
+}
+
+.cards-detail__text .detail-reservasi-kontak {
+  color: #85464f;
+}
+
+.cards-detail__text .detail-reservasi-keterangan {
+  color: var(--sidebar-active);
+}
+
+/* icon color Edit reservasi Saya */
+.divTableCell .detail-reservasi-id {
+  color: #bfbdee;
+}
+
+.divTableCell .detail-reservasi-user {
+  color: #000;
+}
+
+.divTableCell .detail-reservasi-bitch {
+  color: var(--sidebar-color);
+}
+
+.divTableCell .detail-reservasi-tanggal {
+  color: #f01c58;
+}
+
+.divTableCell .detail-reservasi-peserta {
+  color: #fea1ff;
+}
+
+.divTableCell .detail-reservasi-total {
+  color: #0ec7a3;
+}
+
+.cards-detail__cta {
+  display: inline;
+  padding: 1.5rem 3rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  color: #fff;
+  background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 2px 2px 10px rgba(201, 195, 195, 0.1);
+  border-radius: 1rem;
+  text-decoration: none;
+}
+
+.cards-detail__cta:hover {
+  background-image: linear-gradient(to right, #00f2fe 0%, #4facfe 100%);
+}
+
+@media only screen and (max-width: 960px) {
+  .cards-detail {
+    max-width: 80rem;
+  }
+
+  .cards-detail__img {
+    min-width: 30rem;
+    max-width: 30rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .cards-detail {
+    max-width: 70rem;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .cards-detail {
+    max-width: 30rem;
+    flex-direction: column;
+  }
+
+  .cards-detail__img {
+    min-width: 20rem;
+    max-width: 20rem;
+    height: 250px;
+    transform: translate(0, -6rem);
+  }
+
+  .cards-detail__info {
+    min-width: 20rem;
+    max-width: 20rem;
+  }
+
+  .cards-detail__cta {
+    padding: 1.5rem 1.5rem;
+    font-size: 1.2rem;
+  }
+}
+
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+/
+/* DivTable.com */
+.divTable {
+  display: table;
+  width: 100%;
+}
+.divTableRow {
+  display: table-row;
+}
+.divTableHeading {
+  background-color: #eee;
+  display: table-header-group;
+}
+.divTableCell,
+.divTableHead {
+  border: none;
+  display: table-cell;
+  padding: 3px;
+}
+.divTableHeading {
+  background-color: #eee;
+  display: table-header-group;
+  font-weight: bold;
+}
+.divTableFoot {
+  background-color: #eee;
+  display: table-footer-group;
+  font-weight: bold;
+}
+.divTableBody {
+  display: table-row-group;
+}

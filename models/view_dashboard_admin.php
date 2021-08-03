@@ -11,6 +11,22 @@ $stmt = $pdo->prepare($sqlreservasiSelect);
 $stmt->execute();
 $rowReservasi = $stmt->fetchAll();
 
+// Select Status Reservasi wisata lama
+$sqlstatusSelect = "SELECT * FROM t_status_reservasi
+                    WHERE id_status_reservasi = 2";
+
+$stmt = $pdo->prepare($sqlstatusSelect);
+$stmt->execute();
+$rowStatus2 = $stmt->fetchAll();
+
+// Select Status Reservasi wisata Baru
+$sqlstatusSelect = "SELECT * FROM t_status_reservasi
+                    WHERE id_status_reservasi = 1";
+
+$stmt = $pdo->prepare($sqlstatusSelect);
+$stmt->execute();
+$rowStatus1 = $stmt->fetchAll();
+
 // Select Asuransi "Total Asuransi"
 $sqlasuransiSelect = "SELECT COUNT(id_asuransi) 
                         AS total_asuransi
@@ -184,6 +200,62 @@ $rowUser = $stmt->fetchAll();
                     </div>
                 </div>
 
+                <!-- Pembayaran Reservasi Wisata Belum Transfer -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowStatus1 as $status) {
+                        ?>
+                            <?php
+                            $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
+                                                FROM t_reservasi_wisata
+                                                LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
+                                                AND t_status_reservasi.id_status_reservasi = t_reservasi_wisata.id_status_reservasi;";
+
+                            $stmt = $pdo->prepare($sqlfasilitasSelect);
+                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);
+                            $rowReservasi = $stmt->fetchAll();
+
+                            foreach ($rowReservasi as $reservasi) { ?>
+                            <h1><?=$reservasi->total_reservasi?></h1>
+                            <?php } ?>
+                        <?php } ?>
+                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: red;">(belum Transfer)</small></span>
+                    </div>
+                    <div>
+                        <span class="paimon-2 fas fa-money-bill-wave"></span>
+                    </div>
+                </div>
+
+                <!-- Pembayaran Reservasi Wisata Sudah Transfer -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowStatus2 as $status) {
+                        ?>
+                            <?php
+                            $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
+                                                FROM t_reservasi_wisata
+                                                LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
+                                                AND t_status_reservasi.id_status_reservasi = t_reservasi_wisata.id_status_reservasi;";
+
+                            $stmt = $pdo->prepare($sqlfasilitasSelect);
+                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);
+                            $rowReservasi = $stmt->fetchAll();
+
+                            foreach ($rowReservasi as $reservasi) { ?>
+                            <h1><?=$reservasi->total_reservasi?></h1>
+                            <?php } ?>
+                        <?php } ?>
+                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: red;">(Sudah Transfer)</small></span>
+                    </div>
+                    <div>
+                        <span class="paimon-2 fas fa-money-bill-wave"></span>
+                    </div>
+                </div>
+
                 <!-- Asuransi -->
                 <div class="card-single">
                     <div>
@@ -195,7 +267,7 @@ $rowUser = $stmt->fetchAll();
                         <span>Mentoring Data Asuransi</span>
                     </div>
                     <div>
-                        <span class="paimon-2 fas fa-heartbeat"></span>
+                        <span class="paimon-3 fas fa-heartbeat"></span>
                     </div>
                 </div>
 
@@ -210,7 +282,7 @@ $rowUser = $stmt->fetchAll();
                         <span>Mentoring Data Paket Wisata</span>
                     </div>
                     <div>
-                        <span class="paimon-3 fas fa-cubes"></span>
+                        <span class="paimon-4 fas fa-cubes"></span>
                     </div>
                 </div>
 
@@ -225,7 +297,7 @@ $rowUser = $stmt->fetchAll();
                         <span>Mentoring Data Wisata</span>
                     </div>
                     <div>
-                        <span class="paimon-4 fas fa-luggage-cart"></span>
+                        <span class="paimon-5 fas fa-luggage-cart"></span>
                     </div>
                 </div>
 
@@ -240,7 +312,7 @@ $rowUser = $stmt->fetchAll();
                         <span>Mentoring Data Fasilitas Wisata</span>
                     </div>
                     <div>
-                        <span class="paimon-5 fas fa-truck-loading"></span>
+                        <span class="paimon-6 fas fa-truck-loading"></span>
                     </div>
                 </div>
 
@@ -255,7 +327,7 @@ $rowUser = $stmt->fetchAll();
                         <span>Mentoring Data User</span>
                     </div>
                     <div>
-                        <span class="paimon-6 fas fa-users"></span>
+                        <span class="paimon-7 fas fa-users"></span>
                     </div>
                 </div>
             </div>

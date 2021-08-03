@@ -2,6 +2,17 @@
 include '../app/database/koneksi.php';
 session_start();
 
+$sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
+                        LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                        LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
+                        LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                        LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                        ORDER BY update_terakhir DESC';
+
+$stmt = $pdo->prepare($sqlreservasiSelect);
+$stmt->execute();
+$rowReservasi = $stmt->fetchAll();
+
 function ageCalculator($dob){
     $birthdate = new DateTime($dob);
     $today   = new DateTime('today');
@@ -44,7 +55,7 @@ function ageCalculator($dob){
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -123,6 +134,23 @@ function ageCalculator($dob){
 
         <!-- Main -->
         <main>
+            <!-- Notifikasi -->
+            <?php
+                if (!empty($_GET['status'])) {
+                    if ($_GET['status'] == 'updateBerhasil') {
+                        echo '<div class="notif role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil diupdate
+                        </div>';
+                    } else if($_GET['status'] == 'hapusBerhasil') {
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil dihapus
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -149,90 +177,43 @@ function ageCalculator($dob){
 
                                     <tbody>
                                     <?php
-                                        $truedate = strtotime(26-10-1997);
+                                        foreach ($rowReservasi as $reservasi) {
+
+                                        $truedate = strtotime($reservasi->update_terakhir);
+                                        $reservasidate = strtotime($reservasi->tgl_reservasi);
                                     ?>
                                         <tr>
-                                            <td>111</td>
-                                            <td>222</td>
-                                            <td>333</td>
-                                            <td>444</td>
-                                            <td>555</td>
+                                            <td><?=$reservasi->id_reservasi_wisata?></td>
+                                            <td><?=$reservasi->nama_user?></td>
+                                            <td><?=$reservasi->nama_lokasi?></td>
+                                            <td><?=$reservasi->nama_paket_wisata?></td>
                                             <td>
-                                                <span class="status klee"></span>
-                                                666
+                                                <?=strftime('%A, %d %B %Y', $reservasidate);?>
                                                 <br><small style="color: rgba(0, 0, 0, 0.5);">Update Terakhir:
                                                 <br><?=strftime('%A, %d %B %Y', $truedate);?></small>
                                             </td>
                                             <td>
-                                                <button class="modol-btn button-kelola-detail">Detail</button>
-                                                <button class="button-kelola-edit">Edit</button>
-                                                <button class="button-kelola-hapus">Hapus</button>
+                                                <?php 
+                                                    if ($reservasi->id_status_reservasi == "1") { ?>
+                                                    <span class="status diona"></span>
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Atifk -->
+                                                <?php } elseif ($reservasi->id_status_reservasi == "2") { ?>
+                                                    <span class="status yaoyao"></span>
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Tidak Atifk -->
+                                                <?php } elseif ($reservasi->id_status_reservasi == "3") {?>
+                                                    <span class="status klee"></span>
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Perbaikan -->
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <button class="modol-btn button-kelola-detail">
+                                                    <a href="detail_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Detail</a></button>
+                                                <button class="button-kelola-edit">
+                                                    <a href="edit_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Edit</a></button>
                                             </td>
                                         </tr>
                                     </tbody>
-
-                                    <!-- POP UP -->
-                                    <div class="modol-bg">
-                                        <div class="modol">
-                                            <div class="modol-header">
-                                                <h2 class="modol-title">Detail Data Reservasi Wisata</h2>
-                                            </div>
-                                            
-                                            <div class="modol-body">
-                                                <div class="modol-input">
-                                                    <label for="">Total Reservasi</label>
-                                                    <div class="modol-isi">
-                                                        <i class="modol-logo-duid fas fa-money-bill-wave"></i>
-                                                        Rp. 1.500.000<br>
-                                                    </div>
-                                                </div>
-                                                <div class="modol-input">
-                                                    <label for="">Wisata</label>
-                                                    <div class="modol-isi">
-                                                        <i class="modol-logo-wisata fas fa-luggage-cart"></i>
-                                                        Diving<br>
-                                                        <i class="modol-logo-wisata fas fa-luggage-cart"></i>
-                                                        Diving<br>
-                                                        <i class="modol-logo-wisata fas fa-luggage-cart"></i>
-                                                        Diving<br>
-                                                    </div>
-                                                </div>
-                                                <div class="modol-input">
-                                                    <label for="">Fasilitas Wisata</label>
-                                                    <div class="modol-isi">
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                        <i class="modol-logo-fasilitas fas fa-truck-loading"></i>
-                                                        fasilitas<br>
-                                                    </div>
-                                                </div>
-                                                <div class="modol-input">
-                                                    <label for="">Keterangan Reservasi</label>
-                                                    <input type="text" value="Sedang ada badai" readonly>
-                                                </div>
-                                                <div class="modol-input">
-                                                    <label for="">No HP User</label>
-                                                    <input type="text" value="12345" readonly>
-                                                </div>
-                                            </div>
-                                            
-                                            <span class="modol-keluar">X</span>
-                                        </div>
-                                    </div>
+                                    <?php } ?>
                                 </table>
                             </div>
                         </div>
@@ -252,21 +233,6 @@ function ageCalculator($dob){
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
-    <!-- All Javascript -->
-    <!-- Modal -->
-    <script>
-        var modolBtn    = document.querySelector('.modol-btn');
-        var modolBg     = document.querySelector('.modol-bg');
-        var modolKeluar = document.querySelector('.modol-keluar');
-
-        modolBtn.addEventListener('click', function(){
-            modolBg.classList.add('modol-aktif');
-        })
-        modolKeluar.addEventListener('click', function(){
-            modolBg.classList.remove('modol-aktif');
-        })
-    </script>
 
 </body>
 </html>

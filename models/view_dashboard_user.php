@@ -19,7 +19,7 @@ $stmt = $pdo->prepare($sqlstatusSelect);
 $stmt->execute();
 $rowStatus2 = $stmt->fetchAll();
 
-// Select Status Reservasi wisata lama
+// Select Status Reservasi wisata Baru
 $sqlstatusSelect = "SELECT * FROM t_status_reservasi
                     WHERE id_status_reservasi = 1";
 
@@ -152,8 +152,7 @@ $rowLokasi = $stmt->fetchAll();
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
                                                 FROM t_reservasi_wisata
                                                 LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
-                                                AND t_status_reservasi.id_status_reservasi = t_reservasi_wisata.id_status_reservasi;";
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi;";
 
                             $stmt = $pdo->prepare($sqlfasilitasSelect);
                             $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);
@@ -180,8 +179,7 @@ $rowLokasi = $stmt->fetchAll();
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
                                                 FROM t_reservasi_wisata
                                                 LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
-                                                AND t_status_reservasi.id_status_reservasi = t_reservasi_wisata.id_status_reservasi;";
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi;";
 
                             $stmt = $pdo->prepare($sqlfasilitasSelect);
                             $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);

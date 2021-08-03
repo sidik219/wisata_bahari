@@ -31,7 +31,7 @@ $rowAsuransi = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -121,7 +121,7 @@ $rowAsuransi = $stmt->fetchAll();
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif fas fa-exclamation" role="alert">
+                        echo '<div class="notif role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
@@ -171,7 +171,7 @@ $rowAsuransi = $stmt->fetchAll();
                                             <td><?=$asuransi->biaya_asuransi?></td>
                                             <td>
                                                 <button class="button-kelola-edit ">
-                                                    <a href="edit_asuransi?id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Edit</a></button>
+                                                    <a href="edit_data_asuransi?id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">
                                                     <a href="all_hapus?type=asuransi&id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Hapus</a></button>
                                             </td>

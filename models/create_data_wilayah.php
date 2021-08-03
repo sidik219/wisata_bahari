@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
+            <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
         <div class="sidebar-menu">
@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
                                             <input type="text" name="deskripsi_wilayah" placeholder="Deskripsi Wilayah" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Foto Wilayah</span>
+                                            <span class="details">Upload Foto Wilayah</span>
                                             <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
                                             
                                             <!-- upload Image -->

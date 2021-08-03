@@ -2,6 +2,36 @@
 include '../app/database/koneksi.php';
 session_start();
 
+$sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
+                        LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                        LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
+                        LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                        LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                        ORDER BY update_terakhir DESC';
+
+$stmt = $pdo->prepare($sqlreservasiSelect);
+$stmt->execute();
+$rowReservasi = $stmt->fetchAll();
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,96 +110,96 @@ session_start();
 
         <!-- Main -->
         <main>
-            <div class="cards">
-                <div class="card-single">
-                    <div>
-                        <h1>6</h1>
-                        <span>Reservasi wisata</span>
-                    </div>
-                    <div>
-                        <span class="paimon-1 fas fa-suitcase"></span>
-                    </div>
-                </div>
-
-                <div class="card-single">
-                    <div>
-                        <h1>1</h1>
-                        <span>Reservasi wisata baru</span>
-                    </div>
-                    <div>
-                        <span class="paimon-2 fas fa-luggage-cart"></span>
-                    </div>
-                </div>
-
-                <div class="card-single">
-                    <div>
-                        <h1>5</h1>
-                        <span>Reservasi wisata lama</span>
-                    </div>
-                    <div>
-                        <span class="paimon-3 fas fa-suitcase-rolling"></span>
-                    </div>
-                </div>
+            <!-- Deskripsi Reservasi Wisata -->
+            <div class="jarak-desk">
+                <span class="info-data-reservasi">Data Reservasi Saya</span>
             </div>
 
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'updateBerhasil'){
+                        echo '<div class="notif role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil diupdate
+                        </div>';
+                    } else if($_GET['status'] == 'tambahBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data baru berhasil ditambahkan
+                        </div>';
+                    } else if($_GET['status'] == 'hapusBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil dihapus
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
-            <div class="full-area">
+            <div class="full-area-kelola">
                 <!-- Area A -->
                 <div class="area-A">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Pilih lokasi wisata</h3>
-                            <button class="button-map">Reservasi Saya <span class="fas fa-arrow-right"></span></button>
-                        </div>
+                    <div class="card-reservasi">
+                        <?php 
+                            foreach ($rowReservasi as $reservasi) {
 
-                        <div class="card-body">
-                            <div class="table-portable">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <td>aaa</td>
-                                            <td>bbb</td>
-                                            <td>ccc</td>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr>
-                                            <td>111</td>
-                                            <td>222</td>
-                                            <td>
-                                                <span class="status klee"></span>
-                                                333
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>111</td>
-                                            <td>222</td>
-                                            <td>
-                                                <span class="status diona"></span>
-                                                333
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>111</td>
-                                            <td>222</td>
-                                            <td>
-                                                <span class="status qiqi"></span>
-                                                333
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>111</td>
-                                            <td>222</td>
-                                            <td>
-                                                <span class="status yaoyao"></span>
-                                                333
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            $truedate = strtotime($reservasi->update_terakhir);
+                            $reservasidate = strtotime($reservasi->tgl_reservasi);
+                        ?>
+                        <div class="cards-detail">
+                            <div class="cards-detail__img">
+                                <img src="<?=$reservasi->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
                             </div>
-                        </div>
+                            <div class="cards-detail__info">
+                                <div class="cards-detail__date">
+                                    <span>ID Reservasi - <?=$reservasi->id_reservasi_wisata?></span>
+                                    <span>Nama User - <?=$reservasi->nama_user?></span>
+                                </div>
+                                <h1 class="cards-detail__title"><?=$reservasi->nama_paket_wisata?></h1>
+
+                                <p class="cards-detail__text">
+                                    <b>Lokasi Reservasi Wisata:</b><br>
+                                    <i class="detail-reservasi-bitch fas fa-umbrella-beach"></i>
+                                    <small><?=$reservasi->nama_lokasi?></small>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>Tanggal Reservasi:</b><br>
+                                    <i class="detail-reservasi-tanggal far fa-calendar-alt"></i>
+                                    <small><?=strftime('%A, %d %B %Y', $reservasidate);?></small>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>Jumlah Peserta:</b><br>
+                                    <i class="detail-reservasi-peserta fas fa-users"></i>
+                                    <small><?=$reservasi->jumlah_reservasi?></small><br>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>Total Reservasi:</b><br>
+                                    <i class="detail-reservasi-total fas fa-money-bill-wave"></i>
+                                    <small>Rp. <?=number_format($reservasi->total_reservasi, 0)?></small><br>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>Status Reservasi:</b><br>
+                                    <i class="detail-reservasi-status far fa-bell"></i>
+                                    <?=$reservasi->nama_status_reservasi?><br>
+                                    <small style="color: rgba(0, 0, 0, 0.5);"><b>Update Terakhir:</b>
+                                    <br><small><?=strftime('%A, %d %B %Y', $truedate);?></small></small><br>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>No Kontak Pengelola Lokasi:</b><br>
+                                    <i class="detail-reservasi-kontak  fas fas fa-phone"></i>
+                                    <small><?=$reservasi->kontak_lokasi?></small>
+                                </p>
+                                <p class="cards-detail__text">
+                                    <b>Keterangan Pengelola Lokasi:</b><br>
+                                    <i class="detail-reservasi-keterangan fas fa-bookmark"></i>
+                                    <small><?=$reservasi->keterangan_reservasi?></small>
+                                </p>
+                                <a href="edit_data_reservasi_saya?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" class="cards-detail__cta">Upload Bukti Transfer</a>
+                            </div>
+                        </div><br><br>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
