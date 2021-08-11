@@ -115,6 +115,12 @@
   left: 70px;
 }
 
+/* Untuk Login */
+.main-content-login {
+  margin-left: 520px;
+  margin-right: 520px;
+}
+
 /* Tombol gacha bar */
 #tombol-gacha {
   display: none;
@@ -183,9 +189,14 @@ header label span {
 }
 
 main {
-  background: #f7fafc;
   padding: 2rem 1.5rem;
   margin-top: 82px;
+  min-height: calc(100vh - 82px);
+}
+
+main.main-login {
+  padding: 2rem 1.5rem;
+  margin-top: 1rem;
   min-height: calc(100vh - 82px);
 }
 
@@ -194,6 +205,28 @@ main {
   height: 2rem;
   width: 28%;
   background: #3fab76;
+  color: #fff;
+  padding-top: 6px;
+  padding-left: 1rem;
+}
+
+/* Notif Daftar */
+.notif-daftar {
+  border-radius: 10px;
+  height: 2rem;
+  width: 44%;
+  background: #f01c58;
+  color: #fff;
+  padding-top: 6px;
+  padding-left: 1rem;
+}
+
+/* Notif Login */
+.notif-login {
+  border-radius: 10px;
+  height: 2rem;
+  width: 47%;
+  background: #3fbbeb;
   color: #fff;
   padding-top: 6px;
   padding-left: 1rem;
@@ -475,7 +508,7 @@ a.btn-kelola-laporan {
 .btn-kelola-laporan {
   background: #3fab76;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 1rem;
   border: none;
   border-radius: 10px;
   padding: 0.5rem 1rem;
@@ -493,6 +526,37 @@ a.btn-kelola-laporan {
 
 .btn-kelola-laporan:active {
   background-color: #6fbb76;
+  transform: translateY(2px);
+}
+
+/* Google Map */
+a.btn-kelola-map {
+  display: block;
+}
+
+.btn-kelola-map {
+  background-image: linear-gradient(to right, #3fbbeb 0%, #ffbbab 100%);
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  margin-top: 1rem;
+  margin-right: 55rem;
+  margin-bottom: 1rem;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  width: 20%;
+}
+
+.btn-kelola-map:hover {
+  background-image: linear-gradient(to right, #ffbbab 0%, #3fbbeb 100%);
+}
+
+.btn-kelola-map:active {
+  background-image: linear-gradient(to right, #ffbbab 0%, #3fbbeb 100%);
   transform: translateY(2px);
 }
 
@@ -524,6 +588,11 @@ a.btn-map {
 
 .card-header {
   padding: 1rem;
+}
+
+/* Untuk Login */
+.card-header-login {
+  text-align: center;
 }
 
 table {
@@ -668,6 +737,16 @@ footer h2.footer-paimon {
     width: calc(100% - 70px);
     left: 70px;
   }
+
+  /* Untuk Login */
+  .main-content-login {
+    margin-left: 70px;
+  }
+
+  .main-content-login header {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
 }
 
 @media only screen and (max-width: 960px) {
@@ -744,6 +823,12 @@ footer h2.footer-paimon {
     margin-left: 0rem;
   }
 
+  /* Untuk Login */
+  .main-content-login {
+    width: 100%;
+    margin-left: 0rem;
+  }
+
   header {
     width: 100% !important;
     left: 0 !important;
@@ -774,6 +859,11 @@ footer h2.footer-paimon {
     margin-left: 0rem !important;
   }
 
+  /* Untuk Login */
+  #tombol-gacha:checked ~ .main-content-login {
+    margin-left: 0rem !important;
+  }
+
   .btn-kelola-laporan {
     margin-right: 35rem;
   }
@@ -783,6 +873,21 @@ footer h2.footer-paimon {
   }
 
   .btn-kelola-laporan:active {
+    background-color: #6fbb76;
+    transform: translateY(2px);
+  }
+
+  /* Google Map */
+  .btn-kelola-map {
+    margin-right: 35rem;
+    width: 50%;
+  }
+
+  .btn-kelola-map:hover {
+    background-color: #6fbb76;
+  }
+
+  .btn-kelola-map:active {
     background-color: #6fbb76;
     transform: translateY(2px);
   }
@@ -802,6 +907,21 @@ footer h2.footer-paimon {
   }
 
   .btn-kelola-laporan:active {
+    background-color: #6fbb76;
+    transform: translateY(2px);
+  }
+
+  /* Google Map */
+  .btn-kelola-map {
+    margin-right: 0rem;
+    width: 50%;
+  }
+
+  .btn-kelola-map:hover {
+    background-color: #6fbb76;
+  }
+
+  .btn-kelola-map:active {
     background-color: #6fbb76;
     transform: translateY(2px);
   }
@@ -834,7 +954,6 @@ footer h2.footer-paimon {
   flex-wrap: wrap;
   justify-content: space-between;
   margin-left: 1rem;
-  margin-right: 1rem;
 }
 
 /* Reservasi Wisata */
@@ -1067,17 +1186,17 @@ form .button-kelola-form input:hover {
 
 @media (max-width: 584px) {
   form .kelola-detail .input-box {
-    margin: 15px;
+    margin-right: 1rem;
     width: 100%;
   }
 
   .kelola-detail-paket .input-box {
-    margin: 15px;
+    margin-right: 1rem;
     width: 100%;
   }
 
   .kelola-detail-reservasi .input-box {
-    margin: 15px;
+    margin-right: 1rem;
     width: 100%;
   }
 
@@ -1299,6 +1418,28 @@ form .button-kelola-form input:hover {
     height: 2rem;
     width: 100%;
     background: #3fab76;
+    color: #fff;
+    padding-top: 6px;
+    padding-left: 1rem;
+  }
+
+  /* Notif Daftar */
+  .notif-daftar {
+    border-radius: 10px;
+    height: 2rem;
+    width: 53%;
+    background: #f01c58;
+    color: #fff;
+    padding-top: 6px;
+    padding-left: 1rem;
+  }
+
+  /* Notif Login */
+  .notif-login {
+    border-radius: 10px;
+    height: 2rem;
+    width: 57%;
+    background: #3fbbeb;
     color: #fff;
     padding-top: 6px;
     padding-left: 1rem;
@@ -1771,4 +1912,202 @@ hr.jarak {
 }
 .divTableBody {
   display: table-row-group;
+}
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+/
+/* Form Login */
+.full-area-login form .kelola-login {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 1rem;
+  margin-top: 2rem;
+}
+
+.card-header-login {
+  margin-top: 2rem;
+}
+
+.card-header-login .login-1 {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.card-header-login .login-2 {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+/* ada bug */
+form .kelola-login .input-box {
+  width: calc(100% / 1 - 20px);
+  margin: 20px 0 12px 0;
+}
+
+form .btn-kelola-koordinat:hover {
+  background: var(--sidebar-color);
+}
+
+.kelola-login .input-box .details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* Input */
+.kelola-login .input-box input {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding-left: 15px;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.kelola-login .input-box input:focus,
+.kelola-login .input-box input:focus {
+  border-color: var(--sidebar-color);
+}
+
+form .detail-pilihan .pilihan-title {
+  font-size: 20px;
+  font-weight: 200; /*ada bug*/
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+form .detail-pilihan .kategori {
+  display: flex;
+  width: 80%;
+  margin: 1rem;
+  justify-content: space-between;
+}
+
+.detail-pilihan .kategori label {
+  display: flex;
+  align-items: center;
+  margin-right: 2.5rem;
+}
+
+.detail-pilihan .kategori .dot {
+  height: 18px;
+  width: 18px;
+  background: var(--sidebar-active);
+  border-radius: 50%;
+  border: 5px solid transparent;
+  transition: all 0.3s ease;
+}
+
+#dot-1:checked ~ .kategori .satu,
+#dot-2:checked ~ .kategori .dua,
+#dot-3:checked ~ .kategori .tiga {
+  border-color: var(--sidebar-active);
+  background: #fba442;
+}
+
+#all-1:checked ~ .kategori .all {
+  border-color: var(--sidebar-active);
+  background: #fba442;
+}
+
+form input[type="radio"] {
+  display: none;
+}
+
+a.lupa-pw {
+  display: block;
+}
+
+form .lupa-pw {
+  text-align: right;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+}
+
+form .lupa-pw a.lupa {
+  color: #3fbbeb;
+}
+
+form .lupa-pw a.lupa:hover {
+  color: #ffbbab;
+}
+
+form .pesan {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+form .pesan a.daftar {
+  color: #3fbbeb;
+}
+
+form .pesan a.daftar:hover {
+  color: #ffbbab;
+}
+
+/* Login */
+form .button-kelola-form-login {
+  height: 50px;
+  margin: 1rem;
+  margin-bottom: 2rem;
+}
+
+form .button-kelola-form-login input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 12px;
+  letter-spacing: 1px;
+  background-image: linear-gradient(to right, #3fbbeb 0%, #ffbbab 100%);
+}
+
+form .button-kelola-form-login input:hover {
+  background-image: linear-gradient(to right, #ffbbab 0%, #3fbbeb 100%);
+}
+
+@media (max-width: 584px) {
+  form .kelola-login .input-box {
+    margin-right: 1rem;
+    width: 100%;
+  }
+
+  form .detail-pilihan .kategori {
+    width: 100%;
+    display: grid;
+  }
+
+  .full-area-login form .kelola-login {
+    max-height: 400px;
+    overflow: scroll;
+  }
+
+  .kelola-login::-webkit-scrollbar {
+    width: 0;
+  }
 }

@@ -21,8 +21,68 @@ session_start();
 </head>
 <body>
     <!-- Main Content -->
-    <div class="main-content">
-        asd
+    <div class="main-content-login">
+        <!-- Main -->
+        <main class="main-login">
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'Buat_Akun_Berhasil'){
+                        echo '<div class="notif-login role="alert">
+                            Berhasil Membuat Akun
+                        </div>';
+                    }
+                }
+            ?>
+
+            <!-- Full Area -->
+            <div class="full-area-login">
+                <!-- Area A -->
+                <div class="area-A">
+                    <div class="card">
+                        <div class="card-header-login">
+                            <div class="login-0">&nbsp</div> <!-- Jarak jangan di delete -->
+                            <div class="login-1">Login</div>
+                            <div class="login-2">Wisata Bahari</div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-portable">
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    
+                                    <!-- Form Create Fasilitas Wisata -->
+                                    <div class="kelola-login">
+                                        <div class="input-box">
+                                            <span class="details">Username</span>
+                                            <input type="text" name="username" placeholder="Masukan Username Anda" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Password</span>
+                                            <input type="password" name="password" placeholder="Masukan Password Anda" required>
+                                        </div>
+                                    </div>
+                                    <div class="lupa-pw">
+                                        <a class="lupa" href="#"><p>Lupa Password?</p></a>
+                                    </div>
+
+                                    <div class="button-kelola-form-login">
+                                        <input type="submit" name="submit" value="Login">
+                                    </div>
+                                    <div class="pesan">
+                                        <p>-- Atau --</p>
+                                    </div>
+                                    <div class="pesan">
+                                        <p>Klik <a class="daftar" href="models/daftar">Daftar</a> Jika Tidak Punya Akun</p>
+                                    </div>
+                                    <!-- End Form -->
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </body>
 </html>

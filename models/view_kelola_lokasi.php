@@ -176,44 +176,6 @@ $rowLokasi = $stmt->fetchAll();
                                                     <a href="all_hapus?type=lokasi&id_lokasi=<?=$lokasi->id_lokasi?>" style="color: #fff">Hapus</button>
                                             </td>
                                         </tr>
-
-                                        <!-- POP UP -->
-                                        <div class="modol-bg">
-                                            <div class="modol">
-                                                <div class="modol-header">
-                                                    <h2 class="modol-title">Detail Data Lokasi</h2>
-                                                </div>
-                                                
-                                                <div class="modol-body">
-                                                    <div class="modol-input">
-                                                        <label for="">Deskripsi Lokasi</label>
-                                                        <input type="text" value="<?=$lokasi->deskripsi_lokasi?>" readonly>
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Foto Lokasi</label>
-                                                        <br><img src="<?=$lokasi->foto_lokasi?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Kontak Lokasi</label>
-                                                        <input type="text" value="<?=$lokasi->kontak_lokasi?>" readonly>
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Nama Bank</label>
-                                                        <input type="text" value="<?=$lokasi->nama_bank?>" readonly>
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Nama Rekening</label>
-                                                        <input type="text" value="<?=$lokasi->nama_rekening?>" readonly>
-                                                    </div>
-                                                    <div class="modol-input">
-                                                        <label for="">Nomor Rekening</label>
-                                                        <input type="text" value="<?=$lokasi->nomor_rekening?>" readonly>
-                                                    </div>
-                                                </div>
-                                                
-                                                <span class="modol-keluar">X</span>
-                                            </div>
-                                        </div>
                                         <?php } ?>
                                     </tbody> 
                                 </table>
@@ -235,21 +197,6 @@ $rowLokasi = $stmt->fetchAll();
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
-    <!-- All Javascript -->
-    <!-- Modal -->
-    <script>
-        var modolBtn    = document.querySelector('.modol-btn');
-        var modolBg     = document.querySelector('.modol-bg');
-        var modolKeluar = document.querySelector('.modol-keluar');
-
-        modolBtn.addEventListener('click', function(){
-            modolBg.classList.add('modol-aktif');
-        })
-        modolKeluar.addEventListener('click', function(){
-            modolBg.classList.remove('modol-aktif');
-        })
-    </script>
 
 </body>
 </html>

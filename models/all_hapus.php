@@ -7,6 +7,17 @@ $type = $_GET['type'];
 if (empty($type)) {
     header('Location: index');
     // Jarak
+} elseif ($type == 'user') {
+    $id_user = $_GET['id_user'];
+
+    $sql = 'DELETE FROM t_user
+            WHERE id_user = :id_user';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_user' => $id_user]);
+    
+    header('Location: view_kelola_user?status=hapusBerhasil');
+    // Jarak User
 } elseif ($type == 'provinsi') {
     $id_provinsi = $_GET['id_provinsi'];
 
@@ -51,7 +62,7 @@ if (empty($type)) {
             AND t_wisata.id_wisata = t_fasilitas_wisata.id_wisata
             AND t_paket_wisata.id_paket_wisata = :id_paket_wisata';
 
-    $stmt = $pdo->prepare($sqlHapus);
+    $stmt = $pdo->prepare($sql);
     $stmt->execute(['id_paket_wisata' => $_GET['id_paket_wisata']]);
 
     header('Location: view_kelola_wisata?status=hapusBerhasil');

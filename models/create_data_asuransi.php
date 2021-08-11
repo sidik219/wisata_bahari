@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola User</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
                 </li>

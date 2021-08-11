@@ -163,6 +163,12 @@ function ageCalculator($dob){
                                     <b>Lokasi Reservasi Wisata:</b><br>
                                     <i class="detail-reservasi-bitch fas fa-umbrella-beach"></i>
                                     <small><?=$reservasi->nama_lokasi?></small>
+                                    <br><a 
+                                    target="_blank" 
+                                    href="http://maps.google.com/maps/search/?api=1&query=<?=$reservasi->latitude?>,
+                                    <?=$reservasi->longitude?>&z=8"
+                                    class="btn-kelola-map">
+                                    <i class="nav-icon fas fa-map-marked-alt"></i> Lihat di Peta</a>
                                 </p>
                                 <p class="cards-detail__text">
                                     <b>Tanggal Reservasi:</b><br>
@@ -196,7 +202,21 @@ function ageCalculator($dob){
                                     <i class="detail-reservasi-keterangan fas fa-bookmark"></i>
                                     <small><?=$reservasi->keterangan_reservasi?></small>
                                 </p>
-                                <a href="edit_data_reservasi_saya?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" class="cards-detail__cta">Upload Bukti Transfer</a>
+                                <!-- Old Button Bukti Pembayaran -->
+                                <!-- <a href="edit_data_reservasi_saya?id_reservasi_wisata=" class="cards-detail__cta">Upload Bukti Transfer</a> -->
+                                <?php
+                                    if ($reservasi->id_status_reservasi == 2) {
+                                        // Pembayaran Telah di Konfirmasi
+                                        // Download Invoice Reservasi Wisata
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="invoice_wisata?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Download Inovice</a>' : '';
+                                    } else if ($reservasi->id_status_reservasi == 3) {
+                                        // Pembayaran Tidak Sesuai
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Upload Bukti Transfer</a>' : '';
+                                    } else {
+                                        // Menunggu Konfirmasi Pembayaran
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Upload Bukti Transfer</a>' : '';
+                                    }
+                                ?>
                             </div>
                         </div><br><br>
                         <?php } ?>

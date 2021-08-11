@@ -1,6 +1,13 @@
 <?php 
 include '../app/database/koneksi.php';
 session_start();
+
+$sqluserSelect = "SELECT * FROM t_user
+                    ORDER BY id_user DESC";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute();
+$rowUser = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +110,79 @@ session_start();
 
         <!-- Main -->
         <main>
-            
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'updateBerhasil'){
+                        echo '<div class="notif role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil diupdate
+                        </div>';
+                    } else if($_GET['status'] == 'tambahBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data baru berhasil ditambahkan
+                        </div>';
+                    } else if($_GET['status'] == 'hapusBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil dihapus
+                        </div>';
+                    }
+                }
+            ?>
+            <!-- Full Area -->
+            <div class="full-area-kelola">
+                <!-- Area A -->
+                <div class="area-A">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Data User</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-portable">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td>ID User</td>
+                                            <td>Nama User</td>
+                                            <td>Jenis Kelamin</td>
+                                            <td>Email</td>
+                                            <td>No HP</td>
+                                            <td>Alamat</td>
+                                            <td>Level User</td>
+                                            <td>Username</td>
+                                            <td>Aksi</td>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <?php 
+                                            foreach ($rowUser as $user) {
+                                        ?>
+                                        <tr>
+                                            <td><?=$user->id_user?></td>
+                                            <td><?=$user->nama_user?></td>
+                                            <td><?=$user->jenis_kelamin?></td>
+                                            <td><?=$user->email?></td>
+                                            <td><?=$user->no_hp?></td>
+                                            <td><?=$user->alamat?></td>
+                                            <td><?=$user->level_user?></td>
+                                            <td><?=$user->username?></td>
+                                            <td>
+                                                <button class="button-kelola-hapus">
+                                                    <a href="all_hapus?type=user&id_user=<?=$user->id_user?>" style="color: #fff">Hapus</button>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody> 
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Footer -->
