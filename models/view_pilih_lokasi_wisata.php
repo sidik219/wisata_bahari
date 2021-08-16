@@ -163,10 +163,11 @@ $rowPaket = $stmt->fetchAll();
 
                                     <!-- Biaya -->
                                     <?php
-                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas
+                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
                                                         FROM t_fasilitas_wisata 
                                                         LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                         LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                        LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                         WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
                                                         AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
 
@@ -174,9 +175,14 @@ $rowPaket = $stmt->fetchAll();
                                     $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
                                     $rowFasilitas = $stmt->fetchAll();
 
-                                    foreach ($rowFasilitas as $fasilitas) { ?>
+                                    foreach ($rowFasilitas as $fasilitas) { 
+                                    
+                                    $asuransi       = $fasilitas->biaya_asuransi;
+                                    $wisata         = $fasilitas->total_biaya_fasilitas;
+                                    $total_paket    = $asuransi + $wisata;
+                                    ?>
                                     <h4 class="paket-harga">
-                                        Rp. <?=number_format($fasilitas->total_biaya_fasilitas, 0)?>
+                                        Rp. <?=number_format($total_paket, 0)?>
                                     </h4>
                                     <?php } ?>
 

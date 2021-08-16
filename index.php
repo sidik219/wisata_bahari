@@ -1,6 +1,63 @@
 <?php 
 include 'app/database/koneksi.php';
 session_start();
+
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sqluserSelect = "SELECT id_user, nama_user, level_user, username, password
+                        FROM t_user
+                        WHERE username = :username";
+    
+    $stmt = $pdo->prepare($sqluserSelect);
+    $stmt->execute(['username' => $username]);
+    $rowUser = $stmt->fetch();
+
+    if (!empty($rowUser)) {
+        if (password_verify($password, $rowUser->password)) {
+            if ($rowUser->level_user == "1") { // Wisatawan
+                $_SESSION['id_user']    = $rowUser->id_user;
+                $_SESSION['nama_user']  = $rowUser->nama_user;
+                $_SESSION['level_user'] = $rowUser->level_user;
+                $_SESSION['username']   = $rowUser->username;
+
+                header("Location: models/view_dashboard_user?status=login_berhasil");
+                // Jarak
+            } elseif ($rowUser->level_user == "2") { // Pengelola Lokasi
+                $_SESSION['id_user']    = $rowUser->id_user;
+                $_SESSION['nama_user']  = $rowUser->nama_user;
+                $_SESSION['level_user'] = $rowUser->level_user;
+                $_SESSION['username']   = $rowUser->username;
+
+                header("Location: models/view_dashboard_admin?status=login_berhasil");
+                // Jarak
+            } elseif ($rowUser->level_user == "3") { // Pengelola Wilayah
+                $_SESSION['id_user']    = $rowUser->id_user;
+                $_SESSION['nama_user']  = $rowUser->nama_user;
+                $_SESSION['level_user'] = $rowUser->level_user;
+                $_SESSION['username']   = $rowUser->username;
+
+                header("Location: models/view_dashboard_admin?status=login_berhasil");
+                // Jarak
+            } elseif ($rowUser->level_user == "4") { //Pengelola Provinsi
+                $_SESSION['id_user']    = $rowUser->id_user;
+                $_SESSION['nama_user']  = $rowUser->nama_user;
+                $_SESSION['level_user'] = $rowUser->level_user;
+                $_SESSION['username']   = $rowUser->username;
+
+                header("Location: models/view_dashboard_admin?status=login_berhasil");
+                // Jarak
+            } else {
+                header("Location: index?status=gagal_login_session");
+            }
+        } else {
+            header("Location: index?status=gagal_login");
+        }
+    } else {
+        header("Location: index?status=username_dan_password_salah");
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +123,7 @@ session_start();
                                     </div>
 
                                     <div class="button-kelola-form-login">
-                                        <input type="submit" name="submit" value="Login">
+                                        <input type="submit" name="login" value="Login">
                                     </div>
                                     <div class="pesan">
                                         <p>-- Atau --</p>

@@ -1986,6 +1986,18 @@ form .btn-kelola-koordinat:hover {
   transition: all 0.3s ease;
 }
 
+/* Select Option */
+.kelola-login .input-box select {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding-left: 15px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
 .kelola-login .input-box input:focus,
 .kelola-login .input-box input:focus {
   border-color: var(--sidebar-color);

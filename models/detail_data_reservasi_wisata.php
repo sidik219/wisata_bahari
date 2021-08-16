@@ -2,6 +2,13 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 if($_GET['id_reservasi_wisata']){
     $_SESSION['id_reservasi_wisata'] = $_GET['id_reservasi_wisata'];
 }
@@ -42,9 +49,49 @@ $rowReservasi = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
+            <!-- Hak Akses Pengelola Lokasi -->
+            <?php if ($level == 2 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
+            <?php } ?>
         </div>
+
+        <!-- Hak Akses Pengelola Lokasi -->
+        <?php if ($level == 2) { ?>
+        <div class="sidebar-menu">
+            <ul>
+                <!-- Dahboard Admin -->
+                <li>
+                    <a href="view_dashboard_admin">
+                    <span class="icon fas fa-home"></span>
+                        <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_reservasi_wisata" class="paimon-active">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_lokasi">
+                    <span class="fas fa-map-marked-alt"></span>
+                        <span>Kelola Lokasi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_user">
+                    <span class="fas fa-users"></span>
+                        <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="logout">
+                    <span class="fas fa-sign-out-alt"></span>
+                        <span>Log out</span></a>
+                </li>
+            </ul>
+        </div>
+        <?php } ?>
+
+        <!-- Hak Akses Pengelola Provinsi -->
+        <?php if ($level == 4) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard Admin -->
@@ -95,6 +142,7 @@ $rowReservasi = $stmt->fetchAll();
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -110,15 +158,20 @@ $rowReservasi = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses Pengelola Lokasi-->
+            <?php if ($level == 2 || $level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
-                    <h2>Paimon</h2>
-                    <span class="dashboard">Dashboard User</span>
+                    <h2>Selamat Datang</h2>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
-
+        
+        <!-- Hak Akses Pengelola Lokasi-->
+        <?php if ($level == 2 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -158,7 +211,11 @@ $rowReservasi = $stmt->fetchAll();
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Bukti Reservasi</span>
-                                            <br><img src="<?=$reservasi->bukti_reservasi?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                            <?php if ($reservasi->bukti_reservasi==NULL) {
+                                                echo "<small style='color: red;'>Bukti transfer belum diupload</small>";
+                                            } else { ?>
+                                                <br><img src="<?=$reservasi->bukti_reservasi?>" width="300px">
+                                            <?php } ?>
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Nama Bank Wisatawan</span>
@@ -182,6 +239,7 @@ $rowReservasi = $stmt->fetchAll();
                 </div>
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

@@ -2,6 +2,13 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 $sqlwilayahSelect = "SELECT * FROM t_wilayah
                     INNER JOIN t_provinsi ON t_wilayah.id_provinsi = t_provinsi.id_provinsi
                     ORDER BY id_wilayah DESC";
@@ -32,9 +39,59 @@ $rowWilayah = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
+            <!-- Hak Akses Pengelola Wilayah -->
+            <?php if ($level == 3 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
+            <?php } ?>
         </div>
+
+        <!-- Hak Akses Pengelola Wilayah -->
+        <?php if ($level == 3) { ?>
+        <div class="sidebar-menu">
+            <ul>
+                <!-- Dahboard Admin -->
+                <li>
+                    <a href="view_dashboard_admin">
+                    <span class="icon fas fa-home"></span>
+                        <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_lokasi">
+                    <span class="fas fa-map-marked-alt"></span>
+                        <span>Kelola Lokasi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_wilayah" class="paimon-active">
+                    <span class="fas fa-place-of-worship"></span>
+                        <span>Kelola Wilayah</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_user">
+                    <span class="fas fa-users"></span>
+                        <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="logout">
+                    <span class="fas fa-sign-out-alt"></span>
+                        <span>Log out</span></a>
+                </li>
+            </ul>
+        </div>
+        <?php } ?>
+
+        <!-- Hak Akses Pengelola Provinsi -->
+        <?php if ($level == 4) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard Admin -->
@@ -85,6 +142,7 @@ $rowWilayah = $stmt->fetchAll();
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -100,15 +158,20 @@ $rowWilayah = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses Pengelola Wilayah-->
+            <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
-                    <h2>Paimon</h2>
-                    <span class="dashboard">Dashboard User</span>
+                    <h2>Selamat Datang</h2>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
-
+        
+        <!-- Hak Akses Pengelola Wilayah-->
+        <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Notifikasi -->
@@ -187,6 +250,7 @@ $rowWilayah = $stmt->fetchAll();
                 </div>
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

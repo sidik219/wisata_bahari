@@ -2,13 +2,22 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 // Select Reservasi "Total Reservasi Wisata"
 $sqlreservasiSelect = "SELECT COUNT(id_reservasi_wisata) 
                         AS total_reservasi
-                        FROM t_reservasi_wisata";
+                        FROM t_reservasi_wisata
+                        LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                        WHERE t_reservasi_wisata.id_user = :id_user";
 
 $stmt = $pdo->prepare($sqlreservasiSelect);
-$stmt->execute();
+$stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowReservasi = $stmt->fetchAll();
 
 // Select Status Reservasi wisata lama
@@ -65,9 +74,15 @@ $rowLokasi = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
+            <!-- Hak Akses -->
+            <?php if ($level == 1) { ?>
             <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
+            <?php } ?>
         </div>
+
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard User -->
@@ -91,15 +106,9 @@ $rowLokasi = $stmt->fetchAll();
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
                 </li>
-
-                <!-- Dahboard Admin -->
-                <li>
-                    <a href="view_dashboard_admin">
-                    <span class="icon fas fa-home"></span>
-                        <span>Dashboard Admin</span></a>
-                </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -115,15 +124,20 @@ $rowLokasi = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses -->
+            <?php if ($level == 1) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
                     <h2>Selamat Datang</h2>
-                    <span class="dashboard">Hi, Sidik Mulyana</span>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
 
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <!-- Main -->
         <main>
             <div class="cards">
@@ -151,11 +165,14 @@ $rowLokasi = $stmt->fetchAll();
                             <?php
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
                                                 FROM t_reservasi_wisata
+                                                LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
                                                 LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi;";
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
+                                                AND t_reservasi_wisata.id_user = :id_user;";
 
                             $stmt = $pdo->prepare($sqlfasilitasSelect);
-                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);
+                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi,
+                                            'id_user' => $_SESSION['id_user']]);
                             $rowReservasi = $stmt->fetchAll();
 
                             foreach ($rowReservasi as $reservasi) { ?>
@@ -178,11 +195,14 @@ $rowLokasi = $stmt->fetchAll();
                             <?php
                             $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
                                                 FROM t_reservasi_wisata
+                                                LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
                                                 LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi;";
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
+                                                AND t_reservasi_wisata.id_user = :id_user;";
 
                             $stmt = $pdo->prepare($sqlfasilitasSelect);
-                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi]);
+                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi,
+                                            'id_user' => $_SESSION['id_user']]);
                             $rowReservasi = $stmt->fetchAll();
 
                             foreach ($rowReservasi as $reservasi) { ?>
@@ -245,6 +265,7 @@ $rowLokasi = $stmt->fetchAll();
                 </div>
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

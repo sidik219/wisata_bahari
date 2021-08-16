@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
     $email          = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $no_hp          = filter_input(INPUT_POST, 'no_hp', FILTER_SANITIZE_STRING);
     $alamat         = filter_input(INPUT_POST, 'alamat', FILTER_SANITIZE_STRING);
-    $level_user     = 1;
+    $level_user     = $_POST['level_user'];
     $aktivasi_user  = 1;
     $username       = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password       = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -121,6 +121,16 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <span class="details">Password</span>
                                             <input type="password" name="password" placeholder="Masukan Password Anda" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Level User</span>
+                                            <select name="level_user">
+                                                <option>Pilih Level</option>
+                                                <option value="1">Wisatawan</option>
+                                                <option value="2">Pengelola Pantai</option>
+                                                <option value="3">pengelola Wilayah</option>
+                                                <option value="4">Pengelola Provinsi</option>
+                                            </select>
                                         </div>
                                     </div>
 

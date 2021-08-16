@@ -2,8 +2,14 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 $id_paket_wisata = $_GET['id_paket_wisata'];
-$id_user = 1;
 $id_status_reservasi = 1;
 $keterangan_reservasi = '-';
 
@@ -130,13 +136,6 @@ if (isset($_POST['submit'])) {
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
                 </li>
-
-                <!-- Dahboard Admin -->
-                <li>
-                    <a href="view_dashboard_admin">
-                    <span class="icon fas fa-home"></span>
-                        <span>Dashboard Admin</span></a>
-                </li>
             </ul>
         </div>
     </div>
@@ -253,7 +252,7 @@ if (isset($_POST['submit'])) {
 
                                             foreach ($rowLokasi as $lokasi) { ?>
                                             <i class="detail-reservasi-bitch fas fa-umbrella-beach"></i>
-                                            <small><?=$lokasi->nama_lokasi?></small><br>
+                                            <?=$lokasi->nama_lokasi?><br>
                                             <?php } ?>
                                         </div>
 
@@ -270,7 +269,7 @@ if (isset($_POST['submit'])) {
 
                                             foreach ($rowWisata as $wisata) { ?>
                                             <i class="detail-reservasi-wisata fas fa-luggage-cart"></i>
-                                            <small><?=$wisata->judul_wisata?></small><br>
+                                            <?=$wisata->judul_wisata?><br>
                                             <?php } ?>
                                         </div>
 
@@ -290,7 +289,7 @@ if (isset($_POST['submit'])) {
 
                                             foreach ($rowFasilitas as $fasilitas) { ?>
                                             <i class="detail-reservasi-fasilitas fas fa-truck-loading"></i>
-                                            <small><?=$fasilitas->nama_fasilitas?></small><br>
+                                            <?=$fasilitas->nama_fasilitas?><br>
                                             <?php } ?>
                                         </div>
 
@@ -308,7 +307,7 @@ if (isset($_POST['submit'])) {
 
                                             foreach ($rowAsuransi as $asuransi) { ?>
                                             <i class="detail-reservasi-asuransi fas fa-heartbeat"></i>
-                                            <small>Rp. <?=number_format($asuransi->biaya_asuransi, 0)?></small><br>
+                                            Rp. <?=number_format($asuransi->biaya_asuransi, 0)?><br>
                                             <?php } ?>
                                         </div>
 
@@ -316,10 +315,11 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <span class="details"><b>Total Paket Wisata:</b></span>
                                             <?php
-                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas
+                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
                                                                 FROM t_fasilitas_wisata 
                                                                 LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                                 LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                                 WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
                                                                 AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
 
@@ -327,12 +327,17 @@ if (isset($_POST['submit'])) {
                                             $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
                                             $rowFasilitas = $stmt->fetchAll();
 
-                                            foreach ($rowFasilitas as $fasilitas) { ?>
+                                            foreach ($rowFasilitas as $fasilitas) { 
+                                                
+                                            $asuransi       = $fasilitas->biaya_asuransi;
+                                            $wisata         = $fasilitas->total_biaya_fasilitas;
+                                            $total_paket    = $asuransi + $wisata;
+                                            ?>
                                             <!-- Hidden Output Total Biaya Fasilitas -->
                                             <input type="hidden" id="total_paket_wisata" value="<?=$fasilitas->total_biaya_fasilitas?>">
 
                                             <i class="detail-reservasi-duid fas fa-money-bill-wave"></i>
-                                            <small>Rp. <?=number_format($fasilitas->total_biaya_fasilitas, 0)?></small><br>
+                                            Rp. <?=number_format($total_paket, 0)?><br>
                                             <?php } ?>
                                         </div>
 

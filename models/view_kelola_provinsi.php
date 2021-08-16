@@ -2,6 +2,13 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 $sqlprovinsiSelect = "SELECT * FROM t_provinsi
                     ORDER BY id_provinsi DESC";
 
@@ -31,9 +38,15 @@ $rowProvinsi = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
+            <!-- Hak Akses Pengelola Provinsi -->
+            <?php if ($level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
+            <?php } ?>
         </div>
+
+        <!-- Hak Akses Pengelola Provinsi -->
+        <?php if ($level == 4) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard Admin -->
@@ -84,6 +97,7 @@ $rowProvinsi = $stmt->fetchAll();
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -99,15 +113,20 @@ $rowProvinsi = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses Pengelola provinsi-->
+            <?php if ($level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
-                    <h2>Paimon</h2>
-                    <span class="dashboard">Dashboard User</span>
+                    <h2>Selamat Datang</h2>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
-
+        
+        <!-- Hak Akses Pengelola Provinsi -->
+        <?php if ($level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Notifikasi -->
@@ -176,6 +195,7 @@ $rowProvinsi = $stmt->fetchAll();
                 </div>
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

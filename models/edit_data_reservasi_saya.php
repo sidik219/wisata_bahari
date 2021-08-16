@@ -2,6 +2,13 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 $id_reservasi_wisata = $_GET['id_reservasi_wisata'];
 
 $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
@@ -81,9 +88,15 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
+            <!-- Hak Akses -->
+            <?php if ($level == 1) { ?>
             <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
+            <?php } ?>
         </div>
+        
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard User -->
@@ -116,6 +129,7 @@ if (isset($_POST['submit'])) {
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -131,15 +145,20 @@ if (isset($_POST['submit'])) {
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses -->
+            <?php if ($level == 1) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
                     <h2>Selamat Datang</h2>
-                    <span class="dashboard">Hi, Sidik Mulyana</span>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
 
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -333,6 +352,7 @@ if (isset($_POST['submit'])) {
                 <!-- End Form 2 -->
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>
