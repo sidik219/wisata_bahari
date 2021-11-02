@@ -302,7 +302,7 @@ if (isset($_POST['submit'])) {
                     } else if($_GET['status'] == 'tambahGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Input data paket wisata gagal ditambahkan!
+                            Data paket wisata gagal ditambahkan.
                         </div>';
                     }
                 }
@@ -435,9 +435,9 @@ if (isset($_POST['submit'])) {
                                         </div>
                                     </div>
                                     <div class="detail-pilihan">
-                                        <input type="radio" name="status_paket" value="Aktif" id="dot-1" checked>
-                                        <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2">
-                                        <input type="radio" name="status_paket" value="Perbaikan" id="dot-3">
+                                        <input type="radio" name="status_paket" value="Aktif" id="dot-1" checked required>
+                                        <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2" required>
+                                        <input type="radio" name="status_paket" value="Perbaikan" id="dot-3" required>
                                         <div class="pilihan-title">Status</div>
                                         <div class="kategori">
                                             <label for="dot-1">

@@ -220,7 +220,7 @@ if (isset($_POST['submit'])) {
                     if ($_GET['status'] == 'tambahGagal') {
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Input data fasilitas wisata gagal ditambahkan!
+                            Data fasilitas wisata gagal ditambahkan!
                         </div>';
                     }
                 }

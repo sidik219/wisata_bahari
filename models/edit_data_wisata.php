@@ -311,7 +311,7 @@ if (isset($_POST['submit'])) {
                     if($_GET['status'] == 'updateGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data paket wisata gagal diupdate!
+                            Data paket wisata gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
                         </div>';
                     }
                 }
