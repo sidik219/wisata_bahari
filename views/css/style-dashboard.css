@@ -52,7 +52,7 @@
   width: 100%;
   margin-bottom: 1.7rem;
   padding-left: 1rem;
-  padding-right: 1rem;
+  /* padding-right: 1rem; */
 }
 
 .sidebar-menu a {
@@ -68,7 +68,7 @@
   background: var(--sidebar-color);
   padding-top: 1rem;
   padding-bottom: 1rem;
-  border-radius: 30px 30px 30px 30px;
+  border-radius: 30px 0px 0px 30px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -200,14 +200,74 @@ main.main-login {
   min-height: calc(100vh - 82px);
 }
 
+/* Notif Default */
 .notif {
   border-radius: 10px;
   height: 2rem;
-  width: 28%;
+  width: 100%;
   background: #3fab76;
   color: #fff;
   padding-top: 6px;
   padding-left: 1rem;
+}
+
+/* Notif Update */
+.notif-update {
+  border-radius: 10px;
+  height: 2rem;
+  width: 100%;
+  background: #ec8707;
+  color: #fff;
+  padding-top: 6px;
+  padding-left: 1rem;
+}
+
+/* Notif Hapus */
+.notif-hapus {
+  border-radius: 10px;
+  height: 2rem;
+  width: 100%;
+  background: #d43334;
+  color: #fff;
+  padding-top: 6px;
+  padding-left: 1rem;
+}
+
+/* Notif Gagal */
+.notif-gagal {
+  border-radius: 10px;
+  height: 2rem;
+  width: 100%;
+  background: gray;
+  color: #fff;
+  padding-top: 6px;
+  padding-left: 1rem;
+}
+
+/* Notif Batas Pemesanan Paket Wisata Masih Berlaku */
+.notif-awal-paket {
+  border-radius: 10px;
+  height: 2rem;
+  width: 100%;
+  background: #3fab76;
+  color: #fff;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Notif Batas Pemesanan Paket Wisata Sudah Tidak Berlaku */
+.notif-akhir-paket {
+  border-radius: 10px;
+  height: 2rem;
+  width: 100%;
+  background: #d43334;
+  color: #fff;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 /* Notif Daftar */
@@ -332,7 +392,6 @@ main.main-login {
 }
 
 .card-reservasi {
-  background: #f7fafc;
   border-radius: 12px;
 }
 
@@ -486,7 +545,7 @@ main.main-login {
 }
 
 .jarak-desk {
-  background: var(--sidebar-active);
+  background: var(--sidebar-color);
   color: #fff;
   font-size: 1rem;
   border: none;
@@ -686,6 +745,13 @@ tr td:last-child {
 
 .status-wisata span {
   color: var(--sidebar-active);
+  display: inline-block;
+  font-size: 1.7rem;
+  margin-left: 0.5rem;
+}
+
+.status-wisata span:hover {
+  color: var(--sidebar-color);
   display: inline-block;
   font-size: 1.7rem;
   margin-left: 0.5rem;
@@ -987,14 +1053,15 @@ a.btn-tambah-fasilitas {
 }
 
 form .btn-tambah-fasilitas {
-  height: 20px;
-  width: 10%;
+  height: 30px;
+  width: 15%;
   outline: none;
   color: #fff;
   border: none;
   border-radius: 5px;
   background: var(--user-color);
   text-align: center;
+  padding: 0.3rem;
 }
 
 form .btn-tambah-fasilitas:hover {
@@ -1011,14 +1078,15 @@ a.btn-hapus-fasilitas {
 }
 
 form .btn-hapus-fasilitas {
-  height: 20px;
-  width: 10%;
+  height: 30px;
+  width: 15%;
   outline: none;
   color: #fff;
   border: none;
   border-radius: 5px;
   background: #d43334;
   text-align: center;
+  padding: 0.3rem;
 }
 
 form .btn-hapus-fasilitas:hover {
@@ -1223,6 +1291,40 @@ form .button-kelola-form input:hover {
   .kelola-detail-reservasi::-webkit-scrollbar {
     width: 0;
   }
+
+  /* Button Fasilitas Tambah */
+  a.btn-tambah-fasilitas {
+    display: block;
+  }
+
+  form .btn-tambah-fasilitas {
+    height: 30px;
+    width: 60%;
+    outline: none;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background: var(--user-color);
+    text-align: center;
+    padding: 0.3rem;
+  }
+
+  /* Button Fasilitas Hapus */
+  a.btn-hapus-fasilitas {
+    display: block;
+  }
+
+  form .btn-hapus-fasilitas {
+    height: 30px;
+    width: 60%;
+    outline: none;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background: #d43334;
+    text-align: center;
+    padding: 0.3rem;
+  }
 }
 /*
 *
@@ -1421,6 +1523,65 @@ form .button-kelola-form input:hover {
     color: #fff;
     padding-top: 6px;
     padding-left: 1rem;
+  }
+
+  /* Notif Update */
+  .notif-update {
+    border-radius: 10px;
+    height: 2rem;
+    width: 100%;
+    background: #ec8707;
+    color: #fff;
+    padding-top: 6px;
+    padding-left: 1rem;
+  }
+
+  /* Notif Hapus */
+  .notif-hapus {
+    border-radius: 10px;
+    height: 2rem;
+    width: 100%;
+    background: #d43334;
+    color: #fff;
+    padding-top: 6px;
+    padding-left: 1rem;
+  }
+
+  /* Notif Gagal */
+  .notif-gagal {
+    border-radius: 10px;
+    height: 2rem;
+    width: 100%;
+    background: gray;
+    color: #fff;
+    padding-top: 6px;
+    padding-left: 1rem;
+  }
+
+  /* Notif Batas Pemesanan Paket Wisata Masih Berlaku */
+  .notif-awal-paket {
+    border-radius: 10px;
+    height: 2rem;
+    width: 100%;
+    background: #3fab76;
+    color: #fff;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Notif Batas Pemesanan Paket Wisata Sudah Tidak Berlaku */
+  .notif-akhir-paket {
+    border-radius: 10px;
+    height: 2rem;
+    width: 100%;
+    background: #d43334;
+    color: #fff;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   /* Notif Daftar */

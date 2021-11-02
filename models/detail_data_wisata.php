@@ -65,14 +65,14 @@ $rowPaket = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata" class="paimon-active">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -114,14 +114,24 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -201,22 +211,51 @@ $rowPaket = $stmt->fetchAll();
                             <div class="table-portable">
                                 <form action="#" method="POST" enctype="multipart/form-data">
                                     <?php 
-                                        foreach ($rowPaket as $paket) {
+                                    foreach ($rowPaket as $paket) {
+                                    $awaldate = strtotime($paket->tgl_awal_paket);
+                                    $akhirdate = strtotime($paket->tgl_akhir_paket);
                                     ?>
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail-paket">
                                         <div class="input-box">
-                                            <span class="details">Deskripsi Lengkap Paket</span>
-                                            <input type="text" value="<?=$paket->deskripsi_lengkap_paket?>" readonly>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Foto Paket Wisata</span>
-                                            <br><img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                            <span class="details" style="margin-bottom: 0.8rem;"><b>Batas Pemesanan:</b></span>
+                                            <div style="margin-bottom: 0.8rem;">
+                                                <i class="text-info fas fa-hourglass-half"></i>
+                                                <?=strftime('%A, %d %B %Y', $awaldate);?>
+                                                <strong>s/d</strong> 
+                                                <?=strftime('%A, %d %B %Y', $akhirdate);?>
+                                            </div>
+                                            <div style="margin-bottom: 0.8rem;">
+                                                <?php
+                                                // tanggal sekarang
+                                                $tgl_sekarang = date("Y-m-d");
+                                                // tanggal pembuatan batas pemesanan paket wisata
+                                                $tgl_awal = $paket->tgl_awal_paket;
+                                                // tanggal berakhir pembuatan batas pemesanan paket wisata
+                                                $tgl_akhir = $paket->tgl_akhir_paket;
+                                                // jangka waktu + 365 hari
+                                                $jangka_waktu = strtotime($tgl_akhir, strtotime($tgl_awal));
+                                                //tanggal expired
+                                                $tgl_exp = date("Y-m-d",$jangka_waktu);
+
+                                                if ($tgl_sekarang >= $tgl_exp) { ?>
+                                                    <span class="notif-akhir-paket">
+                                                        <i class="fas fa-tag"></i> Sudah Tidak Berlaku.
+                                                    </span><br style="margin-bottom: 0.5rem;">
+                                                    <small>
+                                                        Silahkan untuk mengganti status paket wisata ke, Tidak Aktif.
+                                                    </small>
+                                                <?php } else { ?>
+                                                    <span class="notif-awal-paket">
+                                                        <i class="fas fa-tag"></i> Masih dalam jangka waktu.
+                                                    </span>
+                                                <?php }?>
+                                            </div>
                                         </div>
 
                                         <!-- Select Lokasi Wisata -->
                                         <div class="input-box">
-                                            <span class="details">Nama Lokasi</span>
+                                            <span class="details"><b>Nama Lokasi:</b></span>
                                             <?php
                                             $sqllokasiSelect = 'SELECT nama_lokasi FROM t_paket_wisata
                                                                 LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
@@ -233,12 +272,17 @@ $rowPaket = $stmt->fetchAll();
                                             </div>
                                             <?php } ?>
                                         </div>
+
+                                        <div class="input-box">
+                                            <span class="details"><b>Foto Paket Wisata:</b></span>
+                                            <br><img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                        </div>
                                         
                                         <!-- Asuransi -->
                                         <div class="input-box">
-                                            <span class="details">Biaya Asuransi</span>
+                                            <span class="details"><b>Asuransi Wisata:</b></span>
                                             <?php
-                                            $sqlasuransiSelect = 'SELECT biaya_asuransi FROM t_paket_wisata
+                                            $sqlasuransiSelect = 'SELECT nama_asuransi, biaya_asuransi FROM t_paket_wisata
                                                                 LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                                 WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
 
@@ -249,6 +293,7 @@ $rowPaket = $stmt->fetchAll();
                                             foreach ($rowAsuransi as $asuransi) { ?>
                                             <div class="detail-isi">
                                                 <i class="detail-logo-asuransi fas fa-heartbeat"></i>
+                                                <?=$asuransi->nama_asuransi?>,
                                                 Rp. <?=number_format($asuransi->biaya_asuransi, 0)?>
                                             </div>
                                             <?php } ?>
@@ -256,10 +301,12 @@ $rowPaket = $stmt->fetchAll();
 
                                         <!-- Select data biaya fasilitas untuk menentukan total sesuai harga wisata yang terdapat di paket wisata -->
                                         <div class="input-box">
-                                            <span class="details">Biaya Wisata</span>
+                                            <span class="details"><b>Biaya Paket Wisata:</b></span>
                                             <?php
-                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
+                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_kerjasama) AS total_biaya_fasilitas, biaya_asuransi
                                                                 FROM t_fasilitas_wisata 
+                                                                LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                                LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
                                                                 LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                                 LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
                                                                 LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
@@ -285,10 +332,13 @@ $rowPaket = $stmt->fetchAll();
 
                                         <!-- Select Wisata -->
                                         <div class="input-box">
-                                            <span class="details">Wisata</span>
+                                            <span class="details"><b>Wisata:</b></span>
                                             <?php
-                                            $sqlwisataSelect = 'SELECT judul_wisata FROM t_wisata
-                                                            WHERE id_paket_wisata = :id_paket_wisata';
+                                            $sqlwisataSelect = 'SELECT * FROM t_wisata
+                                                                LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                                AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata
+                                                                ORDER BY id_wisata DESC';
 
                                             $stmt = $pdo->prepare($sqlwisataSelect);
                                             $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
@@ -304,9 +354,11 @@ $rowPaket = $stmt->fetchAll();
 
                                         <!-- Select seluruh data Fasilitas -->
                                         <div class="input-box">
-                                            <span class="details">Fasilitas Wisata</span>
+                                            <span class="details"><b>Fasilitas Wisata:</b></span>
                                             <?php
-                                            $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata 
+                                            $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata
+                                                                LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                                LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
                                                                 LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                                 LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
                                                                 WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
@@ -319,7 +371,7 @@ $rowPaket = $stmt->fetchAll();
                                             foreach ($rowFasilitas as $fasilitas) { ?>
                                             <div class="detail-isi">
                                                 <i class="detail-logo-fasilitas fas fa-truck-loading"></i>
-                                                <?=$fasilitas->nama_fasilitas?><br>
+                                                <?=$fasilitas->pengadaan_fasilitas?><br>
                                             </div>
                                             <?php } ?>
                                         </div>

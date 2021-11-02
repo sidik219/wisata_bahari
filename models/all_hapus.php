@@ -88,9 +88,14 @@ if (empty($type)) {
     $stmt->execute(['id_asuransi' => $id_asuransi]);
     
     header('Location: view_kelola_asuransi?status=hapusBerhasil');
-    // Jarak Asuransi
-} elseif ($type == 'reservasi_wisata') {
+    // Jarak Kerjasama
+} elseif ($type == 'kerjasama') {
+    
+    // Jarak Pengadaan
+} elseif ($type == 'pengadaan') {
     
     // Jarak Reservasi Wisata
+} elseif ($type == 'reservasi_wisata') {
+
 }
 ?>

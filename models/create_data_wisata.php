@@ -20,18 +20,26 @@ $rowFasilitas = $stmt->fetchAll();
 
 if (isset($_POST['submit'])) {
     if ($_POST['submit'] == 'Simpan') {
-        $judul_wisata       = $_POST['judul_wisata'];
-        $deskripsi_wisata   = $_POST['deskripsi_wisata'];
+        $judul_wisata   = $_POST['judul_wisata'];
+        $randomstring   = substr(md5(rand()), 0, 7);
+
+        //Image upload
+        if ($_FILES["image_uploads"]["size"] == 0) {
+            $foto_wisata = "../views/img/image_default.jpg";
+        } else if (isset($_FILES['image_uploads'])) {
+            $target_dir  = "../views/img/foto_wisata/";
+            $foto_wisata = $target_dir . 'WIS_' . $randomstring . '.jpg';
+            move_uploaded_file($_FILES["image_uploads"]["tmp_name"], $foto_wisata);
+        }
+        //---image upload end
 
         $sqlasuransiCreate = "INSERT INTO t_wisata
-                            (judul_wisata,
-                            deskripsi_wisata)
-                            VALUE (:judul_wisata,
-                                    :deskripsi_wisata)";
+                            (judul_wisata, foto_wisata)
+                            VALUE (:judul_wisata, :foto_wisata)";
         
         $stmt = $pdo->prepare($sqlasuransiCreate);
         $stmt->execute(['judul_wisata' => $judul_wisata,
-                        'deskripsi_wisata' => $deskripsi_wisata]);
+                        'foto_wisata' => $foto_wisata]);
         
         $affectedrows = $stmt->rowCount();
         if ($affectedrows == '0') {
@@ -57,7 +65,7 @@ if (isset($_POST['submit'])) {
             if ($affectedrows == '0') {
                 header("Location: create_data_wisata?status=tambahGagal");
             } else {
-                header("Location: create_data_wisata?status=tambahBerhasil");
+                header("Location: create_data_paket_wisata?status=tambahBerhasil");
             }
             $i++;
         }
@@ -104,14 +112,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub" class="paimon-active"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -153,14 +161,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -230,24 +248,20 @@ if (isset($_POST['submit'])) {
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate
-                        </div>';
-                    } else if($_GET['status'] == 'tambahBerhasil'){
+                    if($_GET['status'] == 'tambahBerhasil'){
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
+                            Data fasilitas wisata berhasil ditambahkan
                         </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
+                    } else if($_GET['status'] == 'tambahGagal'){
+                        echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus
+                            Input data wisata gagal ditambahkan!
                         </div>';
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -268,15 +282,47 @@ if (isset($_POST['submit'])) {
                                         <input type="hidden" name="id_fasilitas_wisata[]" value="<?=$fasilitas->id_fasilitas_wisata?>">
                                     <?php } ?>
                                     
-                                    <!-- Form Create Fasilitas Wisata -->
+                                    <!-- Form Create Wisata -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
                                             <span class="details">Judul Wisata</span>
                                             <input type="text" name="judul_wisata" placeholder="Judul Wisata" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Deskripsi Wisata</span>
-                                            <input type="text" name="deskripsi_wisata" placeholder="Deskripsi Wisata" required>
+                                            <span class="details">Upload Foto Wisata</span>
+                                            <input class='form-control' type='file' name='image_uploads' id='image_uploads' accept='.jpg, .jpeg, .png' onchange="readURL(this);" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <img id="preview" width="100px" src="#" alt="Preview Gambar"/>
+
+                                            <script>
+                                                window.onload = function() {
+                                                    document.getElementById('preview').style.display = 'none';
+                                                };
+
+                                                function readURL(input) {
+                                                    //Validasi Size Upload Image
+                                                    // var uploadField = document.getElementById("image_uploads");
+
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
+                                                    };
+
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function(e) {
+                                                            $('#preview')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview').style.display = 'block';
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+                                            </script>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
@@ -285,8 +331,19 @@ if (isset($_POST['submit'])) {
                                     <!-- End Form -->
 
                                 </form>
+                                
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Keterangan -->
+                    <div style="margin-top: 2rem;">
+                        <label for="">Keterangan:</label><br>
+                        <small><b>Contoh Pengisian:</b></small><br>
+                        <small>* Judul Wisata: Wisata Diving</small><br>
+                        <small>* Upload Foto Wisata: "Foto tentang wisata tersebut". <b>Max Ukuran 2Mb</b></small><br>
+                        <small style="color: red;">* Untuk menambahkan wisata baru,
+                            harus <a href="create_data_fasilitas_wisata.php"><b>input fasilitas</b></a> terlebih dahulu</small>
                     </div>
                 </div>
             </div>
@@ -304,6 +361,8 @@ if (isset($_POST['submit'])) {
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
+    <!-- Untuk Review Image -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 </body>
 </html>

@@ -56,14 +56,14 @@ $rowPaket = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata" class="paimon-active">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -105,14 +105,24 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -184,7 +194,7 @@ $rowPaket = $stmt->fetchAll();
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
@@ -194,7 +204,7 @@ $rowPaket = $stmt->fetchAll();
                             Data baru berhasil ditambahkan
                         </div>';
                     } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
+                        echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil dihapus
                         </div>';
@@ -219,20 +229,21 @@ $rowPaket = $stmt->fetchAll();
                                         <tr>
                                             <td>ID Paket Wisata</td>
                                             <td>Nama Paket Wisata</td>
-                                            <td>Deskripsi Paket Wisata</td>
                                             <td>Status Paket</td>
+                                            <td>Status Batas Pemesanan</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                     <?php 
-                                        foreach ($rowPaket as $paket) {
+                                    foreach ($rowPaket as $paket) {
+                                    $awaldate = strtotime($paket->tgl_awal_paket);
+                                    $akhirdate = strtotime($paket->tgl_akhir_paket);
                                     ?>
                                         <tr>
                                             <td><?=$paket->id_paket_wisata?></td>
                                             <td><?=$paket->nama_paket_wisata?></td>
-                                            <td><?=$paket->deskripsi_paket_wisata?></td>
                                             <td>
                                                 <?php 
                                                     if ($paket->status_paket == "Aktif") { ?>
@@ -245,6 +256,35 @@ $rowPaket = $stmt->fetchAll();
                                                     <span class="status diona"></span>
                                                     <?=$paket->status_paket?> <!-- Status Dalam Perbaikan -->
                                                 <?php } ?>
+                                            </td>
+                                            <td>
+                                                <h5>
+                                                    <?php
+                                                    // tanggal sekarang
+                                                    $tgl_sekarang = date("Y-m-d");
+                                                    // tanggal pembuatan batas pemesanan paket wisata
+                                                    $tgl_awal = $paket->tgl_awal_paket;
+                                                    // tanggal berakhir pembuatan batas pemesanan paket wisata
+                                                    $tgl_akhir = $paket->tgl_akhir_paket;
+                                                    // jangka waktu + 365 hari
+                                                    $jangka_waktu = strtotime($tgl_akhir, strtotime($tgl_awal));
+                                                    //tanggal expired
+                                                    $tgl_exp = date("Y-m-d",$jangka_waktu);
+
+                                                    if ($tgl_sekarang >= $tgl_exp) { ?>
+                                                        <small>
+                                                            <span class="notif-akhir-paket">
+                                                                <i class="fas fa-tag"></i> Sudah Tidak Berlaku.
+                                                            </span>
+                                                        </small>
+                                                    <?php } else { ?>
+                                                        <small>
+                                                            <span class="notif-awal-paket">
+                                                                <i class="fas fa-tag"></i> Masih dalam jangka waktu.
+                                                            </span>
+                                                        </small>
+                                                    <?php }?>
+                                                </h5>
                                             </td>
                                             <td>
                                                 <button class="modol-btn button-kelola-detail">

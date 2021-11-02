@@ -10,7 +10,9 @@ if (!$_SESSION['level_user']) {
 }
 
 $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata
-                        ORDER BY update_terakhir DESC';
+                    LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                    LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                    ORDER BY id_fasilitas_wisata DESC';
 
 $stmt = $pdo->prepare($sqlfasilitasSelect);
 $stmt->execute();
@@ -76,14 +78,14 @@ function ageCalculator($dob){
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub" class="paimon-active"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -125,14 +127,24 @@ function ageCalculator($dob){
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -203,23 +215,6 @@ function ageCalculator($dob){
                 <span class="fas fa-file-excel"></span> Laporan Data Wisata</a>
             </div>
 
-            <!-- Notifikasi -->
-            <?php
-                if (!empty($_GET['status'])) {
-                    if ($_GET['status'] == 'updateBerhasil') {
-                        echo '<div class="notif role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate
-                        </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil') {
-                        echo '<div class="notif" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus
-                        </div>';
-                    }
-                }
-            ?>
-
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -236,30 +231,41 @@ function ageCalculator($dob){
                                 <table>
                                     <thead>
                                         <tr>
+                                            <td>ID Fasilitas</td>
                                             <td>Nama Fasilitas</td>
                                             <td>Biaya Fasilitas</td>
+                                            <td>Status Fasilitas</td>
+                                            <td>Status Kerjasama</td>
                                             <td>Update Terakhir</td>
-                                            <td>Aksi</td>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <?php 
-                                            foreach ($rowFasilitas as $fasilitas) {
-
-                                            $truedate = strtotime($fasilitas->update_terakhir);
-                                        ?>
+                                        foreach ($rowFasilitas as $fasilitas) {
+                                        $truedate = strtotime($fasilitas->update_terakhir); ?>
                                         <tr>
-                                            <td><?=$fasilitas->nama_fasilitas?></td>
-                                            <td>Rp. <?=number_format($fasilitas->biaya_fasilitas, 0)?></td>
+                                            <td><?=$fasilitas->id_fasilitas_wisata?></td>
+                                            <td><?=$fasilitas->pengadaan_fasilitas?></td>
+                                            <td>Rp. <?=number_format($fasilitas->biaya_kerjasama, 0)?></td>
                                             <td>
-                                                <small style="color: rgba(0, 0, 0, 0.5);"><?=strftime('%A, %d %B %Y', $truedate).'<br> ('.ageCalculator($fasilitas->update_terakhir).' yang lalu)';?></small>
+                                                <?php if ($fasilitas->status_kerjasama == "Melakukan Kerjasama") { ?>
+                                                    <span class="status yaoyao"></span><?=$fasilitas->status_kerjasama?>
+                                                <?php } elseif ($fasilitas->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
+                                                    <span class="status klee"></span><?=$fasilitas->status_kerjasama?>
+                                                <?php } ?>
                                             </td>
                                             <td>
-                                                <button class="button-kelola-edit">
-                                                    <a href="edit_data_fasilitas_wisata?id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Edit</a></button>
-                                                <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=fasilitas&id_fasilitas_wisata=<?=$fasilitas->id_fasilitas_wisata?>" style="color: #fff">Hapus</a></button>
+                                                <?php if ($fasilitas->status_pengadaan == "Baik") { ?>
+                                                    <span class="status yaoyao"></span><?=$fasilitas->status_pengadaan?>
+                                                <?php } elseif ($fasilitas->status_pengadaan == "Rusak") { ?>
+                                                    <span class="status diona"></span><?=$fasilitas->status_pengadaan?>
+                                                <?php } elseif ($fasilitas->status_pengadaan == "Hilang") { ?>
+                                                    <span class="status klee"></span><?=$fasilitas->status_pengadaan?>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <small style="color: rgba(0, 0, 0, 0.5);"><?=strftime('%A, %d %B %Y', $truedate).'<br> ('.ageCalculator($fasilitas->update_terakhir).' yang lalu)';?></small>
                                             </td>
                                         </tr>
                                         <?php } ?>

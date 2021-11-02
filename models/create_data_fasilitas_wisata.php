@@ -14,31 +14,27 @@ if (isset($_POST['submit'])) {
         $i = 0;
         foreach ($_POST['nama_fasilitas'] as $nama_fasilitas) {
             $id_wisata          = $_POST['id_wisata'];
-            $nama_fasilitas     = $_POST['nama_fasilitas'][$i];
-            $biaya_fasilitas    = $_POST['biaya_fasilitas'][$i];
+            $id_kerjasama       = $_POST['nama_fasilitas'][$i];
             $tanggal_sekarang   = date ('Y-m-d H:i:s', time());
 
             $sqlasuransiCreate = "INSERT INTO t_fasilitas_wisata
                                 (id_wisata,
-                                nama_fasilitas,
-                                biaya_fasilitas,
+                                id_kerjasama,
                                 update_terakhir)
                                 VALUE (:id_wisata,
-                                        :nama_fasilitas,
-                                        :biaya_fasilitas,
+                                        :id_kerjasama,
                                         :update_terakhir)";
             
             $stmt = $pdo->prepare($sqlasuransiCreate);
             $stmt->execute(['id_wisata' => $id_wisata,
-                            'nama_fasilitas' => $nama_fasilitas,
-                            'biaya_fasilitas' => $biaya_fasilitas,
+                            'id_kerjasama' => $id_kerjasama,
                             'update_terakhir' => $tanggal_sekarang]);
             
             $affectedrows = $stmt->rowCount();
             if ($affectedrows == '0') {
                 header("Location: create_data_fasilitas_wisata?status=tambahGagal");
             } else {
-                header("Location: create_data_fasilitas_wisata?status=tambahBerhasil");
+                header("Location: create_data_wisata?status=tambahBerhasil");
             }
             $i++;
         }
@@ -85,14 +81,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub" class="paimon-active"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -134,14 +130,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -211,10 +217,10 @@ if (isset($_POST['submit'])) {
             <!-- Notifikasi -->
             <?php
                 if (!empty($_GET['status'])) {
-                    if ($_GET['status'] == 'tambahBerhasil') {
-                        echo '<div class="notif" role="alert">
+                    if ($_GET['status'] == 'tambahGagal') {
+                        echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
+                            Input data fasilitas wisata gagal ditambahkan!
                         </div>';
                     }
                 }
@@ -244,12 +250,30 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail fieldGroup">
                                         <div class="input-box">
-                                            <span class="details">Nama Fasilitas</span>
-                                            <input type="text" name="nama_fasilitas[]" value="-"  placeholder="Nama Fasilitas" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Biaya Fasilitas</span>
-                                            <input type="number" name="biaya_fasilitas[]" value="0" min="0" placeholder="Biaya Fasilitas" required>
+                                            <span class="details">Nama Fasilitas Wisata</span>
+                                            <select name="nama_fasilitas[]" required>
+                                                <option selected value="">Pilih Fasilitas Wisata</option>
+                                                <?php
+                                                $sqlkerjasama = 'SELECT * FROM t_kerjasama
+                                                                LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                                WHERE t_pengadaan_fasilitas.status_pengadaan = "baik"
+                                                                ORDER BY id_kerjasama DESC';
+                                                $stmt = $pdo->prepare($sqlkerjasama);
+                                                $stmt->execute();
+                                                $rowKerjasama = $stmt->fetchAll();
+
+                                                foreach ($rowKerjasama as $kerjasama) { ?>
+                                                    <?php if ($kerjasama->status_kerjasama == "Melakukan Kerjasama") : ?>
+                                                        <option value="<?=$kerjasama->id_kerjasama?>">
+                                                            <?=$kerjasama->pengadaan_fasilitas?> - <?=$kerjasama->pihak_ketiga_kerjasama?>
+                                                        </option>
+                                                    <?php elseif ($kerjasama->status_kerjasama == "Tidak Melakukan Kerjasama") : ?>
+                                                        <option value="<?=$kerjasama->id_kerjasama?>">
+                                                            <?=$kerjasama->pengadaan_fasilitas?> - Tidak Melakukan Kerjasama 
+                                                        </option>
+                                                    <?php endif ?>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                         <div class="input-box">
                                             <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
@@ -268,11 +292,29 @@ if (isset($_POST['submit'])) {
                                 <div class="kelola-detail fieldGroupCopy" style="display: none;">
                                     <div class="input-box">
                                         <span class="details">Nama Fasilitas</span>
-                                        <input type="text" name="nama_fasilitas[]" value="-" placeholder="Nama Fasilitas" required>
-                                    </div>
-                                    <div class="input-box">
-                                        <span class="details">Biaya Fasilitas</span>
-                                        <input type="number" name="biaya_fasilitas[]" value="0" min="0" placeholder="Biaya Fasilitas" required>
+                                        <select name="nama_fasilitas[]" required>
+                                            <option selected value="">Pilih Fasilitas Wisata</option>
+                                            <?php
+                                            $sqlkerjasama = 'SELECT * FROM t_kerjasama
+                                                            LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                            WHERE t_pengadaan_fasilitas.status_pengadaan = "baik"
+                                                            ORDER BY id_kerjasama DESC';
+                                            $stmt = $pdo->prepare($sqlkerjasama);
+                                            $stmt->execute();
+                                            $rowKerjasama = $stmt->fetchAll();
+
+                                            foreach ($rowKerjasama as $kerjasama) { ?>
+                                                <?php if ($kerjasama->status_kerjasama == "Melakukan Kerjasama") : ?>
+                                                    <option value="<?=$kerjasama->id_kerjasama?>">
+                                                        <?=$kerjasama->pengadaan_fasilitas?> - <?=$kerjasama->pihak_ketiga_kerjasama?>
+                                                    </option>
+                                                <?php elseif ($kerjasama->status_kerjasama == "Tidak Melakukan Kerjasama") : ?>
+                                                    <option value="<?=$kerjasama->id_kerjasama?>">
+                                                        <?=$kerjasama->pengadaan_fasilitas?> - Tidak Melakukan Kerjasama 
+                                                    </option>
+                                                <?php endif ?>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div class="input-box">
                                         <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
@@ -283,6 +325,15 @@ if (isset($_POST['submit'])) {
 
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Keterangan -->
+                    <div style="margin-top: 2rem;">
+                        <label for="">Keterangan:</label><br>
+                        <small>* Fasilitas Wisata Yang Dibuat Max Harus 3</small><br>
+                        <small style="color: red;">* Untuk menambahkan fasilitas wisata baru,
+                            <br> harus <a href="create_data_pengadaan_fasilitas.php"><b>input pengadaan</b></a> terlebih dahulu selanjutnya input kerjasama
+                        </small>
                     </div>
                 </div>
             </div>

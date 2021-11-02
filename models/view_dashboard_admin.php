@@ -34,15 +34,6 @@ $stmt = $pdo->prepare($sqlstatusSelect);
 $stmt->execute();
 $rowStatus1 = $stmt->fetchAll();
 
-// Select Asuransi "Total Asuransi"
-$sqlasuransiSelect = "SELECT COUNT(id_asuransi) 
-                        AS total_asuransi
-                        FROM t_asuransi";
-
-$stmt = $pdo->prepare($sqlasuransiSelect);
-$stmt->execute();
-$rowAsuransi = $stmt->fetchAll();
-
 // Select Paket "Total Paket Wisata"
 $sqlpaketSelect = "SELECT COUNT(id_paket_wisata) 
                         AS total_paket
@@ -70,6 +61,33 @@ $stmt = $pdo->prepare($sqlfasilitasSelect);
 $stmt->execute();
 $rowFasilitas = $stmt->fetchAll();
 
+// Select Asuransi "Total Asuransi"
+$sqlasuransiSelect = "SELECT COUNT(id_asuransi) 
+                        AS total_asuransi
+                        FROM t_asuransi";
+
+$stmt = $pdo->prepare($sqlasuransiSelect);
+$stmt->execute();
+$rowAsuransi = $stmt->fetchAll();
+
+// Select Kerjasama "Total Kerjasama"
+$sqlkerjasamaSelect = "SELECT COUNT(id_kerjasama) 
+                        AS total_kerjasama
+                        FROM t_kerjasama";
+
+$stmt = $pdo->prepare($sqlkerjasamaSelect);
+$stmt->execute();
+$rowKerjasama = $stmt->fetchAll();
+
+// Select Pengadaan "Total Pengadaan"
+$sqlpengadaanSelect = "SELECT COUNT(id_pengadaan) 
+                        AS total_pengadaan
+                        FROM t_pengadaan_fasilitas";
+
+$stmt = $pdo->prepare($sqlpengadaanSelect);
+$stmt->execute();
+$rowPengadaan = $stmt->fetchAll();
+
 // Select User "Total User"
 $sqluserSelect = "SELECT COUNT(id_user) 
                         AS total_user
@@ -78,6 +96,43 @@ $sqluserSelect = "SELECT COUNT(id_user)
 $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute();
 $rowUser = $stmt->fetchAll();
+
+// ChartJS
+$label = ["Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"];
+
+for($bulan = 1; $bulan < 13; $bulan++) {
+
+    // Wisatawan
+    $sqlreservasiSelect = 'SELECT COUNT(id_reservasi_wisata) AS total_wisatawan FROM t_reservasi_wisata
+                            WHERE MONTH(tgl_reservasi) = :bulan';
+
+    $stmt = $pdo->prepare($sqlreservasiSelect);
+    $stmt->execute(['bulan' => $bulan]);
+    $totalWisatawan = $stmt->fetch();
+
+    $total_wisatawan[] = $totalWisatawan->total_wisatawan;
+
+    // Pendapatan Reservasi Wisata
+    $sqlreservasiSelect = 'SELECT SUM(total_reservasi) AS pendapatan_reservasi FROM t_reservasi_wisata
+                            WHERE MONTH(tgl_reservasi) = :bulan';
+
+    $stmt = $pdo->prepare($sqlreservasiSelect);
+    $stmt->execute(['bulan' => $bulan]);
+    $totalReservasi = $stmt->fetch();
+
+    $pendapatan_reservasi[] = $totalReservasi->pendapatan_reservasi;
+}
 ?>
 
 <!DOCTYPE html>
@@ -157,14 +212,14 @@ $rowUser = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -206,14 +261,24 @@ $rowUser = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -341,7 +406,7 @@ $rowUser = $stmt->fetchAll();
                             <h1><?=$reservasi->total_reservasi?></h1>
                             <?php } ?>
                         <?php } ?>
-                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: red;">(Sudah Transfer)</small></span>
+                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: blue;">(Sudah Transfer)</small></span>
                     </div>
                     <div>
                         <span class="paimon-2 fas fa-money-bill-wave"></span>
@@ -351,21 +416,6 @@ $rowUser = $stmt->fetchAll();
                 
                 <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
                 <?php if ($level == 3 || $level == 4) {?>
-                <!-- Asuransi -->
-                <div class="card-single">
-                    <div>
-                        <?php 
-                        foreach ($rowAsuransi as $asuransi) {
-                        ?>
-                        <h1><?=$asuransi->total_asuransi?></h1>
-                        <?php } ?>
-                        <span>Mentoring Data Asuransi</span>
-                    </div>
-                    <div>
-                        <span class="paimon-3 fas fa-heartbeat"></span>
-                    </div>
-                </div>
-
                 <!-- Paket Wisata -->
                 <div class="card-single">
                     <div>
@@ -410,7 +460,52 @@ $rowUser = $stmt->fetchAll();
                         <span class="paimon-6 fas fa-truck-loading"></span>
                     </div>
                 </div>
+
+                <!-- Asuransi -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowAsuransi as $asuransi) {
+                        ?>
+                        <h1><?=$asuransi->total_asuransi?></h1>
+                        <?php } ?>
+                        <span>Mentoring Data Asuransi</span>
+                    </div>
+                    <div>
+                        <span class="paimon-3 fas fa-heartbeat"></span>
+                    </div>
+                </div>
+
+                <!-- Kerjasama -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowKerjasama as $kerjasama) {
+                        ?>
+                        <h1><?=$kerjasama->total_kerjasama?></h1>
+                        <?php } ?>
+                        <span>Mentoring Data Kerjasama</span>
+                    </div>
+                    <div>
+                        <span class="paimon-3 fas fa-handshake"></span>
+                    </div>
+                </div>
                 <?php } ?>
+
+                <!-- Pengadaan -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowPengadaan as $pengadaan) {
+                        ?>
+                        <h1><?=$pengadaan->total_pengadaan?></h1>
+                        <?php } ?>
+                        <span>Mentoring Data Pengadaan</span>
+                    </div>
+                    <div>
+                        <span class="paimon-3 fas fa-truck-loading"></span>
+                    </div>
+                </div>
                 
                 <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
                 <?php if ($level == 2 || $level == 3 || $level == 4) {?>
@@ -429,6 +524,38 @@ $rowUser = $stmt->fetchAll();
                     </div>
                 </div>
                 <?php } ?>
+            </div>
+
+            <!-- Full Area -->
+            <div class="full-area-kelola">
+                <!-- Area A -->
+                <div class="area-A">
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="button-kelola-kembali" id="btn-wisatawan">
+                            <i class="far fa-file-image"></i> Export ke Image</button>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-portable">
+                                <canvas id="wisatawan" width="100%" height="100%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 2rem;">
+                        <div class="card-header">
+                            <button class="button-kelola-kembali" id="btn-reservasi">
+                            <i class="far fa-file-image"></i> Export ke Image</button>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-portable">
+                                <canvas id="reservasi" width="100%" height="100%"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
         <?php } ?>
@@ -451,5 +578,17 @@ $rowUser = $stmt->fetchAll();
     integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     
     <!-- All Javascript -->
+    <!-- Jquery Plugin -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <!-- CharJs CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js" integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.js" integrity="sha512-XcsV/45eM/syxTudkE8AoKK1OfxTrlFpOltc9NmHXh3HF+0ZA917G9iG6Fm7B6AzP+UeEzV8pLwnbRNPxdUpfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Export to Image -->
+    <script src="../plugins/canvas-toBlob.js-master/canvas-toBlob.js"></script>
+    <!-- FileSaver -->
+    <script src="../plugins/FileSaver.js-master/dist/FileSaver.min.js"></script>
+    <!-- Chartjs -->
+    <?php include '../views/js/chartjs.php'; ?>
+
 </body>
 </html>

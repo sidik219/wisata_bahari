@@ -28,6 +28,16 @@ $stmt = $pdo->prepare($sqlasuransiSelect);
 $stmt->execute();
 $rowAsuransi = $stmt->fetchAll();
 
+// Select Wisata
+$sqlwisataSelect = "SELECT * FROM t_wisata
+                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                    ORDER BY id_wisata";
+
+$stmt = $pdo->prepare($sqlwisataSelect);
+$stmt->execute(['id_paket_wisata' => $id_paket_wisata]);
+$rowWisata = $stmt->fetchAll();
+
 // Paket Wisata
 $sqlpaketSelect = 'SELECT * FROM t_paket_wisata
                 LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
@@ -39,23 +49,50 @@ $stmt->execute(['id_paket_wisata' => $_GET['id_paket_wisata']]);
 $rowPaket = $stmt->fetch();
 
 if (isset($_POST['submit'])) {
-    $id_lokasi                  = $_POST['id_lokasi'];
-    $id_asuransi                = $_POST['id_asuransi'];
-    $nama_paket_wisata          = $_POST['nama_paket_wisata'];
-    $deskripsi_paket_wisata     = $_POST['deskripsi_paket_wisata'];
-    $deskripsi_lengkap_paket    = $_POST['deskripsi_lengkap_paket'];
-    $status_paket               = $_POST['status_paket'];
+    $id_lokasi          = $_POST['id_lokasi'];
+    $id_asuransi        = $_POST['id_asuransi'];
+    $nama_paket_wisata  = $_POST['nama_paket_wisata'];
+    $tgl_awal_paket     = $_POST['tgl_awal_paket'];
+    $tgl_akhir_paket    = $_POST['tgl_akhir_paket'];
+    $status_paket       = $_POST['status_paket'];
+    $randomstring       = substr(md5(rand()), 0, 7);
+
+    // POST Wisata
+    $id_wisata          = $_POST["nama_wisata"];
+    $judul_wisata       = $_POST["judul_wisata"];
+    $jadwal_wisata      = $_POST["jadwal_wisata"];
+    $deskripsi_wisata   = $_POST["deskripsi_wisata"];
+
+    $hitung = count($id_wisata);
+    for ($x = 0; $x < $hitung; $x++) {
+        // echo $id_wisata[$x];
+        // echo $judul_wisata[$x];
+        // echo $deskripsi_wisata[$x];
+        $sqlupdatewisata = "UPDATE t_wisata
+        SET id_paket_wisata = :id_paket_wisata,
+            judul_wisata = :judul_wisata,
+            jadwal_wisata = :jadwal_wisata,
+            deskripsi_wisata = :deskripsi_wisata
+        WHERE id_wisata = :id_wisata";
+
+        $stmt = $pdo->prepare($sqlupdatewisata);
+        $stmt->execute([
+            'id_wisata' => $id_wisata[$x],
+            'judul_wisata' => $judul_wisata[$x],
+            'jadwal_wisata' => $jadwal_wisata[$x],
+            'deskripsi_wisata' => $deskripsi_wisata[$x],
+            'id_paket_wisata' => $id_paket_wisata
+        ]);
+    }
 
     //Image upload
-    $randomstring = substr(md5(rand()), 0, 7);
-
     if ($_FILES["image_uploads"]["size"] == 0) {
         $foto_paket_wisata = $rowPaket->foto_paket_wisata;
         $pic = "&none=";
     } else if (isset($_FILES['image_uploads'])) {
         if (($rowPaket->foto_paket_wisata == $defaultpic) || (!$rowPaket->foto_paket_wisata)){
-            $target_dir  = "../views/img/foto_wisata/";
-            $foto_paket_wisata = $target_dir .'WIS_'. $randomstring .'.jpg';
+            $target_dir  = "../views/img/foto_paket_wisata/";
+            $foto_paket_wisata = $target_dir .'PAK_'. $randomstring .'.jpg';
             move_uploaded_file($_FILES["image_uploads"]["tmp_name"], $foto_paket_wisata);
             $pic = "&new=";
         } else if (isset($rowPaket->foto_paket_wisata)){
@@ -71,8 +108,8 @@ if (isset($_POST['submit'])) {
                         SET id_lokasi = :id_lokasi,
                             id_asuransi = :id_asuransi,
                             nama_paket_wisata = :nama_paket_wisata,
-                            deskripsi_paket_wisata = :deskripsi_paket_wisata,
-                            deskripsi_lengkap_paket = :deskripsi_lengkap_paket,
+                            tgl_awal_paket = :tgl_awal_paket,
+                            tgl_akhir_paket = :tgl_akhir_paket,
                             foto_paket_wisata = :foto_paket_wisata,
                             status_paket = :status_paket
                         WHERE id_paket_wisata = :id_paket_wisata";
@@ -81,15 +118,15 @@ if (isset($_POST['submit'])) {
     $stmt->execute(['id_lokasi' => $id_lokasi,
                     'id_asuransi' => $id_asuransi,
                     'nama_paket_wisata' => $nama_paket_wisata,
-                    'deskripsi_paket_wisata' => $deskripsi_paket_wisata,
-                    'deskripsi_lengkap_paket' => $deskripsi_lengkap_paket,
+                    'tgl_awal_paket' => $tgl_awal_paket,
+                    'tgl_akhir_paket' => $tgl_akhir_paket,
                     'foto_paket_wisata' => $foto_paket_wisata,
                     'status_paket' => $status_paket,
                     'id_paket_wisata' => $id_paket_wisata]);
 
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        // header("Location: edit_data_wisata?status=updateGagal");
+        header("Location: edit_data_wisata?status=updateGagal&id_paket_wisata=$id_paket_wisata");
     } else {
         header("Location: view_kelola_wisata?status=updateBerhasil");
     }
@@ -135,14 +172,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata" class="paimon-active">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -184,14 +221,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata" class="paimon-active">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="#">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -262,13 +309,14 @@ if (isset($_POST['submit'])) {
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateGagal'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data gagal diupdate
+                            Data paket wisata gagal diupdate!
                         </div>';
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -284,79 +332,13 @@ if (isset($_POST['submit'])) {
                                     
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
-                                        <div class="input-box">
-                                            <span class="details">Nama Paket Wisata</span>
-                                            <input type="text" name="nama_paket_wisata" value="<?=$rowPaket->nama_paket_wisata?>" placeholder="Nama Paket Wisata" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Deskripsi Paket Wisata</span>
-                                            <input type="text" name="deskripsi_paket_wisata" value="<?=$rowPaket->deskripsi_paket_wisata?>" placeholder="Deskripsi Paket Wisata" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Deskripsi Lengkap Paket</span>
-                                            <input type="text" name="deskripsi_lengkap_paket" value="<?=$rowPaket->deskripsi_lengkap_paket?>" placeholder="Deskripsi Lengkap Paket" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Upload Foto Paket Wisata</span>
-                                            <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
-                                        </div>
-                                        <div class="input-box">
-                                            <img src="#" id="preview" width="100px" alt="Preview Gambar"/>
-
-                                            <a href="<?=$rowPaket->foto_paket_wisata?>">
-                                            <img id="oldpic" src="<?=$rowPaket->foto_paket_wisata?>" width="20%" <?php if($rowPaket->foto_paket_wisata == NULL) echo "style='display: none;'"; ?>></a>
-                                            <br>
-
-                                            <small>
-                                                <?php 
-                                                if ($rowPaket->foto_paket_wisata == NULL) {
-                                                    echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
-                                                } else {
-                                                    echo "Klik gambar untuk memperbesar";
-                                                } ?>
-                                            </small>
-
-                                            <!-- upload Image -->
-                                            <div>
-                                                <script>
-                                                    const actualBtn = document.getElementById('image_uploads');
-                                                    const fileChosen = document.getElementById('file-input-label');
-
-                                                    actualBtn.addEventListener('change', function(){
-                                                        fileChosen.innerHTML = '<b>File dipilih :</b> '+this.files[0].name
-                                                    });
-                                                    window.onload = function() {
-                                                        document.getElementById('preview').style.display = 'none';
-                                                    };
-
-                                                    function readURL(input) {
-                                                        if (input.files && input.files[0]) {
-                                                            var reader = new FileReader();
-
-                                                            document.getElementById('oldpic').style.display = 'none';
-                                                            reader.onload = function (e) {
-                                                                $('#preview')
-                                                                    .attr('src', e.target.result)
-                                                                    .width(200);
-                                                                    document.getElementById('preview').style.display = 'block';
-                                                            };
-
-                                                            reader.readAsDataURL(input.files[0]);
-                                                        }
-                                                    }
-                                                </script>
-                                            </div>
-                                        </div>
-                                        
                                         <!-- Lokasi -->
                                         <div class="input-box">
-                                            <span class="details">ID Lokasi</span>
-                                            <select name="id_lokasi">
-                                                <option>Pilih Lokasi</option>
-                                                <?php 
-                                                    foreach ($rowLokasi as $lokasi) {
-                                                ?>
-                                                <option value="<?=$lokasi->id_lokasi?>">
+                                            <span class="details"><b>ID Lokasi:</b></span>
+                                            <select name="id_lokasi" required>
+                                                <option selected value="">Pilih Lokasi</option>
+                                                <?php foreach ($rowLokasi as $lokasi) { ?>
+                                                <option <?php if ($lokasi->id_lokasi == $rowPaket->id_lokasi) echo 'selected'; ?> value="<?=$lokasi->id_lokasi?>">
                                                     <?=$lokasi->id_lokasi?> - <?=$lokasi->nama_lokasi?></option>
                                                 <?php } ?>
                                             </select>
@@ -364,23 +346,130 @@ if (isset($_POST['submit'])) {
                                         
                                         <!-- Asuransi -->
                                         <div class="input-box">
-                                            <span class="details">ID Asuransi</span>
-                                            <select name="id_asuransi">
-                                                <option>Pilih Asuransi</option>
-                                                <?php 
-                                                    foreach ($rowAsuransi as $asuransi) {
-                                                ?>
-                                                <option value="<?=$asuransi->id_asuransi?>">
+                                            <span class="details"><b>ID Asuransi:</b></span>
+                                            <select name="id_asuransi" required>
+                                                <option selected value="">Pilih Asuransi</option>
+                                                <?php foreach ($rowAsuransi as $asuransi) { ?>
+                                                <option <?php if ($asuransi->id_asuransi == $rowPaket->id_asuransi) echo 'selected'; ?> value="<?=$asuransi->id_asuransi?>">
                                                     <?=$asuransi->id_asuransi?> - <?=$asuransi->biaya_asuransi?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
 
+                                        <!-- Wisata -->
+                                        <div class="input-box">
+                                            <div class="fieldGroup">
+                                                <div class="">
+                                                    <span class="details"><b>ID Wisata:</b></span>
+                                                    <?php foreach ($rowWisata as $wisata) { ?>
+                                                    <!-- Id Wisata -->
+                                                    <input type="hidden" name="nama_wisata[]" value="<?= $wisata->id_wisata ?>" class="form-control" placeholder="Hari" style="margin-top: 0.3rem;" required />
+                                                    <!-- Judul Wisata -->
+                                                    <input type="text" name="judul_wisata[]" value="<?= $wisata->judul_wisata ?>" class="form-control mb-2" placeholder="Judul Wisata" style="margin-top: 0.3rem;" required />
+                                                    <!-- Jadwal Wisata -->
+                                                    <input type="text" name="jadwal_wisata[]" value="<?= $wisata->jadwal_wisata ?>" class="form-control mb-2" placeholder="Jadwal Wisata" style="margin-top: 0.3rem;" required />
+                                                    <!-- Deskripsi Wisata -->
+                                                    <input type="text" name="deskripsi_wisata[]" value="<?= $wisata->deskripsi_wisata ?>" class="form-control" placeholder="Deskripsi" style="margin-top: 0.3rem;" required />
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Keterangan -->
+                                        <div class="input-box">
+                                            <label for="">Keterangan:</label><br>
+                                            <small><b>Contoh Pengisian:</b></small><br>
+                                            <small>* Pilih Wisata: Wisata Diving dst</small><br>
+                                            <small>* Hari: Hari Pertama dst</small><br>
+                                            <small style="color: red;">* Perhari, hanya bisa satu wisata</small><br>
+                                            <small style="color: red;">* Untuk menambahkan wisata baru, harus <a href="create_data_fasilitas_wisata.php"><b>input fasilitas wisata</b></a> terlebih dahulu</small><br>
+                                            <small style="color: red;">* Belum Bisa menambahkan wisata baru, pada saat edit wisata</small>
+                                        </div>
+
+                                        <div class="input-box">
+                                            <span class="details">Nama Paket Wisata</span>
+                                            <input type="text" name="nama_paket_wisata" value="<?=$rowPaket->nama_paket_wisata?>" placeholder="Nama Paket Wisata" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Edit Batas Pemesanan Paket</span>
+                                            <div style="margin-top: 1rem;">
+                                                <small><b>Tanggal Awal</b></small>
+                                                <input type="date" name="tgl_awal_paket" id="tgl_awal_paket" value="<?=$rowPaket->tgl_awal_paket?>" required>
+                                            </div>
+                                            <div style="margin-top: 1rem;">
+                                                <small><b>Tanggal Akhir</b></small>
+                                                <input type="date" name="tgl_akhir_paket" id="tgl_akhir_paket" value="<?=$rowPaket->tgl_akhir_paket?>" required>
+                                            </div>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Upload Foto Paket Wisata</span>
+                                            <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
+                                        </div>
+                                        <div class="input-box">
+                                            <img id="preview" src="#" width="100px" alt="Preview Gambar" />
+                                            <a href="<?= $rowPaket->foto_paket_wisata ?>" data-toggle="lightbox">
+                                                <img id="oldpic" src="<?= $rowPaket->foto_paket_wisata ?>" width="20%" <?php if ($rowPaket->foto_paket_wisata == NULL) echo "style='display: none;'"; ?>></a>
+                                            <br>
+
+                                            <small class="text-muted">
+                                                <?php if ($rowPaket->foto_paket_wisata == NULL) {
+                                                    echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
+                                                } else {
+                                                    echo "Klik gambar untuk memperbesar";
+                                                }
+
+                                                ?>
+                                            </small>
+
+                                            <script>
+                                                const actualBtn = document.getElementById('image_uploads');
+                                                const fileChosen = document.getElementById('file-input-label');
+
+                                                actualBtn.addEventListener('change', function() {
+                                                    fileChosen.innerHTML = '<b>File dipilih :</b> ' + this.files[0].name
+                                                })
+                                                window.onload = function() {
+                                                    document.getElementById('preview').style.display = 'none';
+                                                };
+
+                                                function readURL(input) {
+                                                    //Validasi Size Upload Image
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
+                                                    };
+
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+                                                        document.getElementById('oldpic').style.display = 'none';
+                                                        reader.onload = function(e) {
+                                                            $('#preview')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview').style.display = 'block';
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+
                                     </div>
                                     <div class="detail-pilihan">
-                                        <input type="radio" name="status_paket" value="Aktif" id="dot-1">
-                                        <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2">
-                                        <input type="radio" name="status_paket" value="Perbaikan" id="dot-3">
+                                        <?php if ($rowPaket->status_paket == "Aktif") { ?>
+                                            <input type="radio" name="status_paket" value="Aktif" id="dot-1" checked>
+                                            <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2">
+                                            <input type="radio" name="status_paket" value="Perbaikan" id="dot-3">
+                                        <?php } elseif ($rowPaket->status_paket == "Tidak Aktif") { ?>
+                                            <input type="radio" name="status_paket" value="Aktif" id="dot-1">
+                                            <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2" checked>
+                                            <input type="radio" name="status_paket" value="Perbaikan" id="dot-3">
+                                        <?php } elseif ($rowPaket->status_paket == "Perbaikan") { ?>
+                                            <input type="radio" name="status_paket" value="Aktif" id="dot-1">
+                                            <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2">
+                                            <input type="radio" name="status_paket" value="Perbaikan" id="dot-3" checked>
+                                        <?php } ?>
                                         <div class="pilihan-title">Status</div>
                                         <div class="kategori">
                                             <label for="dot-1">
