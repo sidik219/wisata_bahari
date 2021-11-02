@@ -10,6 +10,7 @@ if (!$_SESSION['level_user']) {
 }
 
 $sqlasuransiSelect = "SELECT * FROM t_asuransi
+                    LEFT JOIN t_perusahaan_asuransi ON t_asuransi.id_perusahaan_asuransi = t_perusahaan_asuransi.id_perusahaan_asuransi
                     ORDER BY id_asuransi DESC";
 
 $stmt = $pdo->prepare($sqlasuransiSelect);
@@ -56,14 +57,14 @@ $rowAsuransi = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi" class="paimon-active">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi" class="paimon-active">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -105,14 +106,24 @@ $rowAsuransi = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi" class="paimon-active">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -184,7 +195,7 @@ $rowAsuransi = $stmt->fetchAll();
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
@@ -194,13 +205,14 @@ $rowAsuransi = $stmt->fetchAll();
                             Data baru berhasil ditambahkan
                         </div>';
                     } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
+                        echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil dihapus
                         </div>';
                     }
                 }
             ?>
+            
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -208,7 +220,7 @@ $rowAsuransi = $stmt->fetchAll();
                     <div class="card">
                         <div class="card-header">
                             <h2>Data Asuransi</h2>
-                            <button class="button-kelola-kembali"><a href="create_data_asuransi" style="color: white;">
+                            <button class="button-kelola-kembali"><a href="create_data_perusahaan_asuransi" style="color: white;">
                             Input Data Baru</a> <span class="fas fa-plus"></span></button>
                         </div>
 
@@ -220,6 +232,9 @@ $rowAsuransi = $stmt->fetchAll();
                                             <td>ID Asuransi</td>
                                             <td>Nama Asuransi</td>
                                             <td>Biaya Asuransi</td>
+                                            <td>Perusahaan Asuransi</td>
+                                            <td>Alamat Perusahaan</td>
+                                            <td>No Telp Perusahaan</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
@@ -232,11 +247,14 @@ $rowAsuransi = $stmt->fetchAll();
                                             <td><?=$asuransi->id_asuransi?></td>
                                             <td><?=$asuransi->nama_asuransi?></td>
                                             <td><?=$asuransi->biaya_asuransi?></td>
+                                            <td><?=$asuransi->nama_perusahaan_asuransi?></td>
+                                            <td><?=$asuransi->alamat_perusahaan_asuransi?></td>
+                                            <td><?=$asuransi->notlp_perusahaan_asuransi?></td>
                                             <td>
                                                 <button class="button-kelola-edit ">
                                                     <a href="edit_data_asuransi?id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=asuransi&id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Hapus</a></button>
+                                                    <a href="all_hapus?type=asuransi&id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</a></button>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -261,6 +279,23 @@ $rowAsuransi = $stmt->fetchAll();
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
+    <!-- Konfirmasi Hapus -->
+    <script>
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Asuransi akan hilang permanen!')
+
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
+
+        }
+    }
+    </script>
 
 </body>
 </html>

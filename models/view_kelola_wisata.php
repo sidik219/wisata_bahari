@@ -115,12 +115,12 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_kerjasama">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -196,21 +196,22 @@ $rowPaket = $stmt->fetchAll();
                     if($_GET['status'] == 'updateBerhasil'){
                         echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate
+                            Data berhasil diupdate.
                         </div>';
                     } else if($_GET['status'] == 'tambahBerhasil'){
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
+                            Data baru berhasil ditambahkan.
                         </div>';
                     } else if($_GET['status'] == 'hapusBerhasil'){
                         echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus
+                            Data berhasil dihapus.
                         </div>';
                     }
                 }
             ?>
+            
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -292,7 +293,7 @@ $rowPaket = $stmt->fetchAll();
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_data_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=paket_wisata&id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Hapus</a></button>
+                                                    <a href="all_hapus?type=paket_wisata&id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</a></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -319,6 +320,22 @@ $rowPaket = $stmt->fetchAll();
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
+    <!-- Konfirmasi Hapus -->
+    <script>
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Paket Wisata akan hilang permanen!')
 
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
+
+        }
+    }
+    </script>
 </body>
 </html>

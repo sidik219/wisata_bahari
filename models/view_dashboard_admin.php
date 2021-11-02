@@ -271,12 +271,12 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_kerjasama">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>

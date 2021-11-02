@@ -19,7 +19,7 @@ $rowLokasi = $stmt->fetchAll();
 
 // Select Asuransi
 $sqlasuransiSelect = "SELECT * FROM t_asuransi
-                    WHERE id_perusahaan_asuransi IS NULL
+                    WHERE id_perusahaan_asuransi IS NOT NULL
                     ORDER BY id_asuransi ASC";
 
 $stmt = $pdo->prepare($sqlasuransiSelect);
@@ -217,12 +217,12 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_kerjasama">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -297,7 +297,7 @@ if (isset($_POST['submit'])) {
                     if($_GET['status'] == 'tambahBerhasil'){
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data wisata berhasil ditambahkan
+                            Data wisata berhasil ditambahkan.
                         </div>';
                     } else if($_GET['status'] == 'tambahGagal'){
                         echo '<div class="notif-gagal" role="alert">
@@ -325,7 +325,7 @@ if (isset($_POST['submit'])) {
                                     <div class="kelola-detail">
                                         <!-- Lokasi -->
                                         <div class="input-box">
-                                            <span class="details">ID Lokasi</span>
+                                            <span class="details"><b>ID Lokasi:</b></span>
                                             <select name="id_lokasi" required>
                                                 <option selected value="">Pilih Lokasi</option>
                                                 <?php foreach ($rowLokasi as $lokasi) { ?>
@@ -337,7 +337,7 @@ if (isset($_POST['submit'])) {
                                         
                                         <!-- Asuransi -->
                                         <div class="input-box">
-                                            <span class="details">ID Asuransi</span>
+                                            <span class="details"><b>ID Asuransi:</b></span>
                                             <select name="id_asuransi" required>
                                                 <option selected value="">Pilih Asuransi</option>
                                                 <?php foreach ($rowAsuransi as $asuransi) { ?>
@@ -351,7 +351,7 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <div class="fieldGroup">
                                                 <div class="">
-                                                    <span class="details">ID Wisata</span>
+                                                    <span class="details"><b>ID Wisata:</b></span>
                                                     <select name="nama_wisata[]" required>
                                                         <option selected value="">Pilih Wisata</option>
                                                         <?php foreach ($rowWisata as $wisata) { ?>
@@ -383,11 +383,11 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         
                                         <div class="input-box">
-                                            <span class="details">Nama Paket Wisata</span>
+                                            <span class="details"><b>Nama Paket Wisata:</b></span>
                                             <input type="text" name="nama_paket_wisata" placeholder="Nama Paket Wisata" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Buat Batas Pemesanan Paket</span>
+                                            <span class="details"><b>Buat Batas Pemesanan Paket:</b></span>
                                             <div style="margin-top: 1rem;">
                                                 <small><b>Tanggal Awal</b></small>
                                                 <input type="date" name="tgl_awal_paket" id="tgl_awal_paket" required>
@@ -398,7 +398,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Upload Foto Paket Wisata</span>
+                                            <span class="details"><b>Upload Foto Paket Wisata:</b></span>
                                             <input class='form-control' type='file' name='image_uploads' id='image_uploads' accept='.jpg, .jpeg, .png' onchange="readURL(this);" required>
                                         </div>
                                         <div class="input-box">
@@ -438,7 +438,7 @@ if (isset($_POST['submit'])) {
                                         <input type="radio" name="status_paket" value="Aktif" id="dot-1" checked required>
                                         <input type="radio" name="status_paket" value="Tidak Aktif" id="dot-2" required>
                                         <input type="radio" name="status_paket" value="Perbaikan" id="dot-3" required>
-                                        <div class="pilihan-title">Status</div>
+                                        <div class="pilihan-title"><b>Status:</b></div>
                                         <div class="kategori">
                                             <label for="dot-1">
                                                 <span class="dot satu"></span>
@@ -465,7 +465,7 @@ if (isset($_POST['submit'])) {
                                 <div class="input-box">
                                     <div class="fieldGroupCopy" style="display: none;">
                                         <div class="">
-                                            <span class="details">ID Wisata</span>
+                                            <span class="details"><b>ID Wisata:</b></span>
                                             <select name="nama_wisata[]" required>
                                                 <option selected value="">Pilih Wisata</option>
                                                 <?php foreach ($rowWisata as $wisata) { ?>

@@ -171,12 +171,12 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_kerjasama">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -251,12 +251,12 @@ if (isset($_POST['submit'])) {
                     if($_GET['status'] == 'tambahBerhasil'){
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data fasilitas wisata berhasil ditambahkan
+                            Data fasilitas wisata berhasil ditambahkan.
                         </div>';
                     } else if($_GET['status'] == 'tambahGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data wisata gagal ditambahkan!
+                            Data wisata gagal ditambahkan.
                         </div>';
                     }
                 }
@@ -285,11 +285,11 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Wisata -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
-                                            <span class="details">Judul Wisata</span>
+                                            <span class="details"><b>Judul Wisata:</b></span>
                                             <input type="text" name="judul_wisata" placeholder="Judul Wisata" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Upload Foto Wisata</span>
+                                            <span class="details"><b>Upload Foto Wisata:</b></span>
                                             <input class='form-control' type='file' name='image_uploads' id='image_uploads' accept='.jpg, .jpeg, .png' onchange="readURL(this);" required>
                                         </div>
                                         <div class="input-box">

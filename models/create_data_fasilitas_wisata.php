@@ -140,12 +140,12 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_kerjasama">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -220,7 +220,7 @@ if (isset($_POST['submit'])) {
                     if ($_GET['status'] == 'tambahGagal') {
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data fasilitas wisata gagal ditambahkan!
+                            Data fasilitas wisata gagal ditambahkan.
                         </div>';
                     }
                 }
@@ -250,7 +250,7 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail fieldGroup">
                                         <div class="input-box">
-                                            <span class="details">Nama Fasilitas Wisata</span>
+                                            <span class="details"><b>Nama Fasilitas:</b></span>
                                             <select name="nama_fasilitas[]" required>
                                                 <option selected value="">Pilih Fasilitas Wisata</option>
                                                 <?php
@@ -291,7 +291,7 @@ if (isset($_POST['submit'])) {
                                 <!-- copy of input fields group -->
                                 <div class="kelola-detail fieldGroupCopy" style="display: none;">
                                     <div class="input-box">
-                                        <span class="details">Nama Fasilitas</span>
+                                        <span class="details"><b>Nama Fasilitas:</b></span>
                                         <select name="nama_fasilitas[]" required>
                                             <option selected value="">Pilih Fasilitas Wisata</option>
                                             <?php

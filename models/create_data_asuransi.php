@@ -10,22 +10,22 @@ if (!$_SESSION['level_user']) {
 }
 
 if (isset($_POST['submit'])) {
-    $nama_asuransi  = $_POST['nama_asuransi'];
-    $biaya_asuransi = $_POST['biaya_asuransi'];
+    $nama_asuransi          = $_POST['nama_asuransi'];
+    $biaya_asuransi         = $_POST['biaya_asuransi'];
+    $id_perusahaan_asuransi = $_POST['nama_pihak'];
 
     $sqlasuransiCreate = "INSERT INTO t_asuransi
-                        (nama_asuransi,
-                        biaya_asuransi)
-                        VALUE (:nama_asuransi,
-                                :biaya_asuransi)";
+                        (nama_asuransi, biaya_asuransi, id_perusahaan_asuransi)
+                        VALUE (:nama_asuransi, :biaya_asuransi, :id_perusahaan_asuransi)";
     
     $stmt = $pdo->prepare($sqlasuransiCreate);
     $stmt->execute(['nama_asuransi' => $nama_asuransi,
-                    'biaya_asuransi' => $biaya_asuransi]);
+                    'biaya_asuransi' => $biaya_asuransi,
+                    'id_perusahaan_asuransi' => $id_perusahaan_asuransi]);
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: view_kelola_asuransi?status=tambahGagal");
+        header("Location: create_data_asuransi?status=tambahGagal");
     } else {
         header("Location: view_kelola_asuransi?status=tambahBerhasil");
     }
@@ -71,14 +71,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi" class="paimon-active">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi" class="paimon-active">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -120,14 +120,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi" class="paimon-active">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -191,8 +201,26 @@ if (isset($_POST['submit'])) {
             <!-- Button Kembali -->
             <div>
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
-            <a href="view_kelola_asuransi" style="color: white;">Kembali</a></button>
+            <a href="create_data_perusahaan_asuransi" style="color: white;">Kembali</a></button>
             </div>
+
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'tambahBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data perusahaan asuransi berhasil ditambahkan.
+                        </div>';
+                    } else if($_GET['status'] == 'tambahGagal'){
+                        echo '<div class="notif-gagal" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data asuransi gagal ditambahkan.
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -216,6 +244,24 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <span class="details">Biaya Asuransi</span>
                                             <input type="number" name="biaya_asuransi" placeholder="Biaya Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Perusahaan Asuransi</span>
+                                            <select name="nama_pihak" required>
+                                                <option selected value="">Pilih Perusahaan Asuransi:</option>
+                                                <?php
+                                                $sqlperusahaan = 'SELECT * FROM t_perusahaan_asuransi
+                                                                    ORDER BY id_perusahaan_asuransi DESC';
+                                                $stmt = $pdo->prepare($sqlperusahaan);
+                                                $stmt->execute();
+                                                $rowPerusahaan = $stmt->fetchAll();
+
+                                                foreach ($rowPerusahaan as $Perusahaan) { ?>
+                                                    <option value="<?= $Perusahaan->id_perusahaan_asuransi ?>">
+                                                        <?= $Perusahaan->nama_perusahaan_asuransi ?>
+                                                    </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">

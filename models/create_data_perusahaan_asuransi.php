@@ -9,59 +9,25 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
-$id_asuransi = $_GET['id_asuransi'];
-
-// Select Provinsi
-$sqlasuransiSelect = "SELECT * FROM t_asuransi
-                    LEFT JOIN t_perusahaan_asuransi ON t_asuransi.id_perusahaan_asuransi = t_perusahaan_asuransi.id_perusahaan_asuransi
-                    WHERE id_asuransi = :id_asuransi";
-
-$stmt = $pdo->prepare($sqlasuransiSelect);
-$stmt->execute(['id_asuransi' => $id_asuransi]);
-$rowAsuransi = $stmt->fetch();
-
 if (isset($_POST['submit'])) {
-    $id_perusahaan_asuransi     = $_POST['nama_pihak'];
+    $nama_perusahaan_asuransi   = $_POST['nama_perusahaan_asuransi'];
     $alamat_perusahaan_asuransi = $_POST['alamat_perusahaan_asuransi'];
     $notlp_perusahaan_asuransi  = $_POST['notlp_perusahaan_asuransi'];
 
-    // Asuransi
-    $id_asuransi = $_POST["id_asuransi"];
-    $nama_asuransi = $_POST['nama_asuransi'];
-    $biaya_asuransi = $_POST['biaya_asuransi'];
-
-    $hitung = count($id_asuransi);
-    for ($x = 0; $x < $hitung; $x++) {
-        $sqlasuransi = "UPDATE t_asuransi
-        SET id_perusahaan_asuransi = :id_perusahaan_asuransi,
-            nama_asuransi = :nama_asuransi,
-            biaya_asuransi = :biaya_asuransi
-        WHERE id_asuransi = :id_asuransi";
-
-        $stmt = $pdo->prepare($sqlasuransi);
-        $stmt->execute([
-            'id_asuransi' => $id_asuransi[$x],
-            'nama_asuransi' => $nama_asuransi[$x],
-            'biaya_asuransi' => $biaya_asuransi[$x],
-            'id_perusahaan_asuransi' => $id_perusahaan_asuransi
-        ]);
-    }
-
-    $sqlpaketUpdate = "UPDATE t_perusahaan_asuransi
-                        SET alamat_perusahaan_asuransi = :alamat_perusahaan_asuransi,
-                            notlp_perusahaan_asuransi = :notlp_perusahaan_asuransi
-                        WHERE id_perusahaan_asuransi = :id_perusahaan_asuransi";
-
-    $stmt = $pdo->prepare($sqlpaketUpdate);
-    $stmt->execute(['alamat_perusahaan_asuransi' => $alamat_perusahaan_asuransi,
-                    'notlp_perusahaan_asuransi' => $notlp_perusahaan_asuransi,
-                    'id_perusahaan_asuransi' => $id_perusahaan_asuransi]);
-
+    $sqlperusahaanCreate = "INSERT INTO t_perusahaan_asuransi
+                        (nama_perusahaan_asuransi, alamat_perusahaan_asuransi, notlp_perusahaan_asuransi)
+                        VALUE (:nama_perusahaan_asuransi, :alamat_perusahaan_asuransi, :notlp_perusahaan_asuransi)";
+    
+    $stmt = $pdo->prepare($sqlperusahaanCreate);
+    $stmt->execute(['nama_perusahaan_asuransi' => $nama_perusahaan_asuransi,
+                    'alamat_perusahaan_asuransi' => $alamat_perusahaan_asuransi,
+                    'notlp_perusahaan_asuransi' => $notlp_perusahaan_asuransi]);
+    
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: edit_data_asuransi?status=updateGagal&id_asuransi=$id_asuransi");
+        header("Location: create_data_perusahaan_asuransi?status=tambahGagal");
     } else {
-        header("Location: view_kelola_asuransi?status=updateBerhasil");
+        header("Location: create_data_asuransi?status=tambahBerhasil");
     }
 }
 ?>
@@ -241,10 +207,10 @@ if (isset($_POST['submit'])) {
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateGagal'){
+                    if($_GET['status'] == 'tambahGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data asuransi gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
+                            Data perusahaan asuransi gagal ditambahkan.
                         </div>';
                     }
                 }
@@ -256,59 +222,44 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Edit Data Asuransi</h2>
+                            <h2>Input Data Perusahaan Asuransi</h2>
+                            <button class="button-map"><a href="create_data_asuransi" style="color: white;">
+                            Selanjutnya Input Asuransi</a> <span class="fas fa-plus"></span></button>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
                                 <form action="#" method="POST" enctype="multipart/form-data">
+                                    
+                                    <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
-                                        <!-- Hidden Id Asuransi -->
-                                        <input type="hidden" name="id_asuransi" value="<?= $rowAsuransi->id_asuransi ?>">
-
                                         <div class="input-box">
-                                            <span class="details">Nama Asuransi</span>
-                                            <input type="text" name="nama_asuransi[]" value="<?=$rowAsuransi->nama_asuransi?>" placeholder="Nama Asuransi" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Biaya Asuransi</span>
-                                            <input type="text" name="biaya_asuransi[]" value="<?=$rowAsuransi->biaya_asuransi?>" placeholder="Biaya Asuransi" required>
-                                        </div>
-
-                                        <!-- Perusahaan Asuransi -->
-                                        <div class="input-box">
-                                            <span class="details">Perusahaan Asuransi</span>
-                                            <select name="nama_pihak" required>
-                                                <option selected value="">Pilih Perusahaan Asuransi:</option>
-                                                <?php
-                                                $sqlperusahaan = 'SELECT * FROM t_perusahaan_asuransi
-                                                                    ORDER BY id_perusahaan_asuransi DESC';
-                                                $stmt = $pdo->prepare($sqlperusahaan);
-                                                $stmt->execute();
-                                                $rowPerusahaan = $stmt->fetchAll();
-
-                                                foreach ($rowPerusahaan as $Perusahaan) { ?>
-                                                    <option <?php if ($Perusahaan->id_perusahaan_asuransi == $rowAsuransi->id_perusahaan_asuransi) echo 'selected'; ?> value="<?= $Perusahaan->id_perusahaan_asuransi ?>">
-                                                        <?= $Perusahaan->nama_perusahaan_asuransi ?>
-                                                    </option>
-                                                <?php } ?>
-                                            </select>
+                                            <span class="details"><b>Nama Perusahaan Asuransi:</b></span>
+                                            <input type="text" name="nama_perusahaan_asuransi" placeholder="Nama Perusahaan Asuransi" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>Alamat Perusahaan:</b></span>
-                                            <input type="text" name="alamat_perusahaan_asuransi" value="<?=$rowAsuransi->alamat_perusahaan_asuransi?>" placeholder="Alamat Perusahaan" required>
+                                            <input type="text" name="alamat_perusahaan_asuransi" placeholder="Alamat Perusahaan" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>No Telp Perusahaan:</b></span>
-                                            <input type="tel" name="notlp_perusahaan_asuransi" value="<?=$rowAsuransi->notlp_perusahaan_asuransi?>" placeholder="No Telp Perusahaan" pattern="^[0-9-+\s()]*$" required>
+                                            <input type="tel" name="notlp_perusahaan_asuransi" placeholder="No Telp Perusahaan" pattern="^[0-9-+\s()]*$" required>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
-                                        <input type="submit" name="submit" value="Simpan">
+                                        <input type="submit" name="submit" value="Submit">
                                     </div>
+                                    <!-- End Form -->
+
                                 </form>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Keterangan -->
+                    <div style="margin-top: 2rem;">
+                        <label for="">Keterangan:</label><br>
+                        <small>* Lewati Jika Data Perusahaan Asuransi Sudah Ada / Sama.</small>
                     </div>
                 </div>
             </div>
@@ -327,8 +278,5 @@ if (isset($_POST['submit'])) {
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
 
-    <!-- All Javascript -->
-    <!-- Jquery Plugin -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 </body>
 </html>
