@@ -93,7 +93,15 @@ if (empty($type)) {
     
     // Jarak Pengadaan
 } elseif ($type == 'pengadaan') {
+    $id_pengadaan = $_GET['id_pengadaan'];
+
+    $sql = 'DELETE FROM t_pengadaan_fasilitas
+            WHERE id_pengadaan = :id_pengadaan';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_pengadaan' => $id_pengadaan]);
     
+    header('Location: view_kelola_pengadaan?status=hapusBerhasil');
     // Jarak Reservasi Wisata
 } elseif ($type == 'reservasi_wisata') {
 

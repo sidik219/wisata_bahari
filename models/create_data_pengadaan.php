@@ -9,12 +9,31 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
-$sqlpaketSelect = 'SELECT * FROM t_paket_wisata
-                    ORDER BY id_paket_wisata DESC';
+if (isset($_POST['submit'])) {
+    if ($_POST['submit'] == 'Simpan') {
+        $i = 0;
+        foreach ($_POST['pengadaan_fasilitas'] as $pengadaan_fasilitas) {
+            $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'][$i];
+            $status_pengadaan       = $_POST['status_pengadaan'][$i];
 
-$stmt = $pdo->prepare($sqlpaketSelect);
-$stmt->execute();
-$rowPaket = $stmt->fetchAll();
+            $sqlasuransiCreate = "INSERT INTO t_pengadaan_fasilitas
+                                (pengadaan_fasilitas, status_pengadaan)
+                                VALUE (:pengadaan_fasilitas, :status_pengadaan)";
+            
+            $stmt = $pdo->prepare($sqlasuransiCreate);
+            $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
+                            'status_pengadaan' => $status_pengadaan]);
+            
+            $affectedrows = $stmt->rowCount();
+            if ($affectedrows == '0') {
+                header("Location: create_data_pengadaan?status=tambahGagal");
+            } else {
+                header("Location: view_kelola_pengadaan?status=tambahBerhasil");
+            }
+            $i++;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,13 +57,13 @@ $rowPaket = $stmt->fetchAll();
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
+            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
             <?php if ($level == 3 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
             <?php } ?>
         </div>
-        
+
         <!-- Hak Akses Pengelola Wilayah -->
         <?php if ($level == 3) { ?>
         <div class="sidebar-menu">
@@ -56,7 +75,7 @@ $rowPaket = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
+                    <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
                 </li>
@@ -105,7 +124,7 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata" class="paimon-active">
+                    <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
                 </li>
@@ -120,7 +139,7 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan">
+                    <a href="view_kelola_pengadaan" class="paimon-active">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -167,7 +186,7 @@ $rowPaket = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
+            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
             <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
@@ -183,118 +202,86 @@ $rowPaket = $stmt->fetchAll();
         <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
-            <!-- Laporan Wisata -->
+            <!-- Button Kembali -->
             <div>
-            <a href="#" class="btn-kelola-laporan">
-                <span class="fas fa-file-excel"></span> Laporan Data Wisata
-            </a>
+            <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
+            <a href="view_kelola_pengadaan" style="color: white;">Kembali</a></button>
             </div>
 
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif-update" role="alert">
+                    if($_GET['status'] == 'tambahGagal'){
+                        echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate.
-                        </div>';
-                    } else if($_GET['status'] == 'tambahBerhasil'){
-                        echo '<div class="notif" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan.
-                        </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif-hapus" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus.
+                            Data pengadaan gagal ditambahkan.
                         </div>';
                     }
                 }
             ?>
-            
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Data Wisata</h2>
-                            <button class="button-kelola-kembali"><a href="view_kelola_fasilitas_wisata" style="color: white;">
-                            Input Data Baru</a> <span class="fas fa-plus"></span></button>
+                            <h2>Input Data Pengadaan Fasilitas</h2>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <td>ID Paket Wisata</td>
-                                            <td>Nama Paket Wisata</td>
-                                            <td>Status Paket</td>
-                                            <td>Status Batas Pemesanan</td>
-                                            <td>Aksi</td>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    <?php 
-                                    foreach ($rowPaket as $paket) {
-                                    $awaldate = strtotime($paket->tgl_awal_paket);
-                                    $akhirdate = strtotime($paket->tgl_akhir_paket);
-                                    ?>
-                                        <tr>
-                                            <td><?=$paket->id_paket_wisata?></td>
-                                            <td><?=$paket->nama_paket_wisata?></td>
-                                            <td>
-                                                <?php 
-                                                    if ($paket->status_paket == "Aktif") { ?>
-                                                    <span class="status yaoyao"></span>
-                                                    <?=$paket->status_paket?> <!-- Status Dalam Atifk -->
-                                                <?php } elseif ($paket->status_paket == "Tidak Aktif") { ?>
-                                                    <span class="status klee"></span>
-                                                    <?=$paket->status_paket?> <!-- Status Dalam Tidak Atifk -->
-                                                <?php } elseif ($paket->status_paket == "Perbaikan") {?>
-                                                    <span class="status diona"></span>
-                                                    <?=$paket->status_paket?> <!-- Status Dalam Perbaikan -->
-                                                <?php } ?>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <?php
-                                                    // tanggal sekarang
-                                                    $tgl_sekarang = date("Y-m-d");
-                                                    // tanggal pembuatan batas pemesanan paket wisata
-                                                    $tgl_awal = $paket->tgl_awal_paket;
-                                                    // tanggal berakhir pembuatan batas pemesanan paket wisata
-                                                    $tgl_akhir = $paket->tgl_akhir_paket;
-                                                    // jangka waktu + 365 hari
-                                                    $jangka_waktu = strtotime($tgl_akhir, strtotime($tgl_awal));
-                                                    //tanggal expired
-                                                    $tgl_exp = date("Y-m-d",$jangka_waktu);
-
-                                                    if ($tgl_sekarang >= $tgl_exp) { ?>
-                                                        <i class="fas fa-tag" style="color: #d43334;"></i>
-                                                        Sudah Tidak Berlaku.
-                                                    <?php } else { ?>
-                                                        <i class="fas fa-tag" style="color: #0ec7a3;"></i>
-                                                        Masih dalam jangka waktu.
-                                                    <?php }?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button class="modol-btn button-kelola-detail">
-                                                    <a href="detail_data_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Detail</a></button>
-                                                <button class="button-kelola-edit">
-                                                    <a href="edit_data_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff">Edit</a></button>
-                                                <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=paket_wisata&id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</a></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-
+                                <form action="#" method="POST" enctype="multipart/form-data">
                                     
-                                    <?php } ?>
-                                </table>
+                                    <!-- Form Create Fasilitas Wisata -->
+                                    <div class="kelola-detail">
+                                        <div class="input-box">
+                                            <div class="fieldGroup">
+                                                <div class="">
+                                                    <span class="details"><b>Pengadaan Fasilitas:</b></span>
+                                                    <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
+                                                    <select name="status_pengadaan[]" required>
+                                                        <option selected value="">Pilih Status Pengadaan</option>
+                                                        <option value="Baik">Baik</option>
+                                                        <option value="Rusak">Rusak</option>
+                                                        <option value="Hilang">Hilang</option>
+                                                    </select>
+                                                </div>
+                                                <div class="input-box">
+                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
+                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah pengadaan
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-kelola-form">
+                                        <input type="submit" name="submit" value="Simpan">
+                                    </div>
+                                    <!-- End Form -->
+
+                                </form>
+
+                                <!-- copy pengadaan -->
+                                <div class="input-box">
+                                    <div class="fieldGroupCopy" style="display: none;">
+                                        <div class="">
+                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
+                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
+                                            <select name="status_pengadaan[]" required>
+                                                <option selected value="">Pilih Status Pengadaan</option>
+                                                <option value="Baik">Baik</option>
+                                                <option value="Rusak">Rusak</option>
+                                                <option value="Hilang">Hilang</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-box">
+                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
+                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -314,22 +301,31 @@ $rowPaket = $stmt->fetchAll();
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-    <!-- Konfirmasi Hapus -->
+
+    <!-- All Javascript -->
+    <!-- Menambah jumlah form input -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        function konfirmasiHapus(event){
-        jawab = true
-        jawab = confirm('Yakin ingin menghapus? Data Paket Wisata akan hilang permanen!')
+        $(document).ready(function(){
+        //group add limit
+        var maxGroup = 10;
 
-        if (jawab){
-            // alert('Lanjut.')
-            return true
-        }
-        else{
-            event.preventDefault()
-            return false
+        //add more fields group
+        $(".addMore").click(function(){
+            if($('body').find('.fieldGroup').length < maxGroup){
+                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
+                $('body').find('.fieldGroup:last').after(fieldHTML);
+            }else{
+                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
+            }
+        });
 
-        }
-    }
+        //remove fields group
+        $("body").on("click",".remove",function(){
+            $(this).parents(".fieldGroup").remove();
+        });
+    });
     </script>
+
 </body>
 </html>
