@@ -11,7 +11,7 @@ if (!$_SESSION['level_user']) {
 
 $id_fasilitas_wisata = $_GET['id_fasilitas_wisata'];
 
-// Select Provinsi
+// Select Fasilitas Wisata
 $sqlfasilitasSelect = "SELECT * FROM t_fasilitas_wisata
                     LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                     WHERE t_fasilitas_wisata.id_fasilitas_wisata = :id_fasilitas_wisata

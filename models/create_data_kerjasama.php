@@ -9,29 +9,48 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
-if (isset($_POST['submit'])) {
-    if ($_POST['submit'] == 'Simpan') {
-        $i = 0;
-        foreach ($_POST['pengadaan_fasilitas'] as $pengadaan_fasilitas) {
-            $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'][$i];
-            $status_pengadaan       = $_POST['status_pengadaan'][$i];
+// Pengadaan Fasilitas
+$sqlpengadaan = 'SELECT * FROM t_pengadaan_fasilitas
+                ORDER BY id_pengadaan DESC';
+$stmt = $pdo->prepare($sqlpengadaan);
+$stmt->execute();
+$rowPengadaan = $stmt->fetchAll();
 
-            $sqlasuransiCreate = "INSERT INTO t_pengadaan_fasilitas
-                                (pengadaan_fasilitas, status_pengadaan)
-                                VALUE (:pengadaan_fasilitas, :status_pengadaan)";
-            
-            $stmt = $pdo->prepare($sqlasuransiCreate);
-            $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
-                            'status_pengadaan' => $status_pengadaan]);
-            
-            $affectedrows = $stmt->rowCount();
-            if ($affectedrows == '0') {
-                header("Location: create_data_pengadaan?status=tambahGagal");
-            } else {
-                header("Location: view_kelola_pengadaan?status=tambahBerhasil");
-            }
-            $i++;
-        }
+if (isset($_POST['submit'])) {
+    $id_pengadaan               = $_POST['id_pengadaan'];
+    $status_kerjasama           = $_POST['status_kerjasama'];
+    $pihak_ketiga_kerjasama     = $_POST['pihak_ketiga_kerjasama'];
+    $pembagian_kerjasama        = $_POST['pembagian_kerjasama'];
+    $biaya_kerjasama            = $_POST['biaya_kerjasama'];
+    $pembagian_hasil_kerjasama  = $_POST['pembagian_hasil_kerjasama'];
+    
+    $sqlkerjasama = "INSERT INTO t_kerjasama (id_pengadaan, 
+                                            status_kerjasama,
+                                            pihak_ketiga_kerjasama,
+                                            pembagian_kerjasama, 
+                                            biaya_kerjasama, 
+                                            pembagian_hasil_kerjasama)
+                    VALUES (:id_pengadaan, 
+                            :status_kerjasama,
+                            :pihak_ketiga_kerjasama,
+                            :pembagian_kerjasama, 
+                            :biaya_kerjasama, 
+                            :pembagian_hasil_kerjasama)";
+
+    $stmt = $pdo->prepare($sqlkerjasama);
+    $stmt->execute(['id_pengadaan'   => $id_pengadaan,
+                    'status_kerjasama'  => $status_kerjasama,
+                    'pihak_ketiga_kerjasama' => $pihak_ketiga_kerjasama,
+                    'pembagian_kerjasama'  => $pembagian_kerjasama,
+                    'biaya_kerjasama'  => $biaya_kerjasama,
+                    'pembagian_hasil_kerjasama'  => $pembagian_hasil_kerjasama]);
+
+    $affectedrows = $stmt->rowCount();
+    if ($affectedrows == '0') {
+        header("Location: create_data_kerjasama.php?status=tambahGagal");
+    } else {
+        //echo "HAHAHAAHA GREAT SUCCESSS !";
+        header("Location: view_kelola_kerjasama.php?status=tambahBerhasil");
     }
 }
 ?>
@@ -134,12 +153,12 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_kerjasama">
+                    <a href="view_kelola_kerjasama" class="paimon-active">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -205,7 +224,7 @@ if (isset($_POST['submit'])) {
             <!-- Button Kembali -->
             <div>
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
-            <a href="view_kelola_pengadaan" style="color: white;">Kembali</a></button>
+            <a href="view_kelola_kerjasama" style="color: white;">Kembali</a></button>
             </div>
 
             <!-- Notifikasi -->
@@ -214,7 +233,7 @@ if (isset($_POST['submit'])) {
                     if($_GET['status'] == 'tambahGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data pengadaan gagal ditambahkan.
+                            Data kerjasama gagal ditambahkan.
                         </div>';
                     }
                 }
@@ -226,7 +245,7 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengadaan Fasilitas</h2>
+                            <h2>Input Data Kerjasama</h2>
                         </div>
 
                         <div class="card-body">
@@ -239,20 +258,64 @@ if (isset($_POST['submit'])) {
                                             <div class="fieldGroup">
                                                 <div class="">
                                                     <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                                    <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                                    <select name="status_pengadaan[]" required>
+                                                    <select name="id_pengadaan" required>
                                                         <option selected value="">Pilih Status Pengadaan</option>
-                                                        <option value="Baik">Baik</option>
-                                                        <option value="Rusak">Rusak</option>
-                                                        <option value="Hilang">Hilang</option>
+                                                        <?php foreach ($rowPengadaan as $pengadaan) { ?>
+                                                        <option value="<?= $pengadaan->id_pengadaan ?>">
+                                                            <?= $pengadaan->pengadaan_fasilitas ?>
+                                                        </option>
+                                                        <?php } ?>
                                                     </select>
                                                 </div>
-                                                <div class="input-box">
-                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
-                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah pengadaan
-                                                    </a>
+                                            </div>
+                                        </div>
+                                        <div class="input-box">
+                                            <div class="fieldGroup">
+                                                <div class="">
+                                                    <span class="details"><b>Status Kerjasama:</b></span>
+                                                    <select name="status_kerjasama" required>
+                                                        <option selected value="">Pilih Status Kerjasama</option>
+                                                        <option value="Melakukan Kerjasama">Melakukan Kerjasama</option>
+                                                        <option value="Tidak Melakukan Kerjasama">Tidak Melakukan Kerjasama</option>
+                                                    </select>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Pihak Kerjasama:</b></span>
+                                            <input type="text" name="pihak_ketiga_kerjasama" placeholder="Pihak Kerjasama" required>
+                                            <small style="color: red;">*Jika tidak melakukan kerjasama, maka nama pihak kerjasama bisa dikosongkan dengan (-)</small>
+                                        </div>
+                                        <div class="input-box">
+                                            <div class="fieldGroup">
+                                                <div class="">
+                                                    <span class="details"><b>Pembagian Kerjasama:</b></span>
+                                                    <select name="pembagian_kerjasama" id="persentase" onchange="myPersentase();" required>
+                                                        <option selected value="">Pilih Status Pengadaan</option>
+                                                        <option value="0">0%</option>
+                                                        <option value="0.1">10%</option>
+                                                        <option value="0.2">20%</option>
+                                                        <option value="0.3">30%</option>
+                                                        <option value="0.4">40%</option>
+                                                        <option value="0.5">50%</option>
+                                                        <option value="0.6">60%</option>
+                                                        <option value="0.7">70%</option>
+                                                        <option value="0.8">80%</option>
+                                                        <option value="0.9">90%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Biaya Pengadaan:</b></span>
+                                            <input type="text" name="biaya_kerjasama" id="biaya_kerjasama" placeholder="Biaya Kerjasama" onchange="myPersentase();" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Pembagian Hasil Kerjsama:</b></span>
+                                            <!-- Output for display in form -->
+                                            <input type="text" id="hasil" placeholder="Pembagian Hasil Kerjsama" readonly>
+                                            <!-- Hidden Output insert to DB -->
+                                            <input type="hidden" name="pembagian_hasil_kerjasama" id="pembagian_hasil" value="" required>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
@@ -261,27 +324,6 @@ if (isset($_POST['submit'])) {
                                     <!-- End Form -->
 
                                 </form>
-
-                                <!-- copy pengadaan -->
-                                <div class="input-box">
-                                    <div class="fieldGroupCopy" style="display: none;">
-                                        <div class="">
-                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                            <select name="status_pengadaan[]" required>
-                                                <option selected value="">Pilih Status Pengadaan</option>
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-box">
-                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
-                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -305,25 +347,23 @@ if (isset($_POST['submit'])) {
     <!-- Menambah jumlah form input -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
-        //group add limit
-        var maxGroup = 10;
+        function myPersentase() {
+            var persentase      = document.getElementById("persentase").value;
+            var biaya_kerjasama = document.getElementById("biaya_kerjasama").value;
 
-        //add more fields group
-        $(".addMore").click(function(){
-            if($('body').find('.fieldGroup').length < maxGroup){
-                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
-                $('body').find('.fieldGroup:last').after(fieldHTML);
-            }else{
-                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
-            }
-        });
+            var pembagian   = parseFloat(persentase) * biaya_kerjasama;
+            var hasil       = pembagian;
+            console.log(hasil);
 
-        //remove fields group
-        $("body").on("click",".remove",function(){
-            $(this).parents(".fieldGroup").remove();
-        });
-    });
+            // Format untuk number.
+            var formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+            });
+
+            document.getElementById("hasil").value = formatter.format(hasil); //Untuk Ditampilkan
+            document.getElementById("pembagian_hasil").value = hasil; //Untuk insert ke DB
+        }
     </script>
 
 </body>

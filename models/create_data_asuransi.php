@@ -237,16 +237,16 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
-                                            <span class="details">Nama Asuransi</span>
+                                            <span class="details"><b>Nama Asuransi:</b></span>
                                             <input type="text" name="nama_asuransi" placeholder="Nama Asuransi" required>
                                             <small style="color: red;">*Nama Asuransi Boleh Dikosongkan.</small>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Biaya Asuransi</span>
+                                            <span class="details"><b>Biaya Asuransi:</b></span>
                                             <input type="number" name="biaya_asuransi" placeholder="Biaya Asuransi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Perusahaan Asuransi</span>
+                                            <span class="details"><b>Perusahaan Asuransi:</b></span>
                                             <select name="nama_pihak" required>
                                                 <option selected value="">Pilih Perusahaan Asuransi:</option>
                                                 <?php
@@ -281,8 +281,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

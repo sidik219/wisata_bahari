@@ -234,7 +234,7 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengadaan Fasilitas</h2>
+                            <h2>Edit Data Pengadaan Fasilitas</h2>
                         </div>
 
                         <div class="card-body">
@@ -296,8 +296,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

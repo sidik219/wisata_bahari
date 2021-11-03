@@ -11,7 +11,7 @@ if (!$_SESSION['level_user']) {
 
 $id_asuransi = $_GET['id_asuransi'];
 
-// Select Provinsi
+// Select Asuransi
 $sqlasuransiSelect = "SELECT * FROM t_asuransi
                     LEFT JOIN t_perusahaan_asuransi ON t_asuransi.id_perusahaan_asuransi = t_perusahaan_asuransi.id_perusahaan_asuransi
                     WHERE id_asuransi = :id_asuransi";
@@ -318,8 +318,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

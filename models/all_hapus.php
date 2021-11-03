@@ -90,7 +90,15 @@ if (empty($type)) {
     header('Location: view_kelola_asuransi?status=hapusBerhasil');
     // Jarak Kerjasama
 } elseif ($type == 'kerjasama') {
+    $id_kerjasama = $_GET['id_kerjasama'];
+
+    $sql = 'DELETE FROM t_kerjasama
+            WHERE id_kerjasama = :id_kerjasama';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_kerjasama' => $id_kerjasama]);
     
+    header('Location: view_kelola_kerjasama?status=hapusBerhasil');
     // Jarak Pengadaan
 } elseif ($type == 'pengadaan') {
     $id_pengadaan = $_GET['id_pengadaan'];

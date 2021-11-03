@@ -9,31 +9,13 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
-if (isset($_POST['submit'])) {
-    if ($_POST['submit'] == 'Simpan') {
-        $i = 0;
-        foreach ($_POST['pengadaan_fasilitas'] as $pengadaan_fasilitas) {
-            $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'][$i];
-            $status_pengadaan       = $_POST['status_pengadaan'][$i];
+$sqlkerjasamaSelect = "SELECT * FROM t_kerjasama
+                    LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                    ORDER BY id_kerjasama DESC";
 
-            $sqlasuransiCreate = "INSERT INTO t_pengadaan_fasilitas
-                                (pengadaan_fasilitas, status_pengadaan)
-                                VALUE (:pengadaan_fasilitas, :status_pengadaan)";
-            
-            $stmt = $pdo->prepare($sqlasuransiCreate);
-            $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
-                            'status_pengadaan' => $status_pengadaan]);
-            
-            $affectedrows = $stmt->rowCount();
-            if ($affectedrows == '0') {
-                header("Location: create_data_pengadaan?status=tambahGagal");
-            } else {
-                header("Location: view_kelola_pengadaan?status=tambahBerhasil");
-            }
-            $i++;
-        }
-    }
-}
+$stmt = $pdo->prepare($sqlkerjasamaSelect);
+$stmt->execute();
+$rowKerjasama = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -134,12 +116,12 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_kerjasama">
+                    <a href="view_kelola_kerjasama" class="paimon-active">
                     <span class="fas fa-handshake"></span>
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -202,86 +184,93 @@ if (isset($_POST['submit'])) {
         <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
-            <!-- Button Kembali -->
-            <div>
-            <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
-            <a href="view_kelola_pengadaan" style="color: white;">Kembali</a></button>
-            </div>
-
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'tambahGagal'){
-                        echo '<div class="notif-gagal" role="alert">
+                    if($_GET['status'] == 'updateBerhasil'){
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data pengadaan gagal ditambahkan.
+                            Data berhasil diupdate
+                        </div>';
+                    } else if($_GET['status'] == 'tambahBerhasil'){
+                        echo '<div class="notif" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data baru berhasil ditambahkan
+                        </div>';
+                    } else if($_GET['status'] == 'hapusBerhasil'){
+                        echo '<div class="notif-hapus" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data berhasil dihapus
                         </div>';
                     }
                 }
             ?>
-
+            
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengadaan Fasilitas</h2>
+                            <h2>Data Kerjasama</h2>
+                            <button class="button-kelola-kembali"><a href="create_data_kerjasama" style="color: white;">
+                            Input Data Baru</a> <span class="fas fa-plus"></span></button>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
-                                <form action="#" method="POST" enctype="multipart/form-data">
-                                    
-                                    <!-- Form Create Fasilitas Wisata -->
-                                    <div class="kelola-detail">
-                                        <div class="input-box">
-                                            <div class="fieldGroup">
-                                                <div class="">
-                                                    <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                                    <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                                    <select name="status_pengadaan[]" required>
-                                                        <option selected value="">Pilih Status Pengadaan</option>
-                                                        <option value="Baik">Baik</option>
-                                                        <option value="Rusak">Rusak</option>
-                                                        <option value="Hilang">Hilang</option>
-                                                    </select>
-                                                </div>
-                                                <div class="input-box">
-                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
-                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah pengadaan
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="button-kelola-form">
-                                        <input type="submit" name="submit" value="Simpan">
-                                    </div>
-                                    <!-- End Form -->
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td>ID Kerjasama</td>
+                                            <td>Pihak Kerjasama</td>
+                                            <td>Pengadaan Fasilitas</td>
+                                            <td>Status Kerjasama</td>
+                                            <td>Pembagian Kerjasama</td>
+                                            <td>Biaya Pengadaan</td>
+                                            <td>Pembagian Hasil</td>
+                                            <td>Aksi</td>
+                                        </tr>
+                                    </thead>
 
-                                </form>
-
-                                <!-- copy pengadaan -->
-                                <div class="input-box">
-                                    <div class="fieldGroupCopy" style="display: none;">
-                                        <div class="">
-                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                            <select name="status_pengadaan[]" required>
-                                                <option selected value="">Pilih Status Pengadaan</option>
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-box">
-                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
-                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($rowKerjasama as $kerjasama) {
+                                        $pembagian_kerjasama = round($kerjasama->pembagian_kerjasama * 100, 2);
+                                        ?>
+                                        <tr>
+                                            <td><?=$kerjasama->id_kerjasama?></td>
+                                            <?php if ($kerjasama->status_kerjasama == "Tidak Melakukan Kerjasama") : ?>
+                                                <td>Tidak Ada Pihak Kerjasama</td>
+                                            <?php elseif ($kerjasama->pihak_ketiga_kerjasama != null) : ?>
+                                                <td><?=$kerjasama->pihak_ketiga_kerjasama?></td>
+                                            <?php else : ?>
+                                                <td>Data Kosong</td>
+                                            <?php endif ?>
+                                            <td><?=$kerjasama->pengadaan_fasilitas?></td>
+                                            <td>
+                                                <?php 
+                                                    if ($kerjasama->status_kerjasama == "Melakukan Kerjasama") { ?>
+                                                    <span class="status yaoyao"></span>
+                                                    <?=$kerjasama->status_kerjasama?>
+                                                <?php } elseif ($kerjasama->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
+                                                    <span class="status klee"></span>
+                                                    <?=$kerjasama->status_kerjasama?>
+                                                <?php } ?>
+                                            </td>
+                                            <td><?= $pembagian_kerjasama ?>%</td>
+                                            <td>Rp. <?=number_format($kerjasama->biaya_kerjasama, 0)?></td>
+                                            <td>Rp. <?=number_format($kerjasama->pembagian_hasil_kerjasama, 0)?></td>
+                                            <td>
+                                                <button class="button-kelola-edit ">
+                                                    <a href="edit_data_kerjasama?id_kerjasama=<?=$kerjasama->id_kerjasama?>" style="color: #fff">Edit</a></button>
+                                                <button class="button-kelola-hapus">
+                                                    <a href="all_hapus?type=kerjasama&id_kerjasama=<?=$kerjasama->id_kerjasama?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</a></button>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -300,30 +289,22 @@ if (isset($_POST['submit'])) {
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
-    <!-- All Javascript -->
-    <!-- Menambah jumlah form input -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Konfirmasi Hapus -->
     <script>
-        $(document).ready(function(){
-        //group add limit
-        var maxGroup = 10;
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Kerjasama akan hilang permanen!')
 
-        //add more fields group
-        $(".addMore").click(function(){
-            if($('body').find('.fieldGroup').length < maxGroup){
-                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
-                $('body').find('.fieldGroup:last').after(fieldHTML);
-            }else{
-                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
-            }
-        });
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
 
-        //remove fields group
-        $("body").on("click",".remove",function(){
-            $(this).parents(".fieldGroup").remove();
-        });
-    });
+        }
+    }
     </script>
 
 </body>
