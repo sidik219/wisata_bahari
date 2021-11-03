@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: view_kelola_provinsi?status=tambahGagal");
+        header("Location: create_data_provinsi?status=tambahGagal");
     } else {
         header("Location: view_kelola_provinsi?status=tambahBerhasil");
     }
@@ -72,14 +72,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -145,6 +155,19 @@ if (isset($_POST['submit'])) {
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
             <a href="view_kelola_provinsi" style="color: white;">Kembali</a></button>
             </div>
+
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'tambahGagal'){
+                        echo '<div class="notif-gagal" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data provinsi gagal ditambahkan.
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -182,8 +205,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
