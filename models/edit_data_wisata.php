@@ -339,7 +339,7 @@ if (isset($_POST['submit'])) {
                                                 <option selected value="">Pilih Lokasi</option>
                                                 <?php foreach ($rowLokasi as $lokasi) { ?>
                                                 <option <?php if ($lokasi->id_lokasi == $rowPaket->id_lokasi) echo 'selected'; ?> value="<?=$lokasi->id_lokasi?>">
-                                                    <?=$lokasi->id_lokasi?> - <?=$lokasi->nama_lokasi?></option>
+                                                    <?=$lokasi->nama_lokasi?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -351,7 +351,7 @@ if (isset($_POST['submit'])) {
                                                 <option selected value="">Pilih Asuransi</option>
                                                 <?php foreach ($rowAsuransi as $asuransi) { ?>
                                                 <option <?php if ($asuransi->id_asuransi == $rowPaket->id_asuransi) echo 'selected'; ?> value="<?=$asuransi->id_asuransi?>">
-                                                    <?=$asuransi->id_asuransi?> - <?=$asuransi->biaya_asuransi?></option>
+                                                    <?=$asuransi->nama_asuransi?>, Rp <?=number_format($asuransi->biaya_asuransi, 0)?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>

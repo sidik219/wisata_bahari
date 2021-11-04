@@ -57,14 +57,14 @@ $rowWilayah = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -106,14 +106,24 @@ $rowWilayah = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -178,7 +188,7 @@ $rowWilayah = $stmt->fetchAll();
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
@@ -188,13 +198,14 @@ $rowWilayah = $stmt->fetchAll();
                             Data baru berhasil ditambahkan
                         </div>';
                     } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
+                        echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil dihapus
                         </div>';
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -231,14 +242,14 @@ $rowWilayah = $stmt->fetchAll();
                                             <td><?=$wilayah->nama_wilayah?></td>
                                             <td><?=$wilayah->deskripsi_wilayah?></td>
                                             <td>
-                                                <img src="<?=$wilayah->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+                                                <img src="<?=$wilayah->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px" height="100px">
                                             </td>
                                             <td><?=$wilayah->sisi_pantai?></td>
                                             <td>
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_data_wilayah?id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">
-                                                    <a href="all_hapus?type=wilayah&id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff">Hapus</button>
+                                                    <a href="all_hapus?type=wilayah&id_wilayah=<?=$wilayah->id_wilayah?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</button>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -255,14 +266,30 @@ $rowWilayah = $stmt->fetchAll();
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
+    <!-- Konfirmasi Hapus -->
+    <script>
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Wilayah akan hilang permanen!')
+
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
+
+        }
+    }
+    </script>
 
 </body>
 </html>

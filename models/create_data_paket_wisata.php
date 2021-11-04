@@ -330,7 +330,7 @@ if (isset($_POST['submit'])) {
                                                 <option selected value="">Pilih Lokasi</option>
                                                 <?php foreach ($rowLokasi as $lokasi) { ?>
                                                 <option value="<?=$lokasi->id_lokasi?>">
-                                                    ID <?=$lokasi->id_lokasi?> - <?=$lokasi->nama_lokasi?></option>
+                                                    <?=$lokasi->nama_lokasi?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -342,7 +342,7 @@ if (isset($_POST['submit'])) {
                                                 <option selected value="">Pilih Asuransi</option>
                                                 <?php foreach ($rowAsuransi as $asuransi) { ?>
                                                 <option value="<?=$asuransi->id_asuransi?>">
-                                                    ID <?=$asuransi->id_asuransi?> - <?=$asuransi->nama_asuransi?>, Rp <?=number_format($asuransi->biaya_asuransi, 0)?></option>
+                                                    <?=$asuransi->nama_asuransi?>, Rp <?=number_format($asuransi->biaya_asuransi, 0)?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -356,7 +356,7 @@ if (isset($_POST['submit'])) {
                                                         <option selected value="">Pilih Wisata</option>
                                                         <?php foreach ($rowWisata as $wisata) { ?>
                                                         <option value="<?=$wisata->id_wisata?>">
-                                                            ID <?=$wisata->id_wisata?> - <?=$wisata->judul_wisata?></option>
+                                                            <?=$wisata->judul_wisata?></option>
                                                         <?php } ?>
                                                     </select>
                                                     <input type="text" name="jadwal_wisata[]" value="Hari Pertama" placeholder="Hari" style="margin-top: 0.3rem;" required />

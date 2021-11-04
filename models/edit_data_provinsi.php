@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
                     if($_GET['status'] == 'updateGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data kerjasama gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
+                            Data provinsi gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
                         </div>';
                     }
                 }

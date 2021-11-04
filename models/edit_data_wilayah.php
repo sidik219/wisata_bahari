@@ -34,10 +34,9 @@ if (isset($_POST['submit'])) {
     $nama_wilayah               = $_POST['nama_wilayah'];
     $deskripsi_wilayah          = $_POST['deskripsi_wilayah'];
     $sisi_pantai                = $_POST['sisi_pantai'];
+    $randomstring               = substr(md5(rand()), 0, 7);
 
     //Image upload
-    $randomstring = substr(md5(rand()), 0, 7);
-
     if ($_FILES["image_uploads"]["size"] == 0) {
         $foto_wilayah = $rowWilayah->foto_wilayah;
         $pic = "&none=";
@@ -74,7 +73,7 @@ if (isset($_POST['submit'])) {
 
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        // header("Location: edit_data_wilayah?status=updateGagal");
+        header("Location: edit_data_wilayah?status=updateGagal&id_wilayah=$id_wilayah");
     } else {
         header("Location: view_kelola_wilayah?status=updateBerhasil");
     }
@@ -120,14 +119,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -169,14 +168,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -247,13 +256,14 @@ if (isset($_POST['submit'])) {
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateGagal'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data gagal diupdate
+                            Data wilayah gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
                         </div>';
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -271,79 +281,81 @@ if (isset($_POST['submit'])) {
                                     <div class="kelola-detail">
                                         <!-- Provinsi -->
                                         <div class="input-box">
-                                            <span class="details">ID Provinsi</span>
-                                            <select name="id_provinsi">
-                                                <option>Pilih Provinsi</option>
+                                            <span class="details"><b>ID Provinsi:</b></span>
+                                            <select name="id_provinsi" required>
+                                                <option selected value="">Pilih Provinsi</option>
                                                 <?php 
-                                                    foreach ($rowProvinsi as $provinsi) {
+                                                foreach ($rowProvinsi as $provinsi) {
                                                 ?>
-                                                <option value="<?=$provinsi->id_provinsi?>">
-                                                    <?=$provinsi->id_provinsi?> - <?=$provinsi->nama_provinsi?></option>
+                                                <option <?php if ($provinsi->id_provinsi == $rowWilayah->id_provinsi) echo 'selected'; ?> value="<?=$provinsi->id_provinsi?>">
+                                                    <?=$provinsi->nama_provinsi?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
                                         
                                         <div class="input-box">
-                                            <span class="details">Nama Wilayah</span>
+                                            <span class="details"><b>Nama Wilayah:</b></span>
                                             <input type="text" name="nama_wilayah" value="<?=$rowWilayah->nama_wilayah?>" placeholder="Nama Wilayah" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Deskripsi Wilayah</span>
+                                            <span class="details"><b>Deskripsi Wilayah:</b></span>
                                             <input type="text" name="deskripsi_wilayah" value="<?=$rowWilayah->deskripsi_wilayah?>" placeholder="Deskripsi Wilayah" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Upload Foto Wilayah</span>
+                                            <span class="details"><b>Upload Foto Wilayah:</b></span>
                                             <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
                                         </div>
                                         <div class="input-box">
-                                            <img src="#" id="preview" width="100px" alt="Preview Gambar"/>
-
-                                            <a href="<?=$rowWilayah->foto_wilayah?>">
-                                            <img id="oldpic" src="<?=$rowWilayah->foto_wilayah?>" width="20%" <?php if($rowWilayah->foto_wilayah == NULL) echo "style='display: none;'"; ?>></a>
+                                            <img id="preview" src="#" width="100px" alt="Preview Gambar" />
+                                            <a href="<?= $rowWilayah->foto_wilayah ?>" data-toggle="lightbox">
+                                                <img id="oldpic" src="<?= $rowWilayah->foto_wilayah ?>" width="20%" <?php if ($rowWilayah->foto_wilayah == NULL) echo "style='display: none;'"; ?>></a>
                                             <br>
 
-                                            <small>
-                                                <?php 
-                                                if ($rowWilayah->foto_wilayah == NULL) {
+                                            <small class="text-muted">
+                                                <?php if ($rowWilayah->foto_wilayah == NULL) {
                                                     echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
                                                 } else {
                                                     echo "Klik gambar untuk memperbesar";
-                                                } ?>
+                                                }
+
+                                                ?>
                                             </small>
 
-                                            <!-- upload Image -->
-                                            <div>
-                                                <script>
-                                                    const actualBtn = document.getElementById('image_uploads');
-                                                    const fileChosen = document.getElementById('file-input-label');
+                                            <script>
+                                                const actualBtn = document.getElementById('image_uploads');
+                                                const fileChosen = document.getElementById('file-input-label');
 
-                                                    actualBtn.addEventListener('change', function(){
-                                                        fileChosen.innerHTML = '<b>File dipilih :</b> '+this.files[0].name
-                                                    });
-                                                    window.onload = function() {
-                                                        document.getElementById('preview').style.display = 'none';
+                                                actualBtn.addEventListener('change', function() {
+                                                    fileChosen.innerHTML = '<b>File dipilih :</b> ' + this.files[0].name
+                                                })
+                                                window.onload = function() {
+                                                    document.getElementById('preview').style.display = 'none';
+                                                };
+
+                                                function readURL(input) {
+                                                    //Validasi Size Upload Image
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
                                                     };
 
-                                                    function readURL(input) {
-                                                        if (input.files && input.files[0]) {
-                                                            var reader = new FileReader();
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+                                                        document.getElementById('oldpic').style.display = 'none';
+                                                        reader.onload = function(e) {
+                                                            $('#preview')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview').style.display = 'block';
+                                                        };
 
-                                                            document.getElementById('oldpic').style.display = 'none';
-                                                            reader.onload = function (e) {
-                                                                $('#preview')
-                                                                    .attr('src', e.target.result)
-                                                                    .width(200);
-                                                                    document.getElementById('preview').style.display = 'block';
-                                                            };
-
-                                                            reader.readAsDataURL(input.files[0]);
-                                                        }
+                                                        reader.readAsDataURL(input.files[0]);
                                                     }
-                                                </script>
-                                            </div>
+                                                }
+                                            </script>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Sisi Pantai</span>
+                                            <span class="details"><b>Sisi Pantai:</b></span>
                                             <input type="text" name="sisi_pantai" value="<?=$rowWilayah->sisi_pantai?>" placeholder="Sisi Pantai" required>
                                         </div>
                                         
@@ -365,8 +377,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
@@ -377,5 +388,6 @@ if (isset($_POST['submit'])) {
     <!-- All Javascript -->
     <!-- Jquery Plugin -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
 </body>
 </html>
