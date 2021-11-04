@@ -112,6 +112,14 @@ if (empty($type)) {
     header('Location: view_kelola_pengadaan?status=hapusBerhasil');
     // Jarak Reservasi Wisata
 } elseif ($type == 'reservasi_wisata') {
+    $id_reservasi_wisata = $_GET['id_reservasi_wisata'];
 
+    $sql = 'DELETE FROM t_reservasi_wisata
+            WHERE id_reservasi_wisata = :id_reservasi_wisata';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_reservasi_wisata' => $id_reservasi_wisata]);
+    header('Location: view_kelola_reservasi_wisata.php?status=hapusBerhasil');
+    // Jarak
 }
 ?>

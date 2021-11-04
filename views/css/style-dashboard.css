@@ -494,6 +494,30 @@ main.main-login {
   transform: translateY(2px);
 }
 
+/* Hapus */
+.button-kelola-pengeluaran {
+  background: #3fab76;
+  color: #fff;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.button-kelola-pengeluaran:hover {
+  background-color: #6fbb76;
+}
+
+.button-kelola-pengeluaran:active {
+  background-color: #6fbb76;
+  transform: translateY(2px);
+}
+
 /* Kembali */
 .button-kelola-kembali {
   background: var(--sidebar-active);

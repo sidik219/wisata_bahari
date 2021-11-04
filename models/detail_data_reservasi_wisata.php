@@ -20,6 +20,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                     LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
                     LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                     LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                     LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                     WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata';
 
@@ -106,14 +107,24 @@ $rowReservasi = $stmt->fetchAll();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -198,35 +209,39 @@ $rowReservasi = $stmt->fetchAll();
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail-paket">
                                         <div class="input-box">
-                                            <span class="details">Jumlah Reservasi</span>
+                                            <span class="details"><b>Nama Paket Wisata:</b></span>
+                                            <input type="text" value="<?=$reservasi->nama_paket_wisata?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Jumlah Reservasi:</b></span>
                                             <input type="text" value="<?=$reservasi->jumlah_reservasi?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Total Reservasi</span>
+                                            <span class="details"><b>Asuransi:</b></span>
+                                            <input type="text" value="<?=$reservasi->nama_asuransi?>, Rp <?=number_format($reservasi->biaya_asuransi, 0)?>" readonly>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Total Reservasi:</b></span>
                                             <input type="text" value="Rp. <?=number_format($reservasi->total_reservasi, 0)?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Keterangan Reservasi</span>
+                                            <span class="details"><b>Keterangan Reservasi:</b></span>
                                             <input type="text" value="<?=$reservasi->keterangan_reservasi?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Bukti Reservasi</span>
-                                            <?php if ($reservasi->bukti_reservasi==NULL) {
-                                                echo "<small style='color: red;'>Bukti transfer belum diupload</small>";
-                                            } else { ?>
-                                                <br><img src="<?=$reservasi->bukti_reservasi?>" width="300px">
-                                            <?php } ?>
+                                            <span class="details"><b>No HP User:</b></span>
+                                            <input type="text" value="<?=$reservasi->no_hp?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Bank Wisatawan</span>
+                                            <span class="details"><b>Nama Bank Wisatawan:</b></span>
                                             <input type="text" value="<?=$reservasi->nama_bank_wisatawan?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Rekening Wisatawan</span>
+                                            <span class="details"><b>Nama Rekening Wisatawan:</b></span>
                                             <input type="text" value="<?=$reservasi->nama_rekening_wisatawan?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nomor Rekening Wisatawan</span>
+                                            <span class="details"><b>Nomor Rekening Wisatawan:</b></span>
                                             <input type="text" value="<?=$reservasi->nomor_rekening_wisatawan?>" readonly>
                                         </div>
                                     </div>

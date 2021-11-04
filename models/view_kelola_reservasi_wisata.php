@@ -39,6 +39,25 @@ function ageCalculator($dob){
         return "$ag Tahun $mn Bulan $dy Hari";
     }
 }
+
+function alertPembayaran($dob)
+{
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+
+    $tglbatas = $birthdate->add(new DateInterval('P3D'));
+    $tglbatas_formatted = strftime('%A, %e %B %Y pukul %R', $tglbatas->getTimeStamp());
+    $batas_waktu_pesan = '<br><b>Batas pembayaran:</b><br>' . $tglbatas_formatted;
+    if ($dy <= 3) {
+        //jika masih dalam batas waktu
+        return  $batas_waktu_pesan . '<br style="margin-bottom: 0.3rem;"> <i class="fas fa-exclamation-circle" style="color: #ec8707;"></i><small> Menunggu bukti pembayaran wisatawan</small>';
+    } else if ($dy > 3) {
+        //overdue
+        return $batas_waktu_pesan . '<br style="margin-bottom: 0.3rem;"><i class="fas fa-exclamation-circle" style="color: #d43334;"></i><small> Sudah lewat batas waktu pembayaran.</small><br>';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -119,14 +138,24 @@ function ageCalculator($dob){
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -189,14 +218,14 @@ function ageCalculator($dob){
         <main>
             <!-- Notifikasi -->
             <?php
-                if (!empty($_GET['status'])) {
-                    if ($_GET['status'] == 'updateBerhasil') {
-                        echo '<div class="notif role="alert">
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'updateBerhasil'){
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil diupdate
                         </div>';
-                    } else if($_GET['status'] == 'hapusBerhasil') {
-                        echo '<div class="notif" role="alert">
+                    } else if($_GET['status'] == 'hapusBerhasil'){
+                        echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
                             Data berhasil dihapus
                         </div>';
@@ -221,7 +250,6 @@ function ageCalculator($dob){
                                             <td>ID Reservasi</td>
                                             <td>Nama User</td>
                                             <td>Nama Lokasi</td>
-                                            <td>Nama Paket Wisata</td>
                                             <td>Tanggal Reservasi</td>
                                             <td>Status Reservasi</td>
                                             <td>Aksi</td>
@@ -239,23 +267,63 @@ function ageCalculator($dob){
                                             <td><?=$reservasi->id_reservasi_wisata?></td>
                                             <td><?=$reservasi->nama_user?></td>
                                             <td><?=$reservasi->nama_lokasi?></td>
-                                            <td><?=$reservasi->nama_paket_wisata?></td>
                                             <td>
                                                 <?=strftime('%A, %d %B %Y', $reservasidate);?>
-                                                <br><small style="color: rgba(0, 0, 0, 0.5);">Update Terakhir:
-                                                <br><?=strftime('%A, %d %B %Y', $truedate);?></small>
+                                                <br><?php if ($reservasi->id_status_reservasi == 1) {
+                                                    echo alertPembayaran($reservasi->tanggal_pesan);
+                                                } ?>
+
+                                                <div style="margin-top: 1rem; margin-bottom: 1.1rem;">
+                                                    <?php
+                                                    $tanggal_pesan  = new DateTime($reservasi->tanggal_pesan);
+                                                    $today          = new DateTime('today');
+
+                                                    if (($tanggal_pesan->diff($today))->d > 2 && ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) && ($reservasi->id_status_reservasi == 1)) { ?>
+                                                        <!--Tombol batalkan reservasi -->
+                                                        <a href="all_hapus.php?type=reservasi_wisata&id_reservasi_wisata=<?= $reservasi->id_reservasi_wisata ?>" class="button-kelola-hapus" onclick="return konfirmasiHapus(event)">
+                                                            <i class="fas fa-times"></i> Batalkan Reservasi
+                                                        </a>
+                                                    <?php } ?>
+                                                </div>
                                             </td>
                                             <td>
                                                 <?php 
                                                     if ($reservasi->id_status_reservasi == "1") { ?>
                                                     <span class="status diona"></span>
-                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Atifk -->
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Baru -->
+                                                    
+                                                    <!-- Untuk SESSION -->
+
+                                                    <!-- Laporan Pengeluaran -->
+                                                    <br><button class="button-kelola-pengeluaran">
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+
+                                                    <br><i class="fas fa-exclamation-circle" style="color: #ec8707;"></i><small> Laporan Pengeluaran Belum Dibuat.</small>
+                                                    <!-- End SESSION -->
                                                 <?php } elseif ($reservasi->id_status_reservasi == "2") { ?>
                                                     <span class="status yaoyao"></span>
-                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Tidak Atifk -->
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Lama -->
+
+                                                    <!-- Untuk SESSION -->
+
+                                                    <!-- Laporan Pengeluaran -->
+                                                    <br><button class="button-kelola-pengeluaran">
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+                                                    
+                                                    <br><i class="fas fa-exclamation-circle" style="color: #0ec7a3;"></i><small> Cek Kembali Laporan Pengeluaran.</small>
+                                                    <!-- End SESSION -->
                                                 <?php } elseif ($reservasi->id_status_reservasi == "3") {?>
                                                     <span class="status klee"></span>
-                                                    <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Perbaikan -->
+                                                    <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Bermasalah -->
+                                                    
+                                                    <!-- Untuk SESSION -->
+
+                                                    <!-- Laporan Pengeluaran -->
+                                                    <br><button class="button-kelola-pengeluaran">
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+
+                                                    <br><i class="fas fa-exclamation-circle" style="color: #d43334;"></i><small> Jangan Melakukan Pengisian Laporan Pengeluaran, Dikarenakan Reservasi Bermasalah.</small>
+                                                    <!-- End SESSION -->
                                                 <?php } ?>
                                             </td>
                                             <td>
@@ -287,6 +355,23 @@ function ageCalculator($dob){
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
+    <!-- Konfirmasi Hapus -->
+    <script>
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Reservasi akan hilang permanen!')
+
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
+
+        }
+    }
+    </script>
 
 </body>
 </html>
