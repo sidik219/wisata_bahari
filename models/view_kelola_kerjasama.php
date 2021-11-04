@@ -184,6 +184,25 @@ $rowKerjasama = $stmt->fetchAll();
         <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Kembali -->
+            <button class="button-kelola-kembali">
+                <span class="fas fa-arrow-left"></span>
+                <a href="view_kelola_pengadaan" style="color: white;">Kembali</a>
+            </button>
+            <!-- Selanjutnya -->
+            <button class="button-kelola-kembali">
+                <a href="view_kelola_asuransi" style="color: white;">Selanjutnya</a>
+                <span class="fas fa-arrow-right"></span>
+            </button>
+
+            <!-- Laporan Kerjasama -->  
+            <a href="#" class="btn-kelola-laporan">
+                <span class="fas fa-file-excel"></span> Laporan Data Kerjasama
+            </a>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){

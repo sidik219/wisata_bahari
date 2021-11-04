@@ -183,8 +183,15 @@ $rowPaket = $stmt->fetchAll();
         <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
-            <!-- Laporan Wisata -->
+            <!-- Button Selanjutnya -->
             <div>
+            <!-- Kembali -->
+            <button class="button-kelola-kembali">
+                <span class="fas fa-arrow-left"></span>
+                <a href="view_kelola_asuransi" style="color: white;">Kembali</a>
+            </button>
+
+            <!-- Laporan Wisata -->  
             <a href="#" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Wisata
             </a>

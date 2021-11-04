@@ -139,6 +139,15 @@ $rowProvinsi = $stmt->fetchAll();
         <?php if ($level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Selanjutnya -->
+            <button class="button-kelola-kembali">
+                <a href="view_kelola_wilayah" style="color: white;">Selanjutnya</a>
+                <span class="fas fa-arrow-right"></span>
+            </button>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){

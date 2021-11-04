@@ -218,6 +218,15 @@ $rowLokasi = $stmt->fetchAll();
         <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Kembali -->
+            <button class="button-kelola-kembali">
+                <span class="fas fa-arrow-left"></span>
+                <a href="view_kelola_wilayah" style="color: white;">Kembali</a>
+            </button>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){

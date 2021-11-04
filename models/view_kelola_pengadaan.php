@@ -183,6 +183,21 @@ $rowPengadaan = $stmt->fetchAll();
         <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Selanjutnya -->
+            <button class="button-kelola-kembali">
+                <a href="view_kelola_kerjasama" style="color: white;">Selanjutnya</a>
+                <span class="fas fa-arrow-right"></span>
+            </button>
+                
+
+            <!-- Laporan Pengadaan -->  
+            <a href="#" class="btn-kelola-laporan">
+                <span class="fas fa-file-excel"></span> Laporan Data Pengadaan
+            </a>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
