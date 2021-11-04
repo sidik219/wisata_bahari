@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: edit_data_kerjasama?status=updateGagal");
+        header("Location: edit_data_kerjasama?status=updateGagal&id_kerjasama=$id_kerjasama");
     } else {
         header("Location: view_kelola_kerjasama?status=updateBerhasil");
     }

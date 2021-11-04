@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
                     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        // header("Location: edit_data_wisata?status=updateGagal");
+        header("Location: view_akun?status=updateGagal&id_user=$id_user");
     } else {
         header("Location: view_akun?status=updateBerhasil");
     }
@@ -170,14 +170,20 @@ if (isset($_POST['submit'])) {
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'updateGagal'){
-                        echo '<div class="notif role="alert">
+                    if($_GET['status'] == 'updateBerhasil'){
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data gagal diupdate
+                            Data berhasil diupdate
+                        </div>';
+                    } else if($_GET['status'] == 'updateGagal'){
+                        echo '<div class="notif-gagal" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data akun gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
                         </div>';
                     }
                 }
             ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -298,8 +304,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

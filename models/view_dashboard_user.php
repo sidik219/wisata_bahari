@@ -256,7 +256,8 @@ $rowLokasi = $stmt->fetchAll();
                                     </div>
                                 </div>
                                 <div class="status-wisata">
-                                    <span class="fas fa-map-marker-alt"></span>
+                                    <a href="view_pilih_lokasi_wisata.php?id_lokasi=<?=$lokasi->id_lokasi?>">
+                                    <span class="fas fa-map-marker-alt"></span></a>
                                 </div>
                             </div>
                             <?php } ?>
@@ -270,8 +271,7 @@ $rowLokasi = $stmt->fetchAll();
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
@@ -296,6 +296,6 @@ $rowLokasi = $stmt->fetchAll();
     <script src="../views/js/leaflet.ajax.js"></script>
     <!-- Leaflet Map -->
     <?php include '../views/js/leaflet_map.php';?>
-    
+
 </body>
 </html>
