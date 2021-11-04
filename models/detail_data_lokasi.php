@@ -98,14 +98,14 @@ $rowLokasi = $stmt->fetch();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi" class="paimon-active">
@@ -147,14 +147,24 @@ $rowLokasi = $stmt->fetch();
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi" class="paimon-active">
@@ -236,27 +246,27 @@ $rowLokasi = $stmt->fetch();
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail-paket"> 
                                         <div class="input-box">
-                                            <span class="details">Foto Lokasi</span>
-                                            <br><img src="<?=$rowLokasi->foto_lokasi?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                            <span class="details"><b>Foto Lokasi:</b></span>
+                                            <br><img src="<?=$rowLokasi->foto_lokasi?>?<?php if ($status='nochange'){echo time();}?>" width="350px" height="250px">
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Deskripsi Lokasi</span>
+                                            <span class="details"><b>Deskripsi Lokasi:</b></span>
                                             <input type="text" value="<?=$rowLokasi->deskripsi_lokasi?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Kontak Lokasi</span>
+                                            <span class="details"><b>Kontak Lokasi:</b></span>
                                             <input type="text" value="<?=$rowLokasi->kontak_lokasi?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Bank</span>
+                                            <span class="details"><b>Nama Bank:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nama_bank?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Rekening</span>
+                                            <span class="details"><b>Nama Rekening:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nama_rekening?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nomor Rekening</span>
+                                            <span class="details"><b>Nomor Rekening:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nomor_rekening?>" readonly>
                                         </div>
                                     </div>
@@ -273,8 +283,7 @@ $rowLokasi = $stmt->fetch();
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

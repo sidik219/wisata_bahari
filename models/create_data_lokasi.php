@@ -26,11 +26,9 @@ if (isset($_POST['submit'])) {
     $nama_bank          = $_POST['nama_bank'];
     $nama_rekening      = $_POST['nama_rekening'];
     $nomor_rekening     = $_POST['nomor_rekening'];
-    
+    $randomstring       = substr(md5(rand()), 0, 7);
 
     // image Uploads
-    $randomstring = substr(md5(rand()), 0, 7);
-
     if($_FILES["image_uploads"]["size"] == 0) {
         $foto_lokasi = "../views/img/foto_lokasi/image_default.jpg";
     }
@@ -77,7 +75,7 @@ if (isset($_POST['submit'])) {
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: view_kelola_lokasi?status=tambahGagal");
+        header("Location: create_data_lokasi?status=tambahGagal");
     } else {
         header("Location: view_kelola_lokasi?status=tambahBerhasil");
     }
@@ -123,14 +121,14 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
-                </li>
-                <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
                         <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi" class="paimon-active">
@@ -172,14 +170,24 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_asuransi">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi" class="paimon-active">
@@ -245,6 +253,19 @@ if (isset($_POST['submit'])) {
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
             <a href="view_kelola_lokasi" style="color: white;">Kembali</a></button>
             </div>
+
+            <!-- Notifikasi -->
+            <?php
+                if(!empty($_GET['status'])){
+                    if($_GET['status'] == 'tambahGagal'){
+                        echo '<div class="notif-gagal" role="alert">
+                        <i class="fa fa-exclamation"></i>
+                            Data wilayah gagal ditambahkan.
+                        </div>';
+                    }
+                }
+            ?>
+
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
@@ -261,70 +282,73 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
-                                            <span class="details">ID Wilayah</span>
-                                            <select name="id_wilayah">
-                                                <option>Pilih Wilayah</option>
-                                                <?php 
-                                                    foreach ($rowWilayah as $wilayah) {
-                                                ?>
+                                            <span class="details"><b>ID Wilayah:</b></span>
+                                            <select name="id_wilayah" required>
+                                                <option selected value="">Pilih Wilayah</option>
+                                                <?php foreach ($rowWilayah as $wilayah) { ?>
                                                 <option value="<?=$wilayah->id_wilayah?>">
-                                                    <?=$wilayah->id_wilayah?> - <?=$wilayah->nama_wilayah?></option>
+                                                    <?=$wilayah->nama_wilayah?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Lokasi</span>
+                                            <span class="details"><b>Nama Lokasi:</b></span>
                                             <input type="text" name="nama_lokasi" placeholder="Nama Lokasi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Deskripsi Lokasi</span>
+                                            <span class="details"><b>Deskripsi Lokasi:</b></span>
                                             <input type="text" name="deskripsi_lokasi" placeholder="Deskripsi Lokasi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Upload Foto Lokasi</span>
-                                            <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
-
-                                            <!-- upload Image -->
-                                            <div>
-                                                <br>
-                                                <img id="preview"  width="100px" src="#" alt="Preview Gambar"/>
-
-                                                <script>
-                                                    window.onload = function() {
-                                                        document.getElementById('preview').style.display = 'none';
-                                                    };
-
-                                                    function readURL(input) {
-                                                        if (input.files && input.files[0]) {
-                                                            var reader = new FileReader();
-
-                                                            reader.onload = function (e) {
-                                                                $('#preview')
-                                                                    .attr('src', e.target.result)
-                                                                    .width(200);
-                                                                    document.getElementById('preview').style.display = 'block';
-                                                            };
-
-                                                            reader.readAsDataURL(input.files[0]);
-                                                        }
-                                                    }
-                                                </script>
-                                            </div>
+                                            <span class="details"><b>Upload Foto Lokasi:</b></span>
+                                            <input class='form-control' type='file' name='image_uploads' id='image_uploads' accept='.jpg, .jpeg, .png' onchange="readURL(this);" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Kontak Lokasi</span>
+                                            <img id="preview" width="100px" src="#" alt="Preview Gambar"/>
+
+                                            <script>
+                                                window.onload = function() {
+                                                    document.getElementById('preview').style.display = 'none';
+                                                };
+
+                                                function readURL(input) {
+                                                    //Validasi Size Upload Image
+                                                    // var uploadField = document.getElementById("image_uploads");
+
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
+                                                    };
+
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function(e) {
+                                                            $('#preview')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview').style.display = 'block';
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Kontak Lokasi:</b></span>
                                             <input type="text" name="kontak_lokasi" placeholder="Kontak Lokasi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Bank</span>
+                                            <span class="details"><b>Nama Bank:</b></span>
                                             <input type="text" name="nama_bank" placeholder="Nama Bank" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nama Rekening</span>
+                                            <span class="details"><b>Nama Rekening:</b></span>
                                             <input type="text" name="nama_rekening" placeholder="Nama Rekening" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Nomor Rekening</span>
+                                            <span class="details"><b>Nomor Rekening:</b></span>
                                             <input type="text" name="nomor_rekening" placeholder="Nomor Rekening" required>
                                         </div>
 
@@ -332,11 +356,11 @@ if (isset($_POST['submit'])) {
                                         <h4 style="margin-top: 1.5rem;"><i class="fas fa-search-location"></i> 
                                             Koordinat Lokasi <br>(Diperlukan agar lokasi muncul di peta)</h4>
                                         <div class="input-box">
-                                            <span class="details" for="tblatitude">Latitude Lokasi</span>
+                                            <span class="details" for="tblatitude"><b>Latitude Lokasi:</b></span>
                                             <input type="text" name="latitude" id="tblatitude" placeholder="Latitude Lokasi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details" for="tblongitude">Longitude Lokasi</span>
+                                            <span class="details" for="tblongitude"><b>Longitude Lokasi:</b></span>
                                             <input type="text" name="longitude" id="tblongitude" placeholder="Longitude Lokasi" required>
                                         </div>
                                         <button class="btn-kelola-koordinat" onclick="getCoordinates()"><i class="nav-icon fas fa-map-marked-alt"></i> Auto Deteksi Lokasi</button>
@@ -359,8 +383,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

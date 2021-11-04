@@ -284,9 +284,7 @@ if (isset($_POST['submit'])) {
                                             <span class="details"><b>ID Provinsi:</b></span>
                                             <select name="id_provinsi" required>
                                                 <option selected value="">Pilih Provinsi</option>
-                                                <?php 
-                                                foreach ($rowProvinsi as $provinsi) {
-                                                ?>
+                                                <?php foreach ($rowProvinsi as $provinsi) { ?>
                                                 <option <?php if ($provinsi->id_provinsi == $rowWilayah->id_provinsi) echo 'selected'; ?> value="<?=$provinsi->id_provinsi?>">
                                                     <?=$provinsi->nama_provinsi?></option>
                                                 <?php } ?>
