@@ -41,6 +41,7 @@ function ageCalculator($dob){
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -228,13 +229,13 @@ function ageCalculator($dob){
                                     if ($reservasi->id_status_reservasi == 2) {
                                         // Pembayaran Telah di Konfirmasi
                                         // Download Invoice Reservasi Wisata
-                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="invoice_wisata?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Download Inovice</a>' : '';
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="invoice_wisata?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta-2">Download Inovice</a>' : '';
                                     } else if ($reservasi->id_status_reservasi == 3) {
                                         // Pembayaran Tidak Sesuai
-                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Upload Bukti Transfer</a>' : '';
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta-2">Upload Bukti Transfer</a>' : '';
                                     } else {
                                         // Menunggu Konfirmasi Pembayaran
-                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta">Upload Bukti Transfer</a>' : '';
+                                        echo ($reservasi->id_status_reservasi <= 3) ? '<a href="edit_data_reservasi_saya?id_reservasi_wisata='.$reservasi->id_reservasi_wisata.'" class="cards-detail__cta-2">Upload Bukti Transfer</a>' : '';
                                     }
                                 ?>
                             </div>
@@ -249,8 +250,7 @@ function ageCalculator($dob){
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

@@ -2045,6 +2045,24 @@ hr.jarak {
   background-image: linear-gradient(to right, #00f2fe 0%, #4facfe 100%);
 }
 
+/* Reservasi Saya */
+.cards-detail__cta-2 {
+  display: inline;
+  padding: 1.5rem 3rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  color: #fff;
+  background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 2px 2px 10px rgba(201, 195, 195, 0.1);
+  border-radius: 1rem;
+  text-decoration: none;
+}
+
+.cards-detail__cta-2:hover {
+  background-image: linear-gradient(to right, #00f2fe 0%, #4facfe 100%);
+}
+
 @media only screen and (max-width: 960px) {
   .cards-detail {
     max-width: 80rem;
@@ -2091,6 +2109,12 @@ hr.jarak {
   .cards-detail__cta {
     padding: 1.5rem 1.5rem;
     margin-left: 2.2rem;
+    font-size: 1.2rem;
+  }
+
+  .cards-detail__cta-2 {
+    padding: 1.5rem 1.5rem;
+    margin-left: 0.4rem;
     font-size: 1.2rem;
   }
 }
