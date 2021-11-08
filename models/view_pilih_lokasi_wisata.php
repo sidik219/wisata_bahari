@@ -2,6 +2,13 @@
 include '../app/database/koneksi.php';
 session_start();
 
+if (!$_SESSION['level_user']) {
+    header('location: ../index?status=akses_terbatas');
+} else {
+    $id_user    = $_SESSION['id_user'];
+    $level      = $_SESSION['level_user'];
+}
+
 if($_GET['id_lokasi']){
     $_SESSION['id_lokasi'] = $_GET['id_lokasi'];
 }
@@ -85,13 +92,16 @@ $rowPaket = $stmt->fetchAll();
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
+            <!-- Hak Akses -->
+            <?php if ($level == 1) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
-                    <h2>Paimon</h2>
-                    <span class="dashboard">Dashboard User</span>
+                    <h2>Selamat Datang</h2>
+                    <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
                 </div>
             </div>
+            <?php } ?>
         </header>
 
         <!-- Main -->
