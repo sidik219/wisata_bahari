@@ -287,55 +287,58 @@ if (isset($_POST['submit'])) {
                                     <span class="fas fa-camera"></span>
                                     Upload File
                                 </label>
-                                <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" style="display: none;" onchange="readURL(this);">
+                                <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" style="display: none;" onchange="readURL(this);" required>
                             </div>
                             <div class="list-lokasi">
                                 <div class="input-box">
                                     <img src="#" id="preview" width="100px" alt="Preview Gambar"/>
 
                                     <a href="<?=$reservasi->bukti_reservasi?>">
-                                    <img id="oldpic" src="<?=$reservasi->bukti_reservasi?>" width="100%" <?php if($reservasi->bukti_reservasi == NULL) echo "style='display: none;'"; ?>></a>
+                                        <img id="oldpic" src="<?=$reservasi->bukti_reservasi?>" width="100%" height="288px" <?php if($reservasi->bukti_reservasi == NULL) echo "style='display: none;'"; ?>></a>
                                     <br>
 
-                                    <small>
-                                        <?php 
-                                        if ($reservasi->bukti_reservasi == NULL) {
+                                    <small class="text-muted">
+                                        <?php if ($reservasi->bukti_reservasi == NULL) {
                                             echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
                                         } else {
                                             echo "Klik gambar untuk memperbesar";
-                                        } ?>
+                                        }
+
+                                        ?>
                                     </small>
 
-                                    <!-- upload Image -->
-                                    <div>
-                                        <script>
-                                            const actualBtn = document.getElementById('image_uploads');
-                                            const fileChosen = document.getElementById('file-input-label');
+                                    <script>
+                                        const actualBtn = document.getElementById('image_uploads');
+                                        const fileChosen = document.getElementById('file-input-label');
 
-                                            actualBtn.addEventListener('change', function(){
-                                                fileChosen.innerHTML = '<b>File dipilih :</b> '+this.files[0].name
-                                            });
-                                            window.onload = function() {
-                                                document.getElementById('preview').style.display = 'none';
+                                        actualBtn.addEventListener('change', function() {
+                                            fileChosen.innerHTML = '<b>File dipilih :</b> ' + this.files[0].name
+                                        })
+                                        window.onload = function() {
+                                            document.getElementById('preview').style.display = 'none';
+                                        };
+
+                                        function readURL(input) {
+                                            //Validasi Size Upload Image
+                                            if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                input.value = "";
                                             };
 
-                                            function readURL(input) {
-                                                if (input.files && input.files[0]) {
-                                                    var reader = new FileReader();
+                                            if (input.files && input.files[0]) {
+                                                var reader = new FileReader();
+                                                document.getElementById('oldpic').style.display = 'none';
+                                                reader.onload = function(e) {
+                                                    $('#preview')
+                                                        .attr('src', e.target.result)
+                                                        .width(200);
+                                                    document.getElementById('preview').style.display = 'block';
+                                                };
 
-                                                    document.getElementById('oldpic').style.display = 'none';
-                                                    reader.onload = function (e) {
-                                                        $('#preview')
-                                                            .attr('src', e.target.result)
-                                                            .width(200);
-                                                            document.getElementById('preview').style.display = 'block';
-                                                    };
-
-                                                    reader.readAsDataURL(input.files[0]);
-                                                }
+                                                reader.readAsDataURL(input.files[0]);
                                             }
-                                        </script>
-                                    </div>
+                                        }
+                                    </script>
                                 </div>
                             </div>
                             <div class="list-lokasi">

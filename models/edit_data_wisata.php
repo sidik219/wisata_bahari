@@ -407,7 +407,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="input-box">
                                             <img id="preview" src="#" width="100px" alt="Preview Gambar" />
-                                            <a href="<?= $rowPaket->foto_paket_wisata ?>" data-toggle="lightbox">
+                                            <a href="<?= $rowPaket->foto_paket_wisata ?>">
                                                 <img id="oldpic" src="<?= $rowPaket->foto_paket_wisata ?>" width="20%" <?php if ($rowPaket->foto_paket_wisata == NULL) echo "style='display: none;'"; ?>></a>
                                             <br>
 

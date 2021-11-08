@@ -140,19 +140,19 @@ function ageCalculator($dob){
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'updateBerhasil'){
-                        echo '<div class="notif role="alert">
+                        echo '<div class="notif-update" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil diupdate
+                            Data berhasil diupdate.
                         </div>';
                     } else if($_GET['status'] == 'tambahBerhasil'){
                         echo '<div class="notif" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data baru berhasil ditambahkan
+                            Data baru berhasil ditambahkan.
                         </div>';
                     } else if($_GET['status'] == 'hapusBerhasil'){
-                        echo '<div class="notif" role="alert">
+                        echo '<div class="notif-hapus" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data berhasil dihapus
+                            Data berhasil dihapus.
                         </div>';
                     }
                 }
