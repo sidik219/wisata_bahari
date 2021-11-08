@@ -36,12 +36,14 @@ if (isset($_POST['submit'])) {
 
         //var_dump($jumlah_donasi); exit();
         $tanggal_sekarang = date ('Y-m-d H:i:s', time());
+        $tanggal_pesan = date('Y-m-d', time());
 
         $sqlreservasiCreate = "INSERT INTO t_reservasi_wisata (id_user,
                                                             id_lokasi,
                                                             id_paket_wisata,
                                                             id_status_reservasi,
                                                             tgl_reservasi,
+                                                            tanggal_pesan,
                                                             jumlah_reservasi,
                                                             total_reservasi,
                                                             keterangan_reservasi,
@@ -54,6 +56,7 @@ if (isset($_POST['submit'])) {
                                         :id_paket_wisata,
                                         :id_status_reservasi,
                                         :tgl_reservasi,
+                                        :tanggal_pesan,
                                         :jumlah_reservasi,
                                         :total_reservasi,
                                         :keterangan_reservasi,
@@ -68,6 +71,7 @@ if (isset($_POST['submit'])) {
                         'id_paket_wisata' => $id_paket_wisata,
                         'id_status_reservasi' => $id_status_reservasi,
                         'tgl_reservasi' => $tgl_reservasi,
+                        'tanggal_pesan' => $tanggal_pesan,
                         'jumlah_reservasi' => $jumlah_reservasi,
                         'total_reservasi' => $total_reservasi,
                         'keterangan_reservasi' => $keterangan_reservasi,
@@ -213,11 +217,11 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Tanggal Reservasi</span>
-                                            <input type="date" name="tgl_reservasi" required>
+                                            <input type="date" name="tgl_reservasi" id="tgl_reservasi" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Jumlah Peserta</span>
-                                            <input type="number" name="jumlah_peserta" id="jumlah_peserta" value="0" min="0" onchange="myFunction()" required>
+                                            <input type="number" name="jumlah_peserta" id="jumlah_peserta" value="0" min="1" max='200' onchange="myFunction()" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details">Nama Bank Wisatawan</span>
@@ -258,44 +262,61 @@ if (isset($_POST['submit'])) {
 
                                         <!-- Wisata -->
                                         <div class="input-box">
-                                            <span class="details"><b>Wisata:</b></span>
+                                            <!-- <span class="details"></span> -->
                                             <?php
-                                            $sqlwisataSelect = 'SELECT judul_wisata FROM t_wisata
-                                                            WHERE id_paket_wisata = :id_paket_wisata';
+                                            $sqlwisataSelect = 'SELECT * FROM t_wisata
+                                                                LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
 
                                             $stmt = $pdo->prepare($sqlwisataSelect);
                                             $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
                                             $rowWisata = $stmt->fetchAll();
 
                                             foreach ($rowWisata as $wisata) { ?>
-                                            <i class="detail-reservasi-wisata fas fa-luggage-cart"></i>
-                                            <?=$wisata->judul_wisata?><br>
-                                            <?php } ?>
-                                        </div>
+                                                <!-- Jadwal Wisata -->
+                                                <br>
+                                                <span class="jadwal-wisata">
+                                                    <?=$wisata->jadwal_wisata?>
+                                                </span><br><br>
+                                                
+                                                <!-- Judul Wisata -->
+                                                <span>
+                                                    <i class="detail-reservasi-wisata fas fa-luggage-cart"></i>
+                                                    <b>Wisata: </b>
+                                                    <?=$wisata->judul_wisata?>
+                                                </span><br>
 
-                                        <!-- Fasilitas -->
-                                        <div class="input-box">
-                                            <span class="details"><b>Fasilitas Wisata:</b></span>
-                                            <?php
-                                            $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata 
-                                                                LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
-                                                                LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
-                                                                WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
-                                                                AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
+                                                <!-- Select Fasilitas -->
+                                                <?php
+                                                $sqlviewfasilitas = 'SELECT * FROM t_fasilitas_wisata
+                                                                    LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                                    LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                                    LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                                    AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata
+                                                                    AND t_wisata.id_wisata = :id_wisata';
 
-                                            $stmt = $pdo->prepare($sqlfasilitasSelect);
-                                            $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
-                                            $rowFasilitas = $stmt->fetchAll();
+                                                $stmt = $pdo->prepare($sqlviewfasilitas);
+                                                $stmt->execute(['id_wisata' => $wisata->id_wisata,
+                                                                'id_paket_wisata' => $paket->id_paket_wisata]);
+                                                $rowFasilitas = $stmt->fetchAll();
 
-                                            foreach ($rowFasilitas as $fasilitas) { ?>
-                                            <i class="detail-reservasi-fasilitas fas fa-truck-loading"></i>
-                                            <?=$fasilitas->nama_fasilitas?><br>
+                                                foreach ($rowFasilitas as $Fasilitas) { ?>
+                                                    <!-- <i class="detail-paket-fasilitas fas fa-truck-loading"></i> -->
+                                                    <span>
+                                                        <i class="fas fa-chevron-circle-right" style="color: #fba442;"></i>
+                                                        <?=$Fasilitas->pengadaan_fasilitas?>
+                                                    </span><br>
+                                                <?php } ?>
                                             <?php } ?>
                                         </div>
 
                                         <!-- Asuransi -->
                                         <div class="input-box">
-                                            <span class="details"><b>Asuransi:</b></span>
+                                            <span class="details">
+                                                <b>Asuransi: </b><?=$paket->nama_asuransi?>
+                                            </span>
                                             <?php
                                             $sqlasuransiSelect = 'SELECT biaya_asuransi FROM t_paket_wisata
                                                                 LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
@@ -306,6 +327,9 @@ if (isset($_POST['submit'])) {
                                             $rowAsuransi = $stmt->fetchAll();
 
                                             foreach ($rowAsuransi as $asuransi) { ?>
+                                            <!-- Hidden Output Total Biaya Fasilitas -->
+                                            <input type="hidden" id="biaya_asuransi" value="<?=$asuransi->biaya_asuransi?>">
+
                                             <i class="detail-reservasi-asuransi fas fa-heartbeat"></i>
                                             Rp. <?=number_format($asuransi->biaya_asuransi, 0)?><br>
                                             <?php } ?>
@@ -315,13 +339,20 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <span class="details"><b>Total Paket Wisata:</b></span>
                                             <?php
-                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
-                                                                FROM t_fasilitas_wisata 
-                                                                LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
-                                                                LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
-                                                                LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
-                                                                WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
-                                                                AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
+                                            $sqlfasilitasSelect = 'SELECT SUM(biaya_kerjasama) 
+                                                                    AS total_biaya_fasilitas,
+                                                                        pengadaan_fasilitas,
+                                                                        biaya_kerjasama,
+                                                                        biaya_asuransi
+                                                                    FROM t_fasilitas_wisata
+                                                                    LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                                    LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                                    LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                                                                    LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
+                                                                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                                    AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
 
                                             $stmt = $pdo->prepare($sqlfasilitasSelect);
                                             $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
@@ -432,8 +463,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
@@ -453,10 +483,12 @@ if (isset($_POST['submit'])) {
         function myFunction() {
             var jumlah_peserta  = document.getElementById("jumlah_peserta").value;
             var paket_wisata    = document.getElementById("total_paket_wisata").value;
+            var asuransi        = document.getElementById("biaya_asuransi").value;
 
             var deskripsi       = jumlah_peserta;
-            var reservasi       = jumlah_peserta * paket_wisata; //5 x 750.000 = 3.750.000
-            var hasil           = reservasi;
+            var reservasi       = parseInt(asuransi) + parseInt(paket_wisata); // asuransi 20.0000 + paket wisata 1.119.997
+            var sub_total       = jumlah_peserta * reservasi; //5 x 1.119.997 = total reservasi 3.750.000
+            var hasil           = sub_total;
 
             // Format untuk number.
             var formatter = new Intl.NumberFormat('id-ID', {
@@ -467,8 +499,15 @@ if (isset($_POST['submit'])) {
             document.getElementById("deskripsi_wisata").value = "Peserta: "+ deskripsi;
             document.getElementById("total_reservasi").value = hasil; //total dari total_reservasi * donasi
             document.getElementById("total").value = formatter.format(hasil); //total dari total_reservasi * donasi
-            //document.write(harga_tk);
+            // document.write(hasil);
+            // console.log(hasil);
+            
         }
+    </script>
+    <!-- Pembatasan Date Reservasi -->
+    <script>
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementsByName("tgl_reservasi")[0].setAttribute('min', today);
     </script>
 
 </body>

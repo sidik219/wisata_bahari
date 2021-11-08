@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
     if ($affectedrows == '0') {
         header("Location: view_akun?status=updateGagal&id_user=$id_user");
     } else {
-        header("Location: view_akun?status=updateBerhasil");
+        header("Location: view_akun?status=updateBerhasil&id_user=$id_user");
     }
 }
 ?>
@@ -246,45 +246,48 @@ if (isset($_POST['submit'])) {
                                             <img id="oldpic" src="<?=$rowUser->foto_user?>" width="20%" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>></a>
                                             <br>
 
-                                            <small>
-                                                <?php 
-                                                if ($rowUser->foto_user == NULL) {
-                                                    echo "Upload foto baru<br>Format .jpg .jpeg .png";
+                                            <small class="text-muted">
+                                                <?php if ($rowUser->foto_user == NULL) {
+                                                    echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
                                                 } else {
                                                     echo "Klik gambar untuk memperbesar";
-                                                } ?>
+                                                }
+
+                                                ?>
                                             </small>
 
-                                            <!-- upload Image -->
-                                            <div>
-                                                <script>
-                                                    const actualBtn = document.getElementById('image_uploads');
-                                                    const fileChosen = document.getElementById('file-input-label');
+                                            <script>
+                                                const actualBtn = document.getElementById('image_uploads');
+                                                const fileChosen = document.getElementById('file-input-label');
 
-                                                    actualBtn.addEventListener('change', function(){
-                                                        fileChosen.innerHTML = '<b>File dipilih :</b> '+this.files[0].name
-                                                    });
-                                                    window.onload = function() {
-                                                        document.getElementById('preview').style.display = 'none';
+                                                actualBtn.addEventListener('change', function() {
+                                                    fileChosen.innerHTML = '<b>File dipilih :</b> ' + this.files[0].name
+                                                })
+                                                window.onload = function() {
+                                                    document.getElementById('preview').style.display = 'none';
+                                                };
+
+                                                function readURL(input) {
+                                                    //Validasi Size Upload Image
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
                                                     };
 
-                                                    function readURL(input) {
-                                                        if (input.files && input.files[0]) {
-                                                            var reader = new FileReader();
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+                                                        document.getElementById('oldpic').style.display = 'none';
+                                                        reader.onload = function(e) {
+                                                            $('#preview')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview').style.display = 'block';
+                                                        };
 
-                                                            document.getElementById('oldpic').style.display = 'none';
-                                                            reader.onload = function (e) {
-                                                                $('#preview')
-                                                                    .attr('src', e.target.result)
-                                                                    .width(200);
-                                                                    document.getElementById('preview').style.display = 'block';
-                                                            };
-
-                                                            reader.readAsDataURL(input.files[0]);
-                                                        }
+                                                        reader.readAsDataURL(input.files[0]);
                                                     }
-                                                </script>
-                                            </div>
+                                                }
+                                            </script>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
@@ -315,6 +318,25 @@ if (isset($_POST['submit'])) {
     <!-- All Javascript -->
     <!-- Jquery Plugin -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <!-- One time page refresh after first page load -->
+    <!-- When I meet this problem, I search to here but most of answers are trying to modify existing url. Here is another answer which works for me using localStorage. -->
+    <script type='text/javascript'>
+
+    (function()
+    {
+    if( window.localStorage )
+    {
+        if( !localStorage.getItem('firstLoad') )
+        {
+        localStorage['firstLoad'] = true;
+        window.location.reload();
+        }  
+        else
+        localStorage.removeItem('firstLoad');
+    }
+    })();
+
+    </script>
 
 </body>
 </html>

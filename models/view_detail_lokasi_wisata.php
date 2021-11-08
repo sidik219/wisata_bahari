@@ -108,7 +108,24 @@ $rowPaket = $stmt->fetchAll();
                         ?>
                         <div class="cards-detail">
                             <div class="cards-detail__img">
-                                <img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+                                <!-- carousel -->
+                                <div class="pic-ctn-2">
+                                    <img class="pic" src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100%" height="200px">
+                                    
+                                    <!-- Select Wisata -->
+                                    <?php
+                                    $sqlpaketSelect = 'SELECT * FROM t_wisata
+                                                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
+
+                                    $stmt = $pdo->prepare($sqlpaketSelect);
+                                    $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
+                                    $rowWisata = $stmt->fetchAll();
+
+                                    foreach ($rowWisata as $wisata) { ?>
+                                    <img class="pic" src="<?=$wisata->foto_wisata?>" width="100%" height="200px">
+                                    <?php } ?>
+                                </div>
                             </div>
                             <div class="cards-detail__info">
                                 <div class="cards-detail__date">
@@ -134,44 +151,64 @@ $rowPaket = $stmt->fetchAll();
                                     <small><?=$lokasi->nama_lokasi?></small>
                                     <?php } ?>
                                 </p>
+
                                 <!-- Wisata -->
                                 <p class="cards-detail__text">
-                                    <b>Wisata:</b><br>
                                     <?php
-                                    $sqlwisataSelect = 'SELECT judul_wisata FROM t_wisata
-                                                    WHERE id_paket_wisata = :id_paket_wisata';
+                                    $sqlwisataSelect = 'SELECT * FROM t_wisata
+                                                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
 
                                     $stmt = $pdo->prepare($sqlwisataSelect);
                                     $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
                                     $rowWisata = $stmt->fetchAll();
 
                                     foreach ($rowWisata as $wisata) { ?>
-                                    <i class="detail-paket-wisata fas fa-luggage-cart"></i>
-                                    <small><?=$wisata->judul_wisata?></small><br>
+                                        <!-- Jadwal Wisata -->
+                                        <br>
+                                        <span class="jadwal-wisata" style="font-size: 1rem;">
+                                            <?=$wisata->jadwal_wisata?>
+                                        </span><br><br>
+                                        
+                                        <!-- Judul Wisata -->
+                                        <span style="font-weight:normal; font-size: 1.2rem;">
+                                            <i class="detail-paket-wisata fas fa-luggage-cart"></i>
+                                            <b>Wisata: </b>
+                                            <?=$wisata->judul_wisata?>
+                                        </span><br>
+
+                                        <!-- Select Fasilitas -->
+                                        <?php
+                                        $sqlviewfasilitas = 'SELECT * FROM t_fasilitas_wisata
+                                                            LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                            LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                            LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                            LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                            WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                            AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata
+                                                            AND t_wisata.id_wisata = :id_wisata';
+
+                                        $stmt = $pdo->prepare($sqlviewfasilitas);
+                                        $stmt->execute(['id_wisata' => $wisata->id_wisata,
+                                                        'id_paket_wisata' => $paket->id_paket_wisata]);
+                                        $rowFasilitas = $stmt->fetchAll();
+
+                                        foreach ($rowFasilitas as $Fasilitas) { ?>
+                                            <!-- <i class="detail-paket-fasilitas fas fa-truck-loading"></i> -->
+                                            <span style="font-weight:normal; font-size: 1.2rem;">
+                                                <i class="fas fa-chevron-circle-right" style="color: #fba442;"></i>
+                                                <?=$Fasilitas->pengadaan_fasilitas?>
+                                            </span><br>
+                                        <?php } ?>
                                     <?php } ?>
                                 </p>
-                                <!-- Fasilitas -->
-                                <p class="cards-detail__text">
-                                    <b>Fasilitas Wisata:</b><br>
-                                    <?php
-                                    $sqlfasilitasSelect = 'SELECT * FROM t_fasilitas_wisata 
-                                                        LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
-                                                        LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
-                                                        WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
-                                                        AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
 
-                                    $stmt = $pdo->prepare($sqlfasilitasSelect);
-                                    $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
-                                    $rowFasilitas = $stmt->fetchAll();
-
-                                    foreach ($rowFasilitas as $fasilitas) { ?>
-                                    <i class="detail-paket-fasilitas fas fa-truck-loading"></i>
-                                    <small><?=$fasilitas->nama_fasilitas?></small><br>
-                                    <?php } ?>
-                                </p>
                                 <!-- Asuransi -->
                                 <p class="cards-detail__text">
-                                    <b>Asuransi:</b><br>
+                                    <span style="font-weight:normal; font-size: 1.2rem;">
+                                        <b>Asuransi: </b><?=$paket->nama_asuransi?>
+                                    </span><br>
+
                                     <?php
                                     $sqlasuransiSelect = 'SELECT biaya_asuransi FROM t_paket_wisata
                                                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
@@ -186,14 +223,22 @@ $rowPaket = $stmt->fetchAll();
                                     <small>Rp. <?=number_format($asuransi->biaya_asuransi, 0)?></small>
                                     <?php } ?>
                                 </p>
+
                                 <!-- Biaya wisata dari total biaya fasilitas -->
                                 <p class="cards-detail__text">
                                     <b>Total Paket Wisata:</b><br>
                                     <?php
-                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
-                                                        FROM t_fasilitas_wisata 
+                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_kerjasama) 
+                                                        AS total_biaya_fasilitas,
+                                                            pengadaan_fasilitas,
+                                                            biaya_kerjasama,
+                                                            biaya_asuransi
+                                                        FROM t_fasilitas_wisata
+                                                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
                                                         LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                         LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                        LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                                                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                         WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
                                                         AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
@@ -212,11 +257,6 @@ $rowPaket = $stmt->fetchAll();
                                     <small>Rp. <?=number_format($total_paket, 0)?></small>
                                     <?php } ?>
                                 </p>
-                                <p class="cards-detail__text">
-                                    <b>Deskripsi Paket Wisata:</b><br>
-                                    <i class="detail-paket-deskripsi fas fa-bookmark"></i>
-                                    <small><?=$paket->deskripsi_paket_wisata?></small>
-                                </p>
                                 <a href="view_reservasi_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" class="cards-detail__cta">Pilih Paket Wisata</a>
                             </div>
                         </div>
@@ -229,8 +269,7 @@ $rowPaket = $stmt->fetchAll();
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

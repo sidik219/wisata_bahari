@@ -109,14 +109,30 @@ $rowPaket = $stmt->fetchAll();
                     <div class="card-reservasi">
 
                         <div class="cards-reservasi">
-                            <?php 
-                            foreach ($rowPaket as $paket) {
-                            ?>
+                            <?php foreach ($rowPaket as $paket) { ?>
+                            <?php $reservasidate = strtotime($paket->tgl_akhir_paket); ?>
                             <?php if ($paket->status_paket == "Aktif") { ?>
                             <div class="card-paket">
                                 <div class="paket-header">
                                     <span class="paket-foto">
-                                        <img src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="300px">
+                                        <!-- carousel -->
+                                        <div class="pic-ctn">
+                                            <img class="pic" src="<?=$paket->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100%" height="200px">
+                                            
+                                            <!-- Select Wisata -->
+                                            <?php
+                                            $sqlpaketSelect = 'SELECT * FROM t_wisata
+                                                            LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                            WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
+
+                                            $stmt = $pdo->prepare($sqlpaketSelect);
+                                            $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
+                                            $rowWisata = $stmt->fetchAll();
+
+                                            foreach ($rowWisata as $wisata) { ?>
+                                            <img class="pic" src="<?=$wisata->foto_wisata?>" width="100%" height="200px">
+                                            <?php } ?>
+                                        </div>
                                     </span>
                                 </div>
                                 <div class="paket-body">
@@ -141,6 +157,41 @@ $rowPaket = $stmt->fetchAll();
                                     </h4>
                                     <?php } ?>
 
+                                    <!-- Batas Paket Wisata -->
+                                    <div class="flex-container">
+                                        <div class="flex-item-left">
+                                            <small style="font-weight:bold;">
+                                                Batas Pemesanan:
+                                            </small>
+                                        </div>
+                                        <div class="flex-item-right">
+                                            <small style="font-weight:normal;">
+                                                <?= strftime('%d %B %Y', $reservasidate); ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <h4 class="paket-batas">
+                                        <?php
+                                        // tanggal sekarang
+                                        $tgl_sekarang = date("Y-m-d");
+                                        // tanggal pembuatan batas pemesanan paket wisata
+                                        $tgl_awal = $paket->tgl_awal_paket;
+                                        // tanggal berakhir pembuatan batas pemesanan paket wisata
+                                        $tgl_akhir = $paket->tgl_akhir_paket;
+                                        // jangka waktu + 365 hari
+                                        $jangka_waktu = strtotime($tgl_akhir, strtotime($tgl_awal));
+                                        //tanggal expired
+                                        $tgl_exp = date("Y-m-d",$jangka_waktu);
+
+                                        if ($tgl_sekarang >= $tgl_exp) { ?>
+                                            <i class="fas fa-tag" style="color: #d43334;"></i>
+                                            Sudah Tidak Berlaku.
+                                        <?php } else { ?>
+                                            <i class="fas fa-tag" style="color: #0ec7a3;"></i>
+                                            Masih dalam jangka waktu.
+                                        <?php }?>
+                                    </h4>
+
                                     <!-- Wisata -->
                                     <?php
                                     $sqlpaketSelect = 'SELECT * FROM t_wisata
@@ -151,22 +202,54 @@ $rowPaket = $stmt->fetchAll();
                                     $stmt->execute(['id_paket_wisata' => $paket->id_paket_wisata]);
                                     $rowWisata = $stmt->fetchAll();
 
-                                    foreach ($rowWisata as $wisata) {
-                                    ?>
-                                    <ol start="1" class="paket-isi">
-                                        <li>
-                                            <i class="fas fa-chevron-circle-right"></i>
-                                            <?=$wisata->judul_wisata?>
+                                    foreach ($rowWisata as $wisata) { ?>
+                                        <!-- Jadwal Wisata -->
+                                        <div class="paket-jadwal">
+                                            <span class="jadwal-wisata" style="font-size: 1rem;">
+                                                <?=$wisata->jadwal_wisata?>
+                                            </span>
+                                        </div>
+
+                                        <!-- Judul Wisata -->
+                                        <li class="paket-isi" style="font-weight:normal; font-size: 1.2rem;">
+                                            <span>Wisata: </span><?=$wisata->judul_wisata?>
                                         </li>
-                                    </ol>
+
+                                        <!-- Select Fasilitas -->
+                                        <?php
+                                        $sqlviewfasilitas = 'SELECT * FROM t_fasilitas_wisata
+                                                            LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                            LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                                                            LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
+                                                            LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                            WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
+                                                            AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata
+                                                            AND t_wisata.id_wisata = :id_wisata';
+
+                                        $stmt = $pdo->prepare($sqlviewfasilitas);
+                                        $stmt->execute(['id_wisata' => $wisata->id_wisata,
+                                                        'id_paket_wisata' => $paket->id_paket_wisata]);
+                                        $rowFasilitas = $stmt->fetchAll();
+
+                                        foreach ($rowFasilitas as $Fasilitas) { ?> 
+                                            <i class="paket-isi fas fa-chevron-circle-right" style="color: #fba442;"></i>
+                                            <?=$Fasilitas->pengadaan_fasilitas?><br>
+                                        <?php } ?>
                                     <?php } ?>
 
-                                    <!-- Biaya -->
+                                    <!-- Biaya Dari Hitungan Fasilitas-->
                                     <?php
-                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_fasilitas) AS total_biaya_fasilitas, biaya_asuransi
-                                                        FROM t_fasilitas_wisata 
+                                    $sqlfasilitasSelect = 'SELECT SUM(biaya_kerjasama) 
+                                                        AS total_biaya_fasilitas,
+                                                            pengadaan_fasilitas,
+                                                            biaya_kerjasama,
+                                                            biaya_asuransi
+                                                        FROM t_fasilitas_wisata
+                                                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                                                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
                                                         LEFT JOIN t_wisata ON t_fasilitas_wisata.id_wisata = t_wisata.id_wisata
                                                         LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                        LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                                                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                         WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata
                                                         AND t_paket_wisata.id_paket_wisata = t_wisata.id_paket_wisata';
@@ -185,11 +268,31 @@ $rowPaket = $stmt->fetchAll();
                                         Rp. <?=number_format($total_paket, 0)?>
                                     </h4>
                                     <?php } ?>
+                                    
+                                    <!-- Rincian Reservasi -->
+                                    <?php
+                                    // tanggal sekarang
+                                    $tgl_sekarang = date("Y-m-d");
+                                    // tanggal pembuatan batas pemesanan paket wisata
+                                    $tgl_awal = $paket->tgl_awal_paket;
+                                    // tanggal berakhir pembuatan batas pemesanan paket wisata
+                                    $tgl_akhir = $paket->tgl_akhir_paket;
+                                    // jangka waktu + 365 hari
+                                    $jangka_waktu = strtotime($tgl_akhir, strtotime($tgl_awal));
+                                    //tanggal expired
+                                    $tgl_exp = date("Y-m-d",$jangka_waktu);
 
-                                    <div>
-                                    <button class="btn-detail-paket">
-                                        <a href="view_detail_lokasi_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: white;">Rincian Reservasi</a></button>
-                                    </div>
+                                    if ($tgl_sekarang >= $tgl_exp) { ?>
+                                        <button class="btn-paket-tutup">
+                                            <i class="fas fa-exclamation"></i>
+                                            Rincian Reservasi Ditutup
+                                        </div>
+                                    <?php } else { ?>
+                                        <div>
+                                            <button class="btn-detail-paket">
+                                            <a href="view_detail_lokasi_wisata?id_paket_wisata=<?=$paket->id_paket_wisata?>" style="color: white;">Rincian Reservasi</a></button>
+                                        </div>
+                                    <?php }?>
                                 </div>
                             </div>
                                 <?php } ?>
@@ -203,8 +306,7 @@ $rowPaket = $stmt->fetchAll();
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>

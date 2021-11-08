@@ -518,6 +518,17 @@ main.main-login {
   transform: translateY(2px);
 }
 
+/* Jadwal Wisata */
+.jadwal-wisata {
+  background: #fba442; /*#3fab76;*/
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  outline: none;
+  font-size: 1rem;
+}
+
 /* Kembali */
 .button-kelola-kembali {
   background: var(--sidebar-active);
@@ -1661,7 +1672,7 @@ form .button-kelola-form input:hover {
 
 .card-paket {
   background: #fff;
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   padding: 2rem;
   border-radius: 12px;
@@ -1672,11 +1683,11 @@ form .button-kelola-form input:hover {
 .card-paket .paket-header .paket-foto .foto {
   width: 100%;
   height: 200px;
-  margin-bottom: 2rem;
 }
 
 .card-paket .paket-judul {
   text-align: center;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -1686,13 +1697,28 @@ form .button-kelola-form input:hover {
   font-weight: normal;
 }
 
+.card-paket .paket-batas {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  font-weight: normal;
+}
+
+.card-paket .paket-jadwal {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: normal;
+}
+
 .card-paket .paket-isi {
   border-radius: 5px;
-  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .card-paket .paket-harga {
   text-align: center;
+  margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -1717,6 +1743,19 @@ form .button-kelola-form input:hover {
 .btn-detail-paket:active {
   background-color: var(--sidebar-color);
   transform: translateY(2px);
+}
+
+/* Rincian Reservasi Tutup */
+.btn-paket-tutup {
+  background: #d43334;
+  color: #fff;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  text-align: center;
+  outline: none;
+  width: 100%;
 }
 
 .card-paket span:first-child {
@@ -2041,8 +2080,17 @@ hr.jarak {
     max-width: 20rem;
   }
 
+  .cards-detail__title {
+    margin-left: 1.2rem;
+  }
+
+  .cards-detail__text {
+    margin-left: 1.2rem;
+  }
+
   .cards-detail__cta {
     padding: 1.5rem 1.5rem;
+    margin-left: 2.2rem;
     font-size: 1.2rem;
   }
 }
@@ -2309,4 +2357,174 @@ form .button-kelola-form-login input:hover {
   }
 }
 
-/* Carousel */
+/* Flex Batas Pemesanan Paket Wisata */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
+.flex-item-left {
+  padding: 5px;
+  flex: 50%;
+}
+
+.flex-item-right {
+  padding: 5px;
+  flex: 50%;
+}
+
+/* Responsive layout - makes a one column-layout instead of two-column layout */
+@media (max-width: 584px) {
+  .flex-container {
+    flex-direction: column;
+  }
+}
+
+/* Carousel-1 */
+.pic-ctn {
+  width: 100%;
+  height: 200px;
+}
+
+@keyframes display {
+  10% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* 20% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateX(-200px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(-200px);
+    opacity: 0;
+  } */
+}
+
+.pic-ctn {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  /* margin-top: 15vh; */
+}
+
+.pic-ctn>img {
+  position: absolute;
+  top: 0;
+  /* left: calc(50% - 100px); */
+  opacity: 0;
+  animation: display 10s infinite;
+}
+
+img:nth-child(2) {
+  animation-delay: 3s;
+}
+
+img:nth-child(3) {
+  animation-delay: 3s;
+}
+
+img:nth-child(4) {
+  animation-delay: 3s;
+}
+
+img:nth-child(5) {
+  animation-delay: 3s;
+}
+
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+/
+/* Carousel-2 */
+.pic-ctn-2 {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes display {
+  10% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* 20% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateX(-200px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(-200px);
+    opacity: 0;
+  } */
+}
+
+.pic-ctn-2 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* margin-top: 15vh; */
+}
+
+.pic-ctn-2>img {
+  position: absolute;
+  top: 0;
+  /* left: calc(50% - 100px); */
+  opacity: 0;
+  animation: display 10s infinite;
+}
+
+img:nth-child(2) {
+  animation-delay: 3s;
+}
+
+img:nth-child(3) {
+  animation-delay: 3s;
+}
+
+img:nth-child(4) {
+  animation-delay: 3s;
+}
+
+img:nth-child(5) {
+  animation-delay: 3s;
+}
