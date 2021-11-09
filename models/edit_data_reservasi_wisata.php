@@ -77,14 +77,14 @@ if (isset($_POST['submit'])) {
     <div class="sidebar">
         <div class="sidebar-logo">
             <!-- Hak Akses Pengelola Lokasi -->
-            <?php if ($level == 2 || $level == 4) { ?>
+            <?php if ($level == 3 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
             <?php } ?>
         </div>
 
-        <!-- Hak Akses Pengelola Lokasi -->
-        <?php if ($level == 2) { ?>
+        <!-- Hak Akses Pengelola Wilayah -->
+        <?php if ($level == 3) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard Admin -->
@@ -104,9 +104,9 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Lokasi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
+                    <a href="view_kelola_wilayah">
+                    <span class="fas fa-place-of-worship"></span>
+                        <span>Kelola Wilayah</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -196,7 +196,7 @@ if (isset($_POST['submit'])) {
             </div>-->
 
             <!-- Hak Akses Pengelola Lokasi-->
-            <?php if ($level == 2 || $level == 4) { ?>
+            <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
@@ -208,7 +208,7 @@ if (isset($_POST['submit'])) {
         </header>
         
         <!-- Hak Akses Pengelola Lokasi-->
-        <?php if ($level == 2 || $level == 4) { ?>
+        <?php if ($level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
