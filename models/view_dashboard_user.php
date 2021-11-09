@@ -22,6 +22,14 @@ $rowReservasi = $stmt->fetchAll();
 
 // Select Status Reservasi wisata lama
 $sqlstatusSelect = "SELECT * FROM t_status_reservasi
+                    WHERE id_status_reservasi = 3";
+
+$stmt = $pdo->prepare($sqlstatusSelect);
+$stmt->execute();
+$rowStatus3 = $stmt->fetchAll();
+
+// Select Status Reservasi wisata lama
+$sqlstatusSelect = "SELECT * FROM t_status_reservasi
                     WHERE id_status_reservasi = 2";
 
 $stmt = $pdo->prepare($sqlstatusSelect);
@@ -141,21 +149,6 @@ $rowLokasi = $stmt->fetchAll();
         <!-- Main -->
         <main>
             <div class="cards">
-                <!-- Total Reservasi Wisata -->
-                <div class="card-single">
-                    <div>
-                        <?php 
-                        foreach ($rowReservasi as $reservasi) {
-                        ?>
-                        <h1><?=$reservasi->total_reservasi?></h1>
-                        <?php } ?>
-                        <span>Reservasi wisata</span>
-                    </div>
-                    <div>
-                        <span class="paimon-1 fas fa-suitcase"></span>
-                    </div>
-                </div>
-                
                 <!-- Total Reservasi Wisata Baru -->
                 <div class="card-single">
                     <div>
@@ -182,7 +175,7 @@ $rowLokasi = $stmt->fetchAll();
                         <span>Reservasi wisata baru</span>
                     </div>
                     <div>
-                        <span class="paimon-2 fas fa-luggage-cart"></span>
+                        <span class="paimon-1 fas fa-luggage-cart"></span>
                     </div>
                 </div>
                 
@@ -212,7 +205,37 @@ $rowLokasi = $stmt->fetchAll();
                         <span>Reservasi wisata lama</span>
                     </div>
                     <div>
-                        <span class="paimon-3 fas fa-suitcase-rolling"></span>
+                        <span class="paimon-4 fas fa-suitcase-rolling"></span>
+                    </div>
+                </div>
+
+                <!-- Total Reservasi Wisata Bermasalah -->
+                <div class="card-single">
+                    <div>
+                        <?php 
+                        foreach ($rowStatus3 as $status) {
+                        ?>
+                            <?php
+                            $sqlfasilitasSelect = "SELECT COUNT(id_reservasi_wisata) AS total_reservasi
+                                                FROM t_reservasi_wisata
+                                                LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                                                LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                                                WHERE t_status_reservasi.id_status_reservasi = :id_status_reservasi
+                                                AND t_reservasi_wisata.id_user = :id_user;";
+
+                            $stmt = $pdo->prepare($sqlfasilitasSelect);
+                            $stmt->execute(['id_status_reservasi' => $status->id_status_reservasi,
+                                            'id_user' => $_SESSION['id_user']]);
+                            $rowReservasi = $stmt->fetchAll();
+
+                            foreach ($rowReservasi as $reservasi) { ?>
+                            <h1><?=$reservasi->total_reservasi?></h1>
+                            <?php } ?>
+                        <?php } ?>
+                        <span>Reservasi wisata Bermasalah</span>
+                    </div>
+                    <div>
+                        <span class="paimon-6 fas fa-suitcase"></span>
                     </div>
                 </div>
             </div>

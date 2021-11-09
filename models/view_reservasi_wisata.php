@@ -117,6 +117,9 @@ if (isset($_POST['submit'])) {
             <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
+
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard User -->
@@ -142,6 +145,7 @@ if (isset($_POST['submit'])) {
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -169,6 +173,8 @@ if (isset($_POST['submit'])) {
             <?php } ?>
         </header>
 
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -462,6 +468,7 @@ if (isset($_POST['submit'])) {
                 <!-- End Form 2 -->
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

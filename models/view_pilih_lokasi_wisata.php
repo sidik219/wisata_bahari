@@ -52,6 +52,9 @@ $rowPaket = $stmt->fetchAll();
             <h2><a href="view_dashboard_user" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
         </div>
+
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard User -->
@@ -77,6 +80,7 @@ $rowPaket = $stmt->fetchAll();
                 </li>
             </ul>
         </div>
+        <?php } ?>
     </div>
     
     <!-- Main Content -->
@@ -103,7 +107,9 @@ $rowPaket = $stmt->fetchAll();
             </div>
             <?php } ?>
         </header>
-
+        
+        <!-- Hak Akses -->
+        <?php if ($level == 1) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -313,6 +319,7 @@ $rowPaket = $stmt->fetchAll();
                 </div>
             </div>
         </main>
+        <?php } ?>
 
         <!-- Footer -->
         <footer>

@@ -120,13 +120,6 @@ if (isset($_POST['submit'])) {
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
                 </li>
-
-                <!-- Dahboard Admin -->
-                <li>
-                    <a href="view_dashboard_admin">
-                    <span class="icon fas fa-home"></span>
-                        <span>Dashboard Admin</span></a>
-                </li>
             </ul>
         </div>
         <?php } ?>
@@ -360,8 +353,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
