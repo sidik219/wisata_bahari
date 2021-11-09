@@ -183,9 +183,24 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_lokasi">
-                    <span class="fas fa-map-marked-alt"></span>
-                        <span>Kelola Lokasi</span></a>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_user">
@@ -212,14 +227,9 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -230,11 +240,6 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <a href="view_kelola_wilayah">
                     <span class="fas fa-place-of-worship"></span>
                         <span>Kelola Wilayah</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -340,8 +345,8 @@ for($bulan = 1; $bulan < 13; $bulan++) {
         <!-- Main -->
         <main>
             <div class="cards">
-                <!-- Hak Akses Pengelola Lokasi atau Provinsi -->
-                <?php if ($level == 2 || $level == 4) {?>
+                <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi -->
+                <?php if ($level == 2 || $level == 3 || $level == 4) {?>
                 <!-- Reservasi Wisata -->
                 <div class="card-single">
                     <div>
@@ -414,8 +419,8 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                 </div>
                 <?php } ?>
                 
-                <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-                <?php if ($level == 3 || $level == 4) {?>
+                <!-- Hak Akses Pengelola Lokasi atau Provinsi -->
+                <?php if ($level == 2 || $level == 4) {?>
                 <!-- Paket Wisata -->
                 <div class="card-single">
                     <div>
@@ -490,7 +495,6 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span class="paimon-3 fas fa-handshake"></span>
                     </div>
                 </div>
-                <?php } ?>
 
                 <!-- Pengadaan -->
                 <div class="card-single">
@@ -506,9 +510,10 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span class="paimon-3 fas fa-truck-loading"></span>
                     </div>
                 </div>
+                <?php } ?>
                 
                 <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-                <?php if ($level == 2 || $level == 3 || $level == 4) {?>
+                <?php if ($level == 4) {?>
                 <!-- User -->
                 <div class="card-single">
                     <div>
