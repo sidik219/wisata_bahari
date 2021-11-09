@@ -121,14 +121,9 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi" class="paimon-active">
@@ -139,11 +134,6 @@ if (isset($_POST['submit'])) {
                     <a href="view_kelola_wilayah">
                     <span class="fas fa-place-of-worship"></span>
                         <span>Kelola Wilayah</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
                 </li>
                 <li>
                     <a href="logout">
