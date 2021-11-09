@@ -155,14 +155,14 @@ if (isset($_POST['submit'])) {
     <div class="sidebar">
         <div class="sidebar-logo">
             <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-            <?php if ($level == 3 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
             <?php } ?>
         </div>
 
-        <!-- Hak Akses Pengelola Wilayah -->
-        <?php if ($level == 3) { ?>
+        <!-- Hak Akses Pengelola Lokasi -->
+        <?php if ($level == 2) { ?>
         <div class="sidebar-menu">
             <ul>
                 <!-- Dahboard Admin -->
@@ -170,6 +170,11 @@ if (isset($_POST['submit'])) {
                     <a href="view_dashboard_admin">
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_wisata" class="paimon-active">
@@ -182,19 +187,14 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Asuransi</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_lokasi">
-                    <span class="fas fa-map-marked-alt"></span>
-                        <span>Kelola Lokasi</span></a>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wilayah">
-                    <span class="fas fa-place-of-worship"></span>
-                        <span>Kelola Wilayah</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -284,7 +284,7 @@ if (isset($_POST['submit'])) {
             </div>-->
 
             <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-            <?php if ($level == 3 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 4) { ?>
             <div class="user-wrapper">
                 <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
                 <div>
@@ -296,7 +296,7 @@ if (isset($_POST['submit'])) {
         </header>
         
         <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-        <?php if ($level == 3 || $level == 4) { ?>
+        <?php if ($level == 2 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -360,8 +360,8 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <div class="fieldGroup">
                                                 <div class="">
-                                                    <span class="details"><b>ID Wisata:</b></span>
                                                     <?php foreach ($rowWisata as $wisata) { ?>
+                                                    <span class="details"><b>ID Wisata:</b></span>
                                                     <!-- Id Wisata -->
                                                     <input type="hidden" name="nama_wisata[]" value="<?= $wisata->id_wisata ?>" class="form-control" placeholder="Hari" style="margin-top: 0.3rem;" required />
                                                     <!-- Judul Wisata -->
@@ -369,7 +369,7 @@ if (isset($_POST['submit'])) {
                                                     <!-- Jadwal Wisata -->
                                                     <input type="text" name="jadwal_wisata[]" value="<?= $wisata->jadwal_wisata ?>" class="form-control mb-2" placeholder="Jadwal Wisata" style="margin-top: 0.3rem;" required />
                                                     <!-- Deskripsi Wisata -->
-                                                    <input type="text" name="deskripsi_wisata[]" value="<?= $wisata->deskripsi_wisata ?>" class="form-control" placeholder="Deskripsi" style="margin-top: 0.3rem;" required />
+                                                    <input type="text" name="deskripsi_wisata[]" value="<?= $wisata->deskripsi_wisata ?>" class="form-control" placeholder="Deskripsi" style="margin-top: 0.3rem;" required /><br><br>
                                                     <?php } ?>
                                                 </div>
                                             </div>
@@ -503,8 +503,7 @@ if (isset($_POST['submit'])) {
         <!-- Footer -->
         <footer>
             <h2 class="footer-paimon">
-                <small>© 2021 Wisata Bahari</small> -
-                <small>Kab. Karawang</small>
+                <small>© 2021 Wisata Bahari</small>
             </h2>
         </footer>
     </div>
