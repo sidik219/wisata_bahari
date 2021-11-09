@@ -57,14 +57,9 @@ $rowWilayah = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_wisata">
-                    <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_asuransi">
-                    <span class="fas fa-heartbeat"></span>
-                        <span>Kelola Asuransi</span></a>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_lokasi">
@@ -75,11 +70,6 @@ $rowWilayah = $stmt->fetchAll();
                     <a href="view_kelola_wilayah" class="paimon-active">
                     <span class="fas fa-place-of-worship"></span>
                         <span>Kelola Wilayah</span></a>
-                </li>
-                <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -186,11 +176,14 @@ $rowWilayah = $stmt->fetchAll();
         <main>
             <!-- Button Selanjutnya -->
             <div>
+            <!-- Hak Akses Pengelola Wilayah-->
+            <?php if ($level == 4) { ?>
             <!-- Kembali -->
             <button class="button-kelola-kembali">
                 <span class="fas fa-arrow-left"></span>
                 <a href="view_kelola_provinsi" style="color: white;">Kembali</a>
             </button>
+            <?php } ?>
             <!-- Selanjutnya -->
             <button class="button-kelola-kembali">
                 <a href="view_kelola_lokasi" style="color: white;">Selanjutnya</a>
