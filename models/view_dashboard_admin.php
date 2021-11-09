@@ -203,11 +203,6 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_user">
-                    <span class="fas fa-users"></span>
-                        <span>Kelola User</span></a>
-                </li>
-                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
