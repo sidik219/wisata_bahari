@@ -337,7 +337,7 @@ function alertPembayaran($dob)
                                                     <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Baru -->
                                                     
                                                     <!-- Untuk SESSION -->
-                                                    <?php if ($_SESSION['level_user'] == 2) : ?>
+                                                    <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
                                                     <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
@@ -350,7 +350,7 @@ function alertPembayaran($dob)
                                                     <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Lama -->
 
                                                     <!-- Untuk SESSION -->
-                                                    <?php if ($_SESSION['level_user'] == 2) : ?>
+                                                    <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
                                                     <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
@@ -363,7 +363,7 @@ function alertPembayaran($dob)
                                                     <?=$reservasi->nama_status_reservasi?> <!-- Reservasi Bermasalah -->
                                                     
                                                     <!-- Untuk SESSION -->
-                                                    <?php if ($_SESSION['level_user'] == 2) : ?>
+                                                    <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
                                                     <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
@@ -376,7 +376,7 @@ function alertPembayaran($dob)
                                             <td>
                                                 <button class="modol-btn button-kelola-detail">
                                                     <a href="detail_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Detail</a></button>
-                                                <?php if ($_SESSION['level_user'] == 3) : ?>
+                                                <?php if ($_SESSION['level_user'] == 3 || $_SESSION['level_user'] == 4) : ?>
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Edit</a></button>
                                                 <?php endif ?>

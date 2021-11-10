@@ -2305,6 +2305,13 @@ form input[type="radio"] {
   display: none;
 }
 
+/* akun wisatawan */
+form .radio[type="radio"] {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
 a.lupa-pw {
   display: block;
 }

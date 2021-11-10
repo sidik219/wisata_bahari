@@ -200,43 +200,42 @@ if (isset($_POST['submit'])) {
                                     <!-- Form User -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
-                                            <span class="details">Nama User</span>
+                                            <span class="details"><b>Nama User:</b></span>
                                             <input type="text" name="nama_user" value="<?=$rowUser->nama_user?>" placeholder="Nama User" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Pilih Jenis Kelamin</span>
-                                            <select name="jenis_kelamin">
-                                                <option>Pilih Jenis Kelamin</option>
-                                                <option value="laki-laki">Laki-laki</option>
-                                                <option value="Perempuan">Perempuan</option>
-                                            </select>
+                                            <span class="details" for="jenis_kelamin"><b>Jenis Kelamin:</b></span>
+                                            <div class="flex-container">
+                                                <input class="radio" type="radio" name="jenis_kelamin" id="laki_laki" value="laki-laki" <?php if ($rowUser->jenis_kelamin != "perempuan") echo "checked"; ?>>
+                                                <label for="laki-laki" style="margin-left: 0.5rem;">Laki-laki</label>
+                                            </div>
+                                            <div class="flex-container" style="margin-top: 0.5rem;">
+                                                <input class="radio" type="radio" name="jenis_kelamin" id="perempuan" value="perempuan" <?php if ($rowUser->jenis_kelamin == "perempuan") echo "checked"; ?>>
+                                                <label for="perempuan" style="margin-left: 0.5rem;">Perempuan</label>
+                                            </div>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Jenis Kelamin Sekarang</span>
-                                            <input type="text" value="<?=$rowUser->jenis_kelamin?>" placeholder="Jenis Kelamin" readonly>
-                                        </div>
-                                        <div class="input-box">
-                                            <span class="details">Tempat Lahir</span>
+                                            <span class="details"><b>Tempat Lahir:</b></span>
                                             <input type="text" name="tempat_lahir" value="<?=$rowUser->tempat_lahir?>" placeholder="Tempat Lahir" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Tanggal Lahir</span>
+                                            <span class="details"><b>Tanggal Lahir:</b></span>
                                             <input type="date" name="tanggal_lahir" value="<?=$rowUser->tanggal_lahir?>" placeholder="Tanggal Lahir" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Email</span>
+                                            <span class="details"><b>Email:</b></span>
                                             <input type="email" name="email" value="<?=$rowUser->email?>" placeholder="Email" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">No HP</span>
+                                            <span class="details"><b>No HP:</b></span>
                                             <input type="number" name="no_hp" value="<?=$rowUser->no_hp?>" placeholder="No HP" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Alamat</span>
+                                            <span class="details"><b>Alamat:</b></span>
                                             <input type="text" name="alamat" value="<?=$rowUser->alamat?>" placeholder="Alamat" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Upload Foto User</span>
+                                            <span class="details"><b>Upload Foto User:</b></span>
                                             <input type="file" name="image_uploads" id="image_uploads" accept=".jpg, .jpeg, .png" onchange="readURL(this);">
                                         </div>
                                         <div class="input-box">

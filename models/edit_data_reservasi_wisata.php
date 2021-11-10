@@ -260,8 +260,7 @@ if (isset($_POST['submit'])) {
                                         <!-- Jarak -->
                                         <div class="kategori<?php if($rowReservasi->id_status_reservasi == $status->id_status_reservasi)?>">
                                             <label for="dot-<?=$status->id_status_reservasi?>">
-                                                <?php 
-                                                    if ($status->id_status_reservasi == "1") { ?>
+                                                <?php if ($status->id_status_reservasi == "1") { ?>
                                                     <span class="dot satu"></span>
                                                 <?php } elseif ($status->id_status_reservasi == "2") { ?>
                                                     <span class="dot dua"></span>
