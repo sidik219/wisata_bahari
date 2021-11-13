@@ -74,7 +74,8 @@ if (isset($_POST['submit'])) {
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'Buat_Akun_Gagal'){
-                        echo '<div class="notif-daftar role="alert">
+                        echo '<div class="notif-daftar" role="alert">
+                            <i class="fas fa-exclamation"></i>
                             Gagal Membuat Akun
                         </div>';
                     }

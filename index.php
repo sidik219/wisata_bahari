@@ -85,7 +85,8 @@ if (isset($_POST['login'])) {
             <?php
                 if(!empty($_GET['status'])){
                     if($_GET['status'] == 'Buat_Akun_Berhasil'){
-                        echo '<div class="notif-login role="alert">
+                        echo '<div class="notif-login" role="alert">
+                            <i class="far fa-smile-wink"></i>
                             Berhasil Membuat Akun
                         </div>';
                     }

@@ -190,8 +190,7 @@ $rowPengadaan = $stmt->fetchAll();
                 <a href="view_kelola_kerjasama" style="color: white;">Selanjutnya</a>
                 <span class="fas fa-arrow-right"></span>
             </button>
-                
-
+               
             <!-- Laporan Pengadaan -->  
             <a href="#" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Pengadaan
