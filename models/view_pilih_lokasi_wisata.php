@@ -16,6 +16,16 @@ else if(!$_GET['id_lokasi' && !$_SESSION['id_lokasi']]){
     header("Location: view_dashboard_user");
 }
 
+$defaultpic = "../views/img/image_default.jpg";
+
+// Select All Data User
+$sqluserSelect = "SELECT * FROM t_user
+                    WHERE id_user = :id_user";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute(['id_user' => $_SESSION['id_user']]);
+$rowUser = $stmt->fetch();
+
 // Select Paket Wisata
 $sqlpaketSelect = 'SELECT * FROM t_paket_wisata
                 LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
@@ -99,7 +109,8 @@ $rowPaket = $stmt->fetchAll();
             <!-- Hak Akses -->
             <?php if ($level == 1) { ?>
             <div class="user-wrapper">
-                <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
+                <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
+                <img id="oldpic" src="<?=$rowUser->foto_user?>" width="50px" height="50px" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>

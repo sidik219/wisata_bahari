@@ -9,6 +9,16 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
+$defaultpic = "../views/img/image_default.jpg";
+
+// Select All Data User
+$sqluserSelect = "SELECT * FROM t_user
+                    WHERE id_user = :id_user";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute(['id_user' => $_SESSION['id_user']]);
+$rowUser = $stmt->fetch();
+
 // Select Reservasi "Total Reservasi Wisata"
 $sqlreservasiSelect = "SELECT COUNT(id_reservasi_wisata) 
                         AS total_reservasi
@@ -135,7 +145,8 @@ $rowLokasi = $stmt->fetchAll();
             <!-- Hak Akses -->
             <?php if ($level == 1) { ?>
             <div class="user-wrapper">
-                <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
+                <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
+                <img id="oldpic" src="<?=$rowUser->foto_user?>" width="50px" height="50px" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>

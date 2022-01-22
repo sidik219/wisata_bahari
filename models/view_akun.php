@@ -311,7 +311,8 @@ if (isset($_POST['submit'])) {
             <!-- Hak Akses -->
             <?php if ($level == 1 || $level == 2 || $level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
-                <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
+                <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
+                <img id="oldpic" src="<?=$rowUser->foto_user?>" width="50px" height="50px" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
@@ -335,7 +336,7 @@ if (isset($_POST['submit'])) {
                     } else if($_GET['status'] == 'updateGagal'){
                         echo '<div class="notif-gagal" role="alert">
                         <i class="fa fa-exclamation"></i>
-                            Data akun gagal diupdate, <b style="color: orange;">Dikarenakan tidak ada perubahan data</b>.
+                            Data foto user berhasil diupdate. <b style="color: orange;">Kecuali data input tetap gagal diupdate dikarenakan tidak ada perubahan data</b>.
                         </div>';
                     }
                 }

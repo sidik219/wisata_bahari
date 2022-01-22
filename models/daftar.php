@@ -130,7 +130,6 @@ if (isset($_POST['submit'])) {
                                                 <option value="1">Wisatawan</option>
                                                 <option value="2">Pengelola Pantai</option>
                                                 <option value="3">pengelola Wilayah</option>
-                                                <option value="4">Pengelola Provinsi</option>
                                             </select>
                                         </div>
                                     </div>
