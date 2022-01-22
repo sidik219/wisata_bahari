@@ -124,6 +124,11 @@ if (isset($_POST['submit'])) {
                         <span>Kelola User</span></a>
                 </li>
                 <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>

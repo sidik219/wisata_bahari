@@ -90,6 +90,11 @@ $rowPaket = $stmt->fetchAll();
                         <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
@@ -152,6 +157,11 @@ $rowPaket = $stmt->fetchAll();
                     <a href="view_kelola_user">
                     <span class="fas fa-users"></span>
                         <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">

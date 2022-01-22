@@ -203,6 +203,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
@@ -235,6 +240,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <a href="view_kelola_wilayah">
                     <span class="fas fa-place-of-worship"></span>
                         <span>Kelola Wilayah</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -299,6 +309,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <a href="view_kelola_user">
                     <span class="fas fa-users"></span>
                         <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">

@@ -124,6 +124,11 @@ function alertPembayaran($dob)
                         <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
@@ -156,6 +161,11 @@ function alertPembayaran($dob)
                     <a href="view_kelola_wilayah">
                     <span class="fas fa-place-of-worship"></span>
                         <span>Kelola Wilayah</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -220,6 +230,11 @@ function alertPembayaran($dob)
                     <a href="view_kelola_user">
                     <span class="fas fa-users"></span>
                         <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -376,7 +391,7 @@ function alertPembayaran($dob)
                                             <td>
                                                 <button class="modol-btn button-kelola-detail">
                                                     <a href="detail_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Detail</a></button>
-                                                <?php if ($_SESSION['level_user'] == 3 || $_SESSION['level_user'] == 4) : ?>
+                                                <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 3 || $_SESSION['level_user'] == 4) : ?>
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_data_reservasi_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Edit</a></button>
                                                 <?php endif ?>

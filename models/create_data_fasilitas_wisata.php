@@ -106,6 +106,11 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Pengadaan</span></a>
                 </li>
                 <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
                     <a href="logout">
                     <span class="fas fa-sign-out-alt"></span>
                         <span>Log out</span></a>
@@ -168,6 +173,11 @@ if (isset($_POST['submit'])) {
                     <a href="view_kelola_user">
                     <span class="fas fa-users"></span>
                         <span>Kelola User</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
                 </li>
                 <li>
                     <a href="logout">
@@ -326,7 +336,7 @@ if (isset($_POST['submit'])) {
                         <label for="">Keterangan:</label><br>
                         <small>* Fasilitas Wisata Yang Dibuat Max Harus 3</small><br>
                         <small style="color: red;">* Untuk menambahkan fasilitas wisata baru,
-                            <br> harus <a href="create_data_pengadaan_fasilitas.php"><b>input pengadaan</b></a> terlebih dahulu selanjutnya input kerjasama
+                            <br> harus <a href="create_data_pengadaan.php"><b>input pengadaan</b></a> terlebih dahulu selanjutnya input kerjasama
                         </small>
                     </div>
                 </div>
