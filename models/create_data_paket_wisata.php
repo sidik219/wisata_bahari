@@ -165,7 +165,7 @@ if (isset($_POST['submit'])) {
                 <li>
                     <a href="view_kelola_wisata" class="paimon-active">
                     <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                        <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_asuransi">
@@ -209,7 +209,7 @@ if (isset($_POST['submit'])) {
                 <li>
                     <a href="view_kelola_wisata" class="paimon-active">
                     <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                        <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_asuransi">

@@ -64,7 +64,7 @@ $rowKerjasama = $stmt->fetchAll();
                 <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                        <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_asuransi">
@@ -108,7 +108,7 @@ $rowKerjasama = $stmt->fetchAll();
                 <li>
                     <a href="view_kelola_wisata">
                     <span class="fas fa-hot-tub"></span>
-                        <span>Kelola Wisata</span></a>
+                        <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_asuransi">
