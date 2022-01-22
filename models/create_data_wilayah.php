@@ -100,11 +100,11 @@ if (isset($_POST['submit'])) {
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
-                </li>
+                </li> -->
                 <li>
                     <a href="view_kelola_lokasi">
                     <span class="fas fa-map-marked-alt"></span>

@@ -221,11 +221,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
-                </li>
+                </li> -->
                 <li>
                     <a href="view_kelola_lokasi">
                     <span class="fas fa-map-marked-alt"></span>
@@ -378,7 +378,7 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                             <h1><?=$reservasi->total_reservasi?></h1>
                             <?php } ?>
                         <?php } ?>
-                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: red;">(belum Transfer)</small></span>
+                        <span>Mentoring Data Reservasi Wisata <small style="color: red;">(Belum Dicek)</small></span>
                     </div>
                     <div>
                         <span class="paimon-2 fas fa-money-bill-wave"></span>
@@ -406,7 +406,7 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                             <h1><?=$reservasi->total_reservasi?></h1>
                             <?php } ?>
                         <?php } ?>
-                        <span>Mentoring Data Pembayaran Reservasi Wisata <small style="color: blue;">(Sudah Transfer)</small></span>
+                        <span>Mentoring Data Reservasi Wisata <small style="color: blue;">(Sudah Dicek)</small></span>
                     </div>
                     <div>
                         <span class="paimon-2 fas fa-money-bill-wave"></span>
@@ -529,7 +529,7 @@ for($bulan = 1; $bulan < 13; $bulan++) {
             <!-- Full Area -->
             <div class="full-area-kelola">
                 <!-- Area A -->
-                <div class="area-A">
+                <!-- <div class="area-A">
                     <div class="card">
                         <div class="card-header">
                             <button class="button-kelola-kembali" id="btn-wisatawan">
@@ -555,7 +555,7 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </main>
         <?php } ?>
