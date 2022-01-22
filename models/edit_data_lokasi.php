@@ -10,7 +10,16 @@ if (!$_SESSION['level_user']) {
 }
 
 $id_lokasi = $_GET['id_lokasi'];
+
 $defaultpic = "../views/img/image_default.jpg";
+
+// Select All Data User
+$sqluserSelect = "SELECT * FROM t_user
+                    WHERE id_user = :id_user";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute(['id_user' => $_SESSION['id_user']]);
+$rowUser2 = $stmt->fetch();
 
 // Select Wilayah
 $sqlwilayahSelect = "SELECT * FROM t_wilayah
@@ -249,7 +258,8 @@ if (isset($_POST['submit'])) {
             <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
             <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
-                <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
+                <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
+                <img id="oldpic" src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>

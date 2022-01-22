@@ -9,6 +9,16 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
+$defaultpic = "../views/img/image_default.jpg";
+
+// Select All Data User
+$sqluserSelect = "SELECT * FROM t_user
+                    WHERE id_user = :id_user";
+
+$stmt = $pdo->prepare($sqluserSelect);
+$stmt->execute(['id_user' => $_SESSION['id_user']]);
+$rowUser2 = $stmt->fetch();
+
 $sqlkerjasamaSelect = "SELECT * FROM t_kerjasama
                     LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
                     ORDER BY id_kerjasama DESC";
@@ -181,7 +191,8 @@ $rowKerjasama = $stmt->fetchAll();
             <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
             <?php if ($level == 2 || $level == 4) { ?>
             <div class="user-wrapper">
-                <img src="../views/img/paimon-5.png" width="50px" height="50px" alt="">
+                <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
+                <img id="oldpic" src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
