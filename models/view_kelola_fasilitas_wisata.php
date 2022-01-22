@@ -211,7 +211,7 @@ function ageCalculator($dob){
                 <a href="view_kelola_wisata" style="color: white;">Kembali</a></button>
                 
             <!-- Laporan Fasilitas -->
-            <a href="#" class="btn-kelola-laporan">
+            <a href="all_laporan.php?type=fasilitas" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Fasilitas Wisata</a>
             </div>
 

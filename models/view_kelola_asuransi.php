@@ -198,7 +198,7 @@ $rowAsuransi = $stmt->fetchAll();
             </button>
 
             <!-- Laporan Asuransi -->  
-            <a href="#" class="btn-kelola-laporan">
+            <a href="all_laporan.php?type=asuransi" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Asuransi
             </a>
             </div>

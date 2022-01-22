@@ -191,8 +191,8 @@ $rowPengadaan = $stmt->fetchAll();
                 <span class="fas fa-arrow-right"></span>
             </button>
                
-            <!-- Laporan Pengadaan -->  
-            <a href="#" class="btn-kelola-laporan">
+            <!-- Laporan Pengadaan -->
+            <a href="all_laporan.php?type=pengadaan" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Pengadaan
             </a>
             </div>
