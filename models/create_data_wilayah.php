@@ -313,7 +313,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
-                                        <input type="submit" name="submit" value="Submit">
+                                        <input type="submit" name="submit" value="Simpan">
                                     </div>
                                     <!-- End Form -->
 

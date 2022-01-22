@@ -230,7 +230,6 @@ $rowWilayah = $stmt->fetchAll();
                                     <thead>
                                         <tr>
                                             <td>ID Wilayah</td>
-                                            <td>Nama Provinsi</td>
                                             <td>Nama Wilayah</td>
                                             <td>Deskripsi Wilayah</td>
                                             <td>Foto Wilayah</td>
@@ -245,7 +244,6 @@ $rowWilayah = $stmt->fetchAll();
                                         ?>
                                         <tr>
                                             <td><?=$wilayah->id_wilayah?></td>
-                                            <td><?=$wilayah->nama_provinsi?></td>
                                             <td><?=$wilayah->nama_wilayah?></td>
                                             <td><?=$wilayah->deskripsi_wilayah?></td>
                                             <td>

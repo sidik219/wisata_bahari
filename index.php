@@ -119,9 +119,9 @@ if (isset($_POST['login'])) {
                                             <input type="password" name="password" placeholder="Masukan Password Anda" required>
                                         </div>
                                     </div>
-                                    <div class="lupa-pw">
+                                    <!-- <div class="lupa-pw">
                                         <a class="lupa" href="#"><p>Lupa Password?</p></a>
-                                    </div>
+                                    </div> -->
 
                                     <div class="button-kelola-form-login">
                                         <input type="submit" name="login" value="Login">
