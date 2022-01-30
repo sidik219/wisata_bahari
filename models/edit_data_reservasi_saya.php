@@ -23,8 +23,8 @@ $id_reservasi_wisata = $_GET['id_reservasi_wisata'];
 
 $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                        LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                        LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                         WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata
                         ORDER BY update_terakhir DESC';
@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) {
             <?php if ($level == 1) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
-                <img id="oldpic" src="<?=$rowUser->foto_user?>" width="50px" height="50px" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>>
+                <img src="<?=$rowUser->foto_user?>" width="50px" height="50px" <?php if($rowUser->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>

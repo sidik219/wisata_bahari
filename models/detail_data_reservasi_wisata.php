@@ -28,8 +28,8 @@ $rowUser2 = $stmt->fetch();
 
 $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                     LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                    LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                     LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                     LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                     LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                     WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata';

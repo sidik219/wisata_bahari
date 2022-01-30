@@ -35,7 +35,6 @@ $rowPaket = $stmt->fetchAll();
 
 if (isset($_POST['submit'])) {
     if ($_POST['submit'] == 'Simpan') {
-        $id_lokasi                  = $_POST['id_lokasi'];
         $id_paket_wisata            = $_POST['id_paket_wisata'];
         $tgl_reservasi              = $_POST['tgl_reservasi'];
         $jumlah_reservasi           = $_POST['jumlah_peserta'];
@@ -49,7 +48,6 @@ if (isset($_POST['submit'])) {
         $tanggal_pesan = date('Y-m-d', time());
 
         $sqlreservasiCreate = "INSERT INTO t_reservasi_wisata (id_user,
-                                                            id_lokasi,
                                                             id_paket_wisata,
                                                             id_status_reservasi,
                                                             tgl_reservasi,
@@ -62,7 +60,6 @@ if (isset($_POST['submit'])) {
                                                             nomor_rekening_wisatawan,
                                                             update_terakhir)
                                 VALUES (:id_user,
-                                        :id_lokasi,
                                         :id_paket_wisata,
                                         :id_status_reservasi,
                                         :tgl_reservasi,
@@ -77,7 +74,6 @@ if (isset($_POST['submit'])) {
         
         $stmt = $pdo->prepare($sqlreservasiCreate);
         $stmt->execute(['id_user' => $id_user,
-                        'id_lokasi' => $id_lokasi,
                         'id_paket_wisata' => $id_paket_wisata,
                         'id_status_reservasi' => $id_status_reservasi,
                         'tgl_reservasi' => $tgl_reservasi,
