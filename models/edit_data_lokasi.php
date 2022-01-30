@@ -70,6 +70,27 @@ if (isset($_POST['submit'])) {
     }
     //---image upload end
 
+    //Image upload
+    $randomstring1 = substr(md5(rand()), 0, 7);
+
+    if ($_FILES["image_uploads1"]["size"] == 0) {
+        $foto_ttd_digital = $rowLokasi->foto_ttd_digital;
+        $pic = "&none=";
+    } else if (isset($_FILES['image_uploads1'])) {
+        if (($rowLokasi->foto_ttd_digital == $defaultpic) || (!$rowLokasi->foto_ttd_digital)){
+            $target_dir  = "../views/img/foto_ttd_digital/";
+            $foto_ttd_digital = $target_dir .'TTD_'. $randomstring1 .'.jpg';
+            move_uploaded_file($_FILES["image_uploads1"]["tmp_name"], $foto_ttd_digital);
+            $pic = "&new=";
+        } else if (isset($rowLokasi->foto_ttd_digital)){
+            $foto_ttd_digital = $rowLokasi->foto_ttd_digital;
+            unlink($rowLokasi->foto_ttd_digital);
+            move_uploaded_file($_FILES["image_uploads1"]["tmp_name"], $rowLokasi->foto_ttd_digital);
+            $pic = "&replace=";
+        }
+    }
+    //---image upload end
+
     $sqllokasiUpdate = "UPDATE t_lokasi
                         SET id_wilayah = :id_wilayah,
                             nama_lokasi = :nama_lokasi,
@@ -77,6 +98,7 @@ if (isset($_POST['submit'])) {
                             longitude = :longitude,
                             deskripsi_lokasi = :deskripsi_lokasi,
                             foto_lokasi = :foto_lokasi,
+                            foto_ttd_digital = :foto_ttd_digital,
                             kontak_lokasi = :kontak_lokasi,
                             nama_bank = :nama_bank,
                             nama_rekening = :nama_rekening,
@@ -90,6 +112,7 @@ if (isset($_POST['submit'])) {
                     'longitude' => $longitude,
                     'deskripsi_lokasi' => $deskripsi_lokasi,
                     'foto_lokasi' => $foto_lokasi,
+                    'foto_ttd_digital' => $foto_ttd_digital,
                     'kontak_lokasi' => $kontak_lokasi,
                     'nama_bank' => $nama_bank,
                     'nama_rekening' => $nama_rekening,
@@ -259,7 +282,7 @@ if (isset($_POST['submit'])) {
             <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
-                <img id="oldpic" src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
+                <img src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
@@ -371,6 +394,59 @@ if (isset($_POST['submit'])) {
                                                                 .attr('src', e.target.result)
                                                                 .width(200);
                                                             document.getElementById('preview').style.display = 'block';
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Upload Foto TTD Digital:</b></span>
+                                            <input type="file" name="image_uploads1" id="image_uploads1" accept=".jpg, .jpeg, .png" onchange="readURL1(this);">
+                                        </div>
+                                        <div class="input-box">
+                                            <img src="#" id="preview1" width="100px" alt="Preview Gambar"/>
+                                            <a href="<?=$rowLokasi->foto_ttd_digital?>">
+                                                <img id="oldpic1" src="<?=$rowLokasi->foto_ttd_digital?>" width="20%" <?php if($rowLokasi->foto_ttd_digital == NULL) echo "style='display: none;'"; ?>></a>
+                                            <br>
+
+                                            <small class="text-muted">
+                                                <?php if ($rowLokasi->foto_ttd_digital == NULL) {
+                                                    echo "Bukti transfer belum diupload<br>Format .jpg .jpeg .png";
+                                                } else {
+                                                    echo "Klik gambar untuk memperbesar";
+                                                }
+
+                                                ?>
+                                            </small>
+
+                                            <script>
+                                                const Tombol = document.getElementById('image_uploads1');
+                                                const PilihFile = document.getElementById('file-input-label');
+
+                                                Tombol.addEventListener('change', function() {
+                                                    PilihFile.innerHTML = '<b>File dipilih :</b> ' + this.files[0].name
+                                                })
+                                                window.onload = function() {
+                                                    document.getElementById('preview1').style.display = 'none';
+                                                };
+
+                                                function readURL1(input) {
+                                                    //Validasi Size Upload Image
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
+                                                    };
+
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+                                                        document.getElementById('oldpic1').style.display = 'none';
+                                                        reader.onload = function(e) {
+                                                            $('#preview1')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview1').style.display = 'block';
                                                         };
 
                                                         reader.readAsDataURL(input.files[0]);

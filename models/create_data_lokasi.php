@@ -49,13 +49,25 @@ if (isset($_POST['submit'])) {
     }
     // image Uploads End
 
+    // image Uploads TTD DIgital
+    if($_FILES["image_uploads1"]["size"] == 0) {
+        $foto_ttd_digital = "../views/img/foto_ttd_digital/image_default.jpg";
+    }
+    else if (isset($_FILES['image_uploads1'])) {
+        $target_dir  = "../views/img/foto_ttd_digital/";
+        $foto_ttd_digital = $target_dir .'TTD_'. $randomstring .'.jpg';
+        move_uploaded_file($_FILES["image_uploads1"]["tmp_name"], $foto_ttd_digital);
+    }
+    // image Uploads End
+
     $sqllokasiCreate = "INSERT INTO t_lokasi
                         (id_wilayah, 
                         nama_lokasi, 
                         latitude, 
                         longitude, 
                         deskripsi_lokasi, 
-                        foto_lokasi, 
+                        foto_lokasi,
+                        foto_ttd_digital, 
                         kontak_lokasi, 
                         nama_bank,
                         nama_rekening,
@@ -65,7 +77,8 @@ if (isset($_POST['submit'])) {
                                 :latitude, 
                                 :longitude, 
                                 :deskripsi_lokasi, 
-                                :foto_lokasi, 
+                                :foto_lokasi,
+                                :foto_ttd_digital, 
                                 :kontak_lokasi, 
                                 :nama_bank,
                                 :nama_rekening,
@@ -78,10 +91,11 @@ if (isset($_POST['submit'])) {
                     'longitude' => $longitude,
                     'deskripsi_lokasi' => $deskripsi_lokasi,
                     'foto_lokasi' => $foto_lokasi,
+                    'foto_ttd_digital' => $foto_ttd_digital,
                     'kontak_lokasi' => $kontak_lokasi,
                     'nama_bank' => $nama_bank,
                     'nama_rekening' => $nama_rekening,
-                    'nomor_rekening' => $nomor_rekening,]);
+                    'nomor_rekening' => $nomor_rekening]);
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
@@ -246,7 +260,7 @@ if (isset($_POST['submit'])) {
             <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
-                <img id="oldpic" src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
+                <img src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
@@ -339,6 +353,42 @@ if (isset($_POST['submit'])) {
                                                                 .attr('src', e.target.result)
                                                                 .width(200);
                                                             document.getElementById('preview').style.display = 'block';
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Upload Foto TTD Digital:</b></span>
+                                            <input class='form-control' type='file' name='image_uploads1' id='image_uploads1' accept='.jpg, .jpeg, .png' onchange="readURL1(this);" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <img id="preview1" width="100px" src="#" alt="Preview Gambar"/>
+
+                                            <script>
+                                                window.onload = function() {
+                                                    document.getElementById('preview1').style.display = 'none';
+                                                };
+
+                                                function readURL1(input) {
+                                                    //Validasi Size Upload Image
+                                                    // var uploadField = document.getElementById("image_uploads1");
+
+                                                    if (input.files[0].size > 2000000) { // ini untuk ukuran 800KB, 2000000 untuk 2MB.
+                                                        alert("Maaf, Ukuran File Terlalu Besar. !Maksimal Upload 2MB");
+                                                        input.value = "";
+                                                    };
+
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function(e) {
+                                                            $('#preview1')
+                                                                .attr('src', e.target.result)
+                                                                .width(200);
+                                                            document.getElementById('preview1').style.display = 'block';
                                                         };
 
                                                         reader.readAsDataURL(input.files[0]);

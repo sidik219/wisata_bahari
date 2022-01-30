@@ -189,7 +189,7 @@ $rowLokasi = $stmt->fetch();
             <?php if ($level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
-                <img id="oldpic" src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
+                <img src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
                 <div>
                     <h2>Selamat Datang</h2>
                     <span class="dashboard"><?php echo $_SESSION['nama_user']; ?></span>
@@ -225,6 +225,10 @@ $rowLokasi = $stmt->fetch();
                                         <div class="input-box">
                                             <span class="details"><b>Foto Lokasi:</b></span>
                                             <br><img src="<?=$rowLokasi->foto_lokasi?>?<?php if ($status='nochange'){echo time();}?>" width="350px" height="250px">
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Foto TTD Digital:</b></span>
+                                            <br><img src="<?=$rowLokasi->foto_ttd_digital?>?<?php if ($status='nochange'){echo time();}?>" width="350px" height="250px">
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>Deskripsi Lokasi:</b></span>

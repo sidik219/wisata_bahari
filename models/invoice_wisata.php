@@ -5,7 +5,7 @@ include '../app/database/koneksi.php';
 class myPDF extends FPDF{
     function header(){
         global $pdo;
-        $this->Image('../views/img/KKPlogo.png', 10, 3, -2500); //Logo, Kiri-Atas,Kanan-Bawah
+        //$this->Image('../views/img/KKPlogo.png', 10, 3, -2500); //Logo, Kiri-Atas,Kanan-Bawah
         //$this->Image('images/bg-invoice.png', 5, 30, 287, -550); //Bg-Invoice, Kiri-Atas,Kanan-Bawah
         $this->Image('../views/img/bg-invoice-line.png', 8, 34, 158, -2400); //Line-Invoice-kiri, Kiri-Atas,Kanan-Bawah
         $this->Image('../views/img/bg-invoice-line.png', 168, 34, 121, -2400); //Line-Invoice-kanan, Kiri-Atas,Kanan-Bawah
@@ -18,8 +18,8 @@ class myPDF extends FPDF{
 
         $sqlviewreservasi = 'SELECT * FROM t_reservasi_wisata
                             LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                            LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                             LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                            LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                             LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                     WHERE id_reservasi_wisata = :id_reservasi_wisata
                     ORDER BY id_reservasi_wisata DESC';
@@ -60,8 +60,8 @@ class myPDF extends FPDF{
 
         $sqlviewreservasi = 'SELECT * FROM t_reservasi_wisata
                             LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                            LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                             LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                            LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                             LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                     WHERE id_reservasi_wisata = :id_reservasi_wisata
                     ORDER BY id_reservasi_wisata DESC';
@@ -119,12 +119,15 @@ class myPDF extends FPDF{
             $this->Cell(55, 5, 'No HP Pengelola Lokasi', 0, 0);
             $this->Cell(117, 5, ': '.$rowitem->kontak_lokasi, 0, 1);
 
+            // TTD Digital
+            $this->Image($rowitem->foto_ttd_digital, 245, 129, -450); //Logo, Kiri-Atas,Kanan-Bawah
+
             //$this->SetTextColor(0, 0, 0);
             $this->Line(234, 170, 286, 170); //Line TTD
 
             $this->Ln(50);
-            $this->Cell(224, 5, '', 0, 0);
-            $this->Cell(52, 5, $rowitem->nama_rekening, 0, 1, 'C');
+            //$this->Cell(224, 5, '', 0, 0);
+            //$this->Cell(52, 5, $rowitem->nama_rekening, 0, 1, 'C');
             $this->Cell(224, 5, '', 0, 0);
             $this->Cell(52, 5, 'Pengelola, '.$rowitem->nama_lokasi, 0, 1, 'C');
         }
@@ -143,8 +146,8 @@ $id_reservasi_wisata = $_GET['id_reservasi_wisata'];
 
 $sqlviewreservasi = 'SELECT * FROM t_reservasi_wisata
                     LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                    LEFT JOIN t_lokasi ON t_reservasi_wisata.id_lokasi = t_lokasi.id_lokasi
                     LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                     LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
             WHERE id_reservasi_wisata = :id_reservasi_wisata
             ORDER BY id_reservasi_wisata DESC';
