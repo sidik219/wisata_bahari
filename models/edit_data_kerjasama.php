@@ -110,6 +110,11 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
@@ -157,6 +162,11 @@ if (isset($_POST['submit'])) {
                     <a href="view_dashboard_admin">
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_reservasi_wisata">

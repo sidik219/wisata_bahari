@@ -66,6 +66,11 @@ $rowProvinsi = $stmt->fetchAll();
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>

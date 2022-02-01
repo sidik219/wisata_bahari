@@ -121,5 +121,15 @@ if (empty($type)) {
     $stmt->execute(['id_reservasi_wisata' => $id_reservasi_wisata]);
     header('Location: view_kelola_reservasi_wisata.php?status=hapusBerhasil');
     // Jarak
+} elseif ($type == 'pengajuan') {
+    $id_pengajuan = $_GET['id_pengajuan'];
+
+    $sql = 'DELETE FROM t_pengajuan
+            WHERE id_pengajuan = :id_pengajuan';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id_pengajuan' => $id_pengajuan]);
+    header('Location: view_kelola_pengajuan.php?status=hapusBerhasil');
+    // Jarak
 }
 ?>

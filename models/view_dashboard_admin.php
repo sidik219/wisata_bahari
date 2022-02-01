@@ -188,6 +188,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
@@ -236,6 +241,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
                 </li>
+                <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
                 <!-- <li>
                     <a href="view_kelola_reservasi_wisata">
                     <span class="fas fa-luggage-cart"></span>
@@ -274,6 +284,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                     <a href="view_dashboard_admin" class="paimon-active">
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_reservasi_wisata">
