@@ -279,7 +279,7 @@ $rowAsuransi = $stmt->fetchAll();
                                         <tr>
                                             <td><?=$asuransi->id_asuransi?></td>
                                             <td><?=$asuransi->nama_asuransi?></td>
-                                            <td><?=$asuransi->biaya_asuransi?></td>
+                                            <td>Rp. <?=number_format($asuransi->biaya_asuransi, 0)?></td>
                                             <td><?=$asuransi->nama_perusahaan_asuransi?></td>
                                             <td><?=$asuransi->alamat_perusahaan_asuransi?></td>
                                             <td><?=$asuransi->notlp_perusahaan_asuransi?></td>

@@ -274,6 +274,36 @@ $rowLokasi = $stmt->fetchAll();
                 <div class="area-B">
                     <div class="card">
                         <div class="card-header">
+                            <h3>Cara Membuat Reservasi Wisata</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="list-lokasi">
+                                <div class="info-wisata">
+                                    <div class="kelola-detail">
+                                        <div class="input-box">
+                                            <span class="details">1. Memilih Lokasi Wisata di Map.</span>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">2. Melihat Paket Wisata.</span>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">3. Mengecek Detail Paket Wisata.</span>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">4. Membuat Reservasi Wisata.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area C -->
+                <div class="area-C">
+                    <div class="card">
+                        <div class="card-header">
                             <h3>Daftar Lokasi Wisata</h3>
                         </div>
 

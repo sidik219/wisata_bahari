@@ -252,12 +252,12 @@ function ageCalculator($dob){
                                 <table>
                                     <thead>
                                         <tr>
-                                            <td>ID Fasilitas</td>
-                                            <td>Nama Fasilitas</td>
-                                            <td>Biaya Fasilitas</td>
-                                            <td>Status Fasilitas</td>
-                                            <td>Status Kerjasama</td>
+                                            <td>Kode Fasilitas Wisata</td>
+                                            <td>Nama Pengadaan Fasilitas</td>
                                             <td>Update Terakhir</td>
+                                            <td>Status Pengadaan Fasilitas</td>
+                                            <td>Status Kerjasama</td>
+                                            <td>Biaya Kerjasama</td>
                                         </tr>
                                     </thead>
 
@@ -266,15 +266,10 @@ function ageCalculator($dob){
                                         foreach ($rowFasilitas as $fasilitas) {
                                         $truedate = strtotime($fasilitas->update_terakhir); ?>
                                         <tr>
-                                            <td><?=$fasilitas->id_fasilitas_wisata?></td>
+                                            <td><?=$fasilitas->kode_fasilitas_wisata?></td>
                                             <td><?=$fasilitas->pengadaan_fasilitas?></td>
-                                            <td>Rp. <?=number_format($fasilitas->biaya_kerjasama, 0)?></td>
                                             <td>
-                                                <?php if ($fasilitas->status_kerjasama == "Melakukan Kerjasama") { ?>
-                                                    <span class="status yaoyao"></span><?=$fasilitas->status_kerjasama?>
-                                                <?php } elseif ($fasilitas->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
-                                                    <span class="status klee"></span><?=$fasilitas->status_kerjasama?>
-                                                <?php } ?>
+                                                <small style="color: rgba(0, 0, 0, 0.5);"><?=strftime('%A, %d %B %Y', $truedate).'<br> ('.ageCalculator($fasilitas->update_terakhir).' yang lalu)';?></small>
                                             </td>
                                             <td>
                                                 <?php if ($fasilitas->status_pengadaan == "Baik") { ?>
@@ -286,8 +281,13 @@ function ageCalculator($dob){
                                                 <?php } ?>
                                             </td>
                                             <td>
-                                                <small style="color: rgba(0, 0, 0, 0.5);"><?=strftime('%A, %d %B %Y', $truedate).'<br> ('.ageCalculator($fasilitas->update_terakhir).' yang lalu)';?></small>
+                                                <?php if ($fasilitas->status_kerjasama == "Melakukan Kerjasama") { ?>
+                                                    <span class="status yaoyao"></span><?=$fasilitas->status_kerjasama?>
+                                                <?php } elseif ($fasilitas->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
+                                                    <span class="status klee"></span><?=$fasilitas->status_kerjasama?>
+                                                <?php } ?>
                                             </td>
+                                            <td>Rp. <?=number_format($fasilitas->biaya_kerjasama, 0)?></td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>

@@ -354,7 +354,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Biaya Pengadaan:</b></span>
+                                            <span class="details"><b>Biaya Kerjasama:</b></span>
                                             <input type="text" name="biaya_kerjasama" id="biaya_kerjasama" value="<?=$rowKerjasama->biaya_kerjasama?>" placeholder="Biaya Kerjasama" onchange="myPersentase();" required>
                                         </div>
                                         <div class="input-box">

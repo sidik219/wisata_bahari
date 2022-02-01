@@ -256,7 +256,7 @@ $rowPengadaan = $stmt->fetchAll();
                                 <table>
                                     <thead>
                                         <tr>
-                                            <td>ID Pengadaan</td>
+                                            <td>ID Pengadaan Fasilitas</td>
                                             <td>Pengadaan Fasilitas</td>
                                             <td>Status Pengadaan</td>
                                             <td>Aksi</td>

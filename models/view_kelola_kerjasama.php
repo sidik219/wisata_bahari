@@ -267,7 +267,7 @@ $rowKerjasama = $stmt->fetchAll();
                                             <td>Pengadaan Fasilitas</td>
                                             <td>Status Kerjasama</td>
                                             <td>Pembagian Kerjasama</td>
-                                            <td>Biaya Pengadaan</td>
+                                            <td>Biaya Kerjasama</td>
                                             <td>Pembagian Hasil</td>
                                             <td>Aksi</td>
                                         </tr>
