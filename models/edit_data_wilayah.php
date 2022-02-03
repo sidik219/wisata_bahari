@@ -21,17 +21,8 @@ $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
-// Select Provinsi
-$sqlprovinsiSelect = "SELECT * FROM t_provinsi
-                    ORDER BY id_provinsi ASC";
-
-$stmt = $pdo->prepare($sqlprovinsiSelect);
-$stmt->execute();
-$rowProvinsi = $stmt->fetchAll();
-
 // Select Wilayah
 $sqlwilayahSelect = 'SELECT * FROM t_wilayah
-                LEFT JOIN t_provinsi ON t_wilayah.id_provinsi = t_provinsi.id_provinsi
                 WHERE t_wilayah.id_wilayah = :id_wilayah';
 
 $stmt = $pdo->prepare($sqlwilayahSelect);
@@ -39,7 +30,6 @@ $stmt->execute(['id_wilayah' => $_GET['id_wilayah']]);
 $rowWilayah = $stmt->fetch();
 
 if (isset($_POST['submit'])) {
-    $id_provinsi                = $_POST['id_provinsi'];
     $nama_wilayah               = $_POST['nama_wilayah'];
     $deskripsi_wilayah          = $_POST['deskripsi_wilayah'];
     $sisi_pantai                = $_POST['sisi_pantai'];
@@ -65,16 +55,14 @@ if (isset($_POST['submit'])) {
     //---image upload end
 
     $sqlpaketUpdate = "UPDATE t_wilayah
-                        SET id_provinsi = :id_provinsi,
-                            nama_wilayah = :nama_wilayah,
+                        SET nama_wilayah = :nama_wilayah,
                             deskripsi_wilayah = :deskripsi_wilayah,
                             foto_wilayah = :foto_wilayah,
                             sisi_pantai = :sisi_pantai
                         WHERE id_wilayah = :id_wilayah";
 
     $stmt = $pdo->prepare($sqlpaketUpdate);
-    $stmt->execute(['id_provinsi' => $id_provinsi,
-                    'nama_wilayah' => $nama_wilayah,
+    $stmt->execute(['nama_wilayah' => $nama_wilayah,
                     'deskripsi_wilayah' => $deskripsi_wilayah,
                     'foto_wilayah' => $foto_wilayah,
                     'sisi_pantai' => $sisi_pantai,
@@ -299,18 +287,6 @@ if (isset($_POST['submit'])) {
                                     
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
-                                        <!-- Provinsi -->
-                                        <div class="input-box">
-                                            <span class="details"><b>ID Provinsi:</b></span>
-                                            <select name="id_provinsi" required>
-                                                <option selected value="">Pilih Provinsi</option>
-                                                <?php foreach ($rowProvinsi as $provinsi) { ?>
-                                                <option <?php if ($provinsi->id_provinsi == $rowWilayah->id_provinsi) echo 'selected'; ?> value="<?=$provinsi->id_provinsi?>">
-                                                    <?=$provinsi->nama_provinsi?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        
                                         <div class="input-box">
                                             <span class="details"><b>Nama Wilayah:</b></span>
                                             <input type="text" name="nama_wilayah" value="<?=$rowWilayah->nama_wilayah?>" placeholder="Nama Wilayah" required>

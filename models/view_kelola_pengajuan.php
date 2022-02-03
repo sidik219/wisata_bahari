@@ -27,6 +27,26 @@ $sqlpengajuanSelect = "SELECT * FROM t_pengajuan
 $stmt = $pdo->prepare($sqlpengajuanSelect);
 $stmt->execute();
 $rowPengajuan = $stmt->fetchAll();
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,11 +71,65 @@ $rowPengajuan = $stmt->fetchAll();
     <div class="sidebar">
         <div class="sidebar-logo">
             <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
-            <?php if ($level == 3 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
             <?php } ?>
         </div>
+
+        <!-- Hak Akses Pengelola Lokasi -->
+        <?php if ($level == 2) { ?>
+        <div class="sidebar-menu">
+            <ul>
+                <!-- Dahboard Admin -->
+                <li>
+                    <a href="view_dashboard_admin">
+                    <span class="icon fas fa-home"></span>
+                        <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengajuan" class="paimon-active">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_wisata">
+                    <span class="fas fa-hot-tub"></span>
+                        <span>Kelola Paket Wisata</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_asuransi">
+                    <span class="fas fa-heartbeat"></span>
+                        <span>Kelola Asuransi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_kerjasama">
+                    <span class="fas fa-handshake"></span>
+                        <span>Kelola Kerjasama</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengadaan">
+                    <span class="fas fa-truck-loading"></span>
+                        <span>Kelola Pengadaan</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
+                    <a href="logout">
+                    <span class="fas fa-sign-out-alt"></span>
+                        <span>Log out</span></a>
+                </li>
+            </ul>
+        </div>
+        <?php } ?>
 
         <!-- Hak Akses Pengelola Wilayah -->
         <?php if ($level == 3) { ?>
@@ -190,7 +264,7 @@ $rowPengajuan = $stmt->fetchAll();
             </div>-->
 
             <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
-            <?php if ($level == 3 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
                 <img src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
@@ -203,9 +277,17 @@ $rowPengajuan = $stmt->fetchAll();
         </header>
 
         <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
-        <?php if ($level == 3 || $level == 4) { ?>
+        <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Laporan Wisata -->  
+            <a href="all_laporan.php?type=pengajuan" class="btn-kelola-laporan">
+                <span class="fas fa-file-excel"></span> Laporan Data Pengajuan
+            </a>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){
@@ -235,7 +317,7 @@ $rowPengajuan = $stmt->fetchAll();
                     <div class="card">
                         <div class="card-header">
                             <h2>Data Pengajuan</h2>
-                            <?php if ($level == 3 || $level == 4) { ?>
+                            <?php if ($level == 2 || $level == 4) { ?>
                             <button class="button-kelola-kembali"><a href="create_data_pengajuan" style="color: white;">
                             Input Data Baru</a> <span class="fas fa-plus"></span></button>
                             <?php } ?>
@@ -250,6 +332,7 @@ $rowPengajuan = $stmt->fetchAll();
                                             <td>Judul Pengajuan</td>
                                             <td>Deskripsi Pengajuan</td>
                                             <td>Tanggal Pengajuan</td>
+                                            <td>Status Pengajuan</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
@@ -257,20 +340,35 @@ $rowPengajuan = $stmt->fetchAll();
                                     <tbody>
                                         <?php 
                                             foreach ($rowPengajuan as $pengajuan) {
+                                            $pengajuandate = strtotime($pengajuan->tanggal_pengajuan);
                                         ?>
                                         <tr>
                                             <td><?=$pengajuan->id_pengajuan?></td>
                                             <td><?=$pengajuan->judul_pengajuan?></td>
                                             <td><?=$pengajuan->deskripsi_pengajuan?></td>
-                                            <td><?=$pengajuan->tanggal_pengajuan?></td>
                                             <td>
-                                                <?php if ($level == 3 || $level == 4) { ?>
-                                                <button class="modol-btn button-kelola-detail">
-                                                    <a href="detail_data_pengajuan?id_pengajuan=<?=$pengajuan->id_pengajuan?>" style="color: #fff">Detail</button>
+                                                <?=strftime('%A, %d %B %Y', $pengajuandate);?>
+                                            </td>
+                                            <td>
+                                                <?php if ($pengajuan->status_pengajuan == "Pending") { ?>
+                                                    <span class="status diona"></span>
+                                                    <?=$pengajuan->status_pengajuan?>
+                                                <?php } elseif ($pengajuan->status_pengajuan == "Diterima") { ?>
+                                                    <span class="status yaoyao"></span>
+                                                    <?=$pengajuan->status_pengajuan?>
+                                                <?php } elseif ($pengajuan->status_pengajuan == "Ditolak") {?>
+                                                    <span class="status klee"></span>
+                                                    <?=$pengajuan->status_pengajuan?>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
                                                 <button class="button-kelola-edit">
                                                     <a href="edit_data_pengajuan?id_pengajuan=<?=$pengajuan->id_pengajuan?>" style="color: #fff">Edit</a></button>
+                                                    <?php if ($level == 2 ||$level == 4) { ?>
                                                 <button class="button-kelola-hapus">
                                                     <a href="all_hapus?type=pengajuan&id_pengajuan=<?=$pengajuan->id_pengajuan?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</button>
+                                                    <?php } ?>
                                                 <?php } ?>
                                             </td>
                                         </tr>

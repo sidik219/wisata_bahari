@@ -224,7 +224,7 @@ $rowPaket = $stmt->fetchAll();
 
             <!-- Laporan Wisata -->  
             <a href="all_laporan.php?type=paket_wisata" class="btn-kelola-laporan">
-                <span class="fas fa-file-excel"></span> Laporan Data Wisata
+                <span class="fas fa-file-excel"></span> Laporan Data Paket Wisata
             </a>
             </div>
 

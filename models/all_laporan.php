@@ -149,6 +149,107 @@ session_start();
             } ?>
         </tbody>
     </table>
+<?php } elseif ($_GET['type'] == 'fasilitas') {
+// Cetak Laporan Biasa
+    // Laporan Data Fasilitas Wisata
+    header("Content-type: application/vnd-ms-excel");
+    header("Content-Disposition: attachment; filename=laporan_data_fasilitas_wisata.xls");
+
+    // Tampil all data fasilitas
+    $sqlFasilitas = 'SELECT * FROM t_fasilitas_wisata
+                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                        ORDER BY id_fasilitas_wisata ASC';
+
+    $stmt = $pdo->prepare($sqlFasilitas);
+    $stmt->execute();
+    $rowFasilitas = $stmt->fetchAll();
+
+    // Tampil untuk total biaya fasilitas
+    $sqlFasilitas = 'SELECT SUM(biaya_kerjasama) AS total_biaya_fasilitas FROM t_fasilitas_wisata
+                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
+                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan';
+
+    $stmt = $pdo->prepare($sqlFasilitas);
+    $stmt->execute();
+    $sumFasilitas = $stmt->fetchAll();
+
+    function ageCalculator($dob)
+    {
+        $birthdate = new DateTime($dob);
+        $today   = new DateTime('today');
+        $ag = $birthdate->diff($today)->y;
+        $mn = $birthdate->diff($today)->m;
+        $dy = $birthdate->diff($today)->d;
+        if ($mn == 0) {
+            return "$dy Hari";
+        } elseif ($ag == 0) {
+            return "$mn Bulan  $dy Hari";
+        } else {
+            return "$ag Tahun $mn Bulan $dy Hari";
+        }
+    } ?>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th scope="col" colspan="7"><h2>LAPORAN DATA FASILITAS WISATA</h2></th>
+            </tr>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Kode Fasilitas Wisata</th>
+                <th scope="col">Nama Pengadaan Fasilitas</th>
+                <th scope="col">Update Terakhir</th>
+                <th scope="col">Status Pengadaan Fasilitas</th>
+                <th scope="col">Status Kerjasama</th>
+                <th scope="col">Biaya Kerjasama</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            foreach ($rowFasilitas as $fasilitas) {
+                $truedate = strtotime($fasilitas->update_terakhir); ?>
+                <tr>
+                    <th><?= $no ?></th>
+                    <th scope="row"><?= $fasilitas->kode_fasilitas_wisata ?></th>
+                    <td><?= $fasilitas->pengadaan_fasilitas ?></td>
+                    <td>
+                        <small class="text-muted"><b>Update Terakhir</b>
+                            <br><?= strftime('%A, %d %B %Y', $truedate) . '<br> (' . ageCalculator($fasilitas->update_terakhir) . ' yang lalu)'; ?></small>
+                    </td>
+                    <td>
+                        <?php if ($fasilitas->status_pengadaan == "Baik") { ?>
+                            <span class="badge badge-pill badge-success"><?= $fasilitas->status_pengadaan ?></span>
+                        <?php } elseif ($fasilitas->status_pengadaan == "Rusak") { ?>
+                            <span class="badge badge-pill badge-warning"><?= $fasilitas->status_pengadaan ?></span>
+                        <?php } elseif ($fasilitas->status_pengadaan == "Hilang") { ?>
+                            <span class="badge badge-pill badge-danger"><?= $fasilitas->status_pengadaan ?></span>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php if ($fasilitas->status_kerjasama == "Melakukan Kerjasama") { ?>
+                            <span class="badge badge-pill badge-success"><?= $fasilitas->status_kerjasama ?></span>
+                        <?php } elseif ($fasilitas->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
+                            <span class="badge badge-pill badge-warning"><?= $fasilitas->status_kerjasama ?></span>
+                        <?php } ?>
+                    </td>
+                    <td>Rp. <?= number_format($fasilitas->biaya_kerjasama, 0) ?></td>
+                </tr>
+            <?php $no++;
+            } ?>
+        </tbody>
+        <tfoot>
+            <?php foreach ($sumFasilitas as $fasilitas) { ?>
+                <tr>
+                    <th colspan="6">Total Biaya Fasilitas Wisata</th>
+                    <th>
+                        Rp. <?= number_format($fasilitas->total_biaya_fasilitas, 0) ?>
+                    </th>
+                </tr>
+            <?php } ?>
+        </tfoot>
+    </table>
 <?php } elseif ($_GET['type'] == 'paket_wisata') {
 // Cetak Laporan Biasa
     // Laporan Data Paket Wisata
@@ -168,7 +269,7 @@ session_start();
     <table border="1">
         <thead>
             <tr>
-                <th scope="col" colspan="7"><h2>LAPORAN DATA PAKET WISATA</h2></th>
+                <th scope="col" colspan="11"><h2>LAPORAN DATA PAKET WISATA</h2></th>
             </tr>
             <tr>
                 <th scope="col">No</th>
@@ -351,30 +452,100 @@ session_start();
             } ?>
         </tbody>
     </table>
-<?php } elseif ($_GET['type'] == 'fasilitas') {
-// Cetak Laporan Biasa
-    // Laporan Data Fasilitas Wisata
+<?php } elseif ($_GET['type'] == 'reservasi_wisata') {
+// Cetak Laporan Periode
+    // Laporan Data Reservasi Wisata
     header("Content-type: application/vnd-ms-excel");
-    header("Content-Disposition: attachment; filename=laporan_data_fasilitas_wisata.xls");
+    header("Content-Disposition: attachment; filename=laporan_data_kerjasama.xls");
 
-    // Tampil all data fasilitas
-    $sqlFasilitas = 'SELECT * FROM t_fasilitas_wisata
-                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
-                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
-                        ORDER BY id_fasilitas_wisata ASC';
+    // Tampil all data reservasi wisata
+    $sqlReservasi = 'SELECT * FROM t_reservasi_wisata
+                    LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
+                    LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                    LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
+                    LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
+                    ORDER BY update_terakhir ASC';
 
-    $stmt = $pdo->prepare($sqlFasilitas);
+    $stmt = $pdo->prepare($sqlReservasi);
     $stmt->execute();
-    $rowFasilitas = $stmt->fetchAll();
+    $rowReservasi = $stmt->fetchAll(); ?>
 
-    // Tampil untuk total biaya fasilitas
-    $sqlFasilitas = 'SELECT SUM(biaya_kerjasama) AS total_biaya_fasilitas FROM t_fasilitas_wisata
-                        LEFT JOIN t_kerjasama ON t_fasilitas_wisata.id_kerjasama = t_kerjasama.id_kerjasama
-                        LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan';
+    <table border="1">
+        <thead>
+            <tr>
+                <th scope="col" colspan="14"><h2>LAPORAN DATA RESERVASI WISATA</h2></th>
+            </tr>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Nama User</th>
+                <th scope="col">Nama Lokasi</th>
+                <th scope="col">Tanggal Reservasi</th>
+                <th scope="col">Status Reservasi</th>
+                <th scope="col">Nama Paket Wisata</th>
+                <th scope="col">Jumlah Reservasi</th>
+                <th scope="col">Asuransi</th>
+                <th scope="col">Total Reservasi</th>
+                <th scope="col">Keterangan Reservasi</th>
+                <th scope="col">No HP User</th>
+                <th scope="col">Nama Bank Wisatawan</th>
+                <th scope="col">Nama Rekening Wisatawan</th>
+                <th scope="col">Nomor Rekening Wisatawan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            foreach ($rowReservasi as $reservasi) { 
+            $reservasidate = strtotime($reservasi->tgl_reservasi); ?>
+                <tr>
+                    <th><?= $no ?></th>
+                    <td><?=$reservasi->nama_user?></td>
+                    <td><?=$reservasi->nama_lokasi?></td>
+                    <td>
+                        <?=strftime('%A, %d %B %Y', $reservasidate);?>
+                    </td>
+                    <td>
+                        <?php if ($reservasi->nama_status_reservasi == "Menunggu Konfirmasi Pembayaran") { ?>
+                            <span class="status yaoyao"></span>
+                            <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Atifk -->
+                        <?php } elseif ($reservasi->nama_status_reservasi == "Pembayaran Telah Dikonfirmasi") { ?>
+                            <span class="status klee"></span>
+                            <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Tidak Atifk -->
+                        <?php } elseif ($reservasi->nama_status_reservasi == "Pembayaran Ditolak") {?>
+                            <span class="status diona"></span>
+                            <?=$reservasi->nama_status_reservasi?> <!-- Status Dalam Perbaikan -->
+                        <?php } ?>
+                    </td>
+                    <td><?=$reservasi->nama_paket_wisata?></td>
+                    <td><?=$reservasi->jumlah_reservasi?></td>
+                    <td><?=$reservasi->nama_asuransi?></td>
+                    <td><?=$reservasi->total_reservasi?></td>
+                    <td><?=$reservasi->keterangan_reservasi?></td>
+                    <td><?=$reservasi->no_hp?></td>
+                    <td><?=$reservasi->nama_bank_wisatawan?></td>
+                    <td><?=$reservasi->nama_rekening_wisatawan?></td>
+                    <td><?=$reservasi->nomor_rekening_wisatawan?></td>
+                </tr>
+            <?php $no++;
+            } ?>
+        </tbody>
+    </table>
+<?php } elseif ($_GET['type'] == 'pengajuan') {
+// Cetak Laporan Periode
+    // Laporan Data Pengajuan
+    header("Content-type: application/vnd-ms-excel");
+    header("Content-Disposition: attachment; filename=laporan_data_pengajuan.xls");
 
-    $stmt = $pdo->prepare($sqlFasilitas);
+    // Tampil all data pengajuan
+    $sqlPengajuan = 'SELECT * FROM t_pengajuan
+                        LEFT JOIN t_lokasi ON t_pengajuan.id_lokasi = t_lokasi.id_lokasi
+                        LEFT JOIN t_pengadaan_fasilitas ON t_pengajuan.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                        ORDER BY id_pengajuan ASC';
+
+    $stmt = $pdo->prepare($sqlPengajuan);
     $stmt->execute();
-    $sumFasilitas = $stmt->fetchAll();
+    $rowPengajuan = $stmt->fetchAll();
 
     function ageCalculator($dob)
     {
@@ -395,67 +566,44 @@ session_start();
     <table border="1">
         <thead>
             <tr>
-                <th scope="col" colspan="7"><h2>LAPORAN DATA FASILITAS WISATA</h2></th>
+                <th scope="col" colspan="7"><h2>LAPORAN DATA PENGAJUAN</h2></th>
             </tr>
             <tr>
                 <th scope="col">No</th>
-                <th scope="col">Kode Fasilitas Wisata</th>
-                <th scope="col">Nama Pengadaan Fasilitas</th>
-                <th scope="col">Update Terakhir</th>
-                <th scope="col">Status Pengadaan Fasilitas</th>
-                <th scope="col">Status Kerjasama</th>
-                <th scope="col">Biaya Kerjasama</th>
+                <th scope="col">Nama Lokasi</th>
+                <th scope="col">Judul Pengajuan</th>
+                <th scope="col">Deskripsi Pengajuan</th>
+                <th scope="col">Pengadaan Fasilitas</th>
+                <th scope="col">Tanggal Pengajuan</th>
+                <th scope="col">Status Pengajuan</th>
             </tr>
         </thead>
         <tbody>
             <?php
             $no = 1;
-            foreach ($rowFasilitas as $fasilitas) {
-                $truedate = strtotime($fasilitas->update_terakhir); ?>
+            foreach ($rowPengajuan as $pengajuan) {
+            $pengajuandate = strtotime($pengajuan->tanggal_pengajuan); ?>
                 <tr>
                     <th><?= $no ?></th>
-                    <th scope="row"><?= $fasilitas->kode_fasilitas_wisata ?></th>
-                    <td><?= $fasilitas->pengadaan_fasilitas ?></td>
+                    <td><?= $pengajuan->nama_lokasi ?></td>
+                    <td><?= $pengajuan->judul_pengajuan ?></td>
+                    <td><?= $pengajuan->deskripsi_pengajuan ?></td>
+                    <td><?= $pengajuan->pengadaan_fasilitas ?></td>
                     <td>
-                        <small class="text-muted"><b>Update Terakhir</b>
-                            <br><?= strftime('%A, %d %B %Y', $truedate) . '<br> (' . ageCalculator($fasilitas->update_terakhir) . ' yang lalu)'; ?></small>
+                        <?=strftime('%A, %d %B %Y', $pengajuandate);?>
                     </td>
                     <td>
-                        <?php if ($fasilitas->status_pengadaan == "Baik") { ?>
-                            <span class="badge badge-pill badge-success"><?= $fasilitas->status_pengadaan ?></span>
-                        <?php } elseif ($fasilitas->status_pengadaan == "Rusak") { ?>
-                            <span class="badge badge-pill badge-warning"><?= $fasilitas->status_pengadaan ?></span>
-                        <?php } elseif ($fasilitas->status_pengadaan == "Hilang") { ?>
-                            <span class="badge badge-pill badge-danger"><?= $fasilitas->status_pengadaan ?></span>
+                        <?php if ($pengajuan->status_pengajuan == "Pending") { ?>
+                            <span class="badge badge-pill badge-success"><?= $pengajuan->status_pengajuan ?></span>
+                        <?php } elseif ($pengajuan->status_pengajuan == "Diterima") { ?>
+                            <span class="badge badge-pill badge-warning"><?= $pengajuan->status_pengajuan ?></span>
+                        <?php } elseif ($pengajuan->status_pengajuan == "Ditolak") { ?>
+                            <span class="badge badge-pill badge-danger"><?= $pengajuan->status_pengajuan ?></span>
                         <?php } ?>
                     </td>
-                    <td>
-                        <?php if ($fasilitas->status_kerjasama == "Melakukan Kerjasama") { ?>
-                            <span class="badge badge-pill badge-success"><?= $fasilitas->status_kerjasama ?></span>
-                        <?php } elseif ($fasilitas->status_kerjasama == "Tidak Melakukan Kerjasama") { ?>
-                            <span class="badge badge-pill badge-warning"><?= $fasilitas->status_kerjasama ?></span>
-                        <?php } ?>
-                    </td>
-                    <td>Rp. <?= number_format($fasilitas->biaya_kerjasama, 0) ?></td>
                 </tr>
             <?php $no++;
             } ?>
         </tbody>
-        <tfoot>
-            <?php foreach ($sumFasilitas as $fasilitas) { ?>
-                <tr>
-                    <th colspan="6">Total Biaya Fasilitas Wisata</th>
-                    <th>
-                        Rp. <?= number_format($fasilitas->total_biaya_fasilitas, 0) ?>
-                    </th>
-                </tr>
-            <?php } ?>
-        </tfoot>
     </table>
-<?php } elseif ($_GET['type'] == 'reservasi_wisata') {
-// Cetak Laporan Periode ?>
-
-<?php } elseif ($_GET['type'] == 'pengajuan') {
-// Cetak Laporan Periode ?>
-
 <?php } ?>

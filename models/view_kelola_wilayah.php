@@ -20,7 +20,6 @@ $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
 $sqlwilayahSelect = "SELECT * FROM t_wilayah
-                    INNER JOIN t_provinsi ON t_wilayah.id_provinsi = t_provinsi.id_provinsi
                     ORDER BY id_wilayah DESC";
 
 $stmt = $pdo->prepare($sqlwilayahSelect);

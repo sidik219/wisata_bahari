@@ -20,14 +20,13 @@ $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
 // Select Provinsi
-$sqlprovinsiSelect = "SELECT * FROM t_provinsi";
+// $sqlprovinsiSelect = "SELECT * FROM t_provinsi";
 
-$stmt = $pdo->prepare($sqlprovinsiSelect);
-$stmt->execute();
-$rowProvinsi = $stmt->fetchAll();
+// $stmt = $pdo->prepare($sqlprovinsiSelect);
+// $stmt->execute();
+// $rowProvinsi = $stmt->fetchAll();
 
 if (isset($_POST['submit'])) {
-    $id_provinsi        = $_POST['id_provinsi'];
     $nama_wilayah       = $_POST['nama_wilayah'];
     $deskripsi_wilayah  = $_POST['deskripsi_wilayah'];
     $sisi_pantai        = $_POST['sisi_pantai'];
@@ -45,20 +44,17 @@ if (isset($_POST['submit'])) {
     // image Uploads End
 
     $sqlwilayahCreate = "INSERT INTO t_wilayah
-                        (id_provinsi, 
-                        nama_wilayah, 
+                        (nama_wilayah, 
                         deskripsi_wilayah, 
                         foto_wilayah, 
                         sisi_pantai)
-                        VALUE (:id_provinsi, 
-                                :nama_wilayah, 
+                        VALUE (:nama_wilayah, 
                                 :deskripsi_wilayah, 
                                 :foto_wilayah, 
                                 :sisi_pantai)";
     
     $stmt = $pdo->prepare($sqlwilayahCreate);
-    $stmt->execute(['id_provinsi' => $id_provinsi,
-                    'nama_wilayah' => $nama_wilayah,
+    $stmt->execute(['nama_wilayah' => $nama_wilayah,
                     'deskripsi_wilayah' => $deskripsi_wilayah,
                     'foto_wilayah' => $foto_wilayah,
                     'sisi_pantai' => $sisi_pantai]);
@@ -282,18 +278,6 @@ if (isset($_POST['submit'])) {
                                     
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
-                                        <div class="input-box">
-                                            <span class="details"><b>ID Provinsi:</b></span>
-                                            <select name="id_provinsi" required>
-                                                <option selected value="">Pilih Provinsi</option>
-                                                <?php 
-                                                    foreach ($rowProvinsi as $provinsi) {
-                                                ?>
-                                                <option value="<?=$provinsi->id_provinsi?>">
-                                                    <?=$provinsi->nama_provinsi?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
                                         <div class="input-box">
                                             <span class="details"><b>Nama Wilayah:</b></span>
                                             <input type="text" name="nama_wilayah" placeholder="Nama Wilayah" required>

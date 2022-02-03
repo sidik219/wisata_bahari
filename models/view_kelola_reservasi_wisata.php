@@ -23,6 +23,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
                         LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
                         LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                        LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                         ORDER BY update_terakhir DESC';
 
@@ -57,13 +58,13 @@ function alertPembayaran($dob)
     $mn = $birthdate->diff($today)->m;
     $dy = $birthdate->diff($today)->d;
 
-    $tglbatas = $birthdate->add(new DateInterval('P3D'));
+    $tglbatas = $birthdate->add(new DateInterval('P0D'));
     $tglbatas_formatted = strftime('%A, %e %B %Y pukul %R', $tglbatas->getTimeStamp());
     $batas_waktu_pesan = '<br><b>Batas pembayaran:</b><br>' . $tglbatas_formatted;
-    if ($dy <= 3) {
+    if ($dy <= 1) {
         //jika masih dalam batas waktu
         return  $batas_waktu_pesan . '<br style="margin-bottom: 0.3rem;"> <i class="fas fa-exclamation-circle" style="color: #ec8707;"></i><small> Menunggu bukti pembayaran wisatawan</small>';
-    } else if ($dy > 3) {
+    } else if ($dy > 1) {
         //overdue
         return $batas_waktu_pesan . '<br style="margin-bottom: 0.3rem;"><i class="fas fa-exclamation-circle" style="color: #d43334;"></i><small> Sudah lewat batas waktu pembayaran.</small><br>';
     }
@@ -301,6 +302,14 @@ function alertPembayaran($dob)
         <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
+            <!-- Button Selanjutnya -->
+            <div>
+            <!-- Laporan Wisata -->  
+            <a href="all_laporan.php?type=reservasi_wisata" class="btn-kelola-laporan">
+                <span class="fas fa-file-excel"></span> Laporan Data Reservasi Wisata
+            </a>
+            </div>
+
             <!-- Notifikasi -->
             <?php
                 if(!empty($_GET['status'])){

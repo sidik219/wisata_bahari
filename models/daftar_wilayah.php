@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
                                             <span class="details">Level User</span>
                                             <select name="level_user">
                                                 <option>Pilih Level</option>
-                                                <option value="1">Wisatawan</option>
+                                                <option value="3">pengelola Wilayah</option>
                                             </select>
                                         </div>
                                     </div>

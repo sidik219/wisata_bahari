@@ -9,8 +9,9 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
+$id_pengajuan = $_GET['id_pengajuan'];
+
 $defaultpic = "../views/img/image_default.jpg";
-$status_pengajuan = "Pending";
 
 // Select All Data User
 $sqluserSelect = "SELECT * FROM t_user
@@ -34,50 +35,58 @@ $stmt = $pdo->prepare($sqlfasilitasSelect);
 $stmt->execute();
 $rowPengadaan = $stmt->fetchAll();
 
+// Select Pengadaan Fasilitas
+$sqlpengajuanSelect = "SELECT * FROM t_pengajuan
+                        LEFT JOIN t_lokasi ON t_pengajuan.id_lokasi = t_lokasi.id_lokasi
+                        LEFT JOIN t_pengadaan_fasilitas ON t_pengajuan.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                        WHERE t_pengajuan.id_pengajuan = :id_pengajuan";
+
+$stmt = $pdo->prepare($sqlpengajuanSelect);
+$stmt->execute(['id_pengajuan' => $_GET['id_pengajuan']]);
+$rowPengajuan = $stmt->fetch();
+
 if (isset($_POST['submit'])) {
     $id_lokasi              = $_POST['id_lokasi'];
     $id_pengadaan           = $_POST['id_pengadaan'];
     $judul_pengajuan        = $_POST['judul_pengajuan'];
     $deskripsi_pengajuan    = $_POST['deskripsi_pengajuan'];
     $tanggal_pengajuan      = $_POST['tanggal_pengajuan'];
+    $status_pengajuan       = $_POST['status_pengajuan'];
     $randomstring           = substr(md5(rand()), 0, 7);
 
     // dokumen Uploads
-    if($_FILES["dokumen_pengajuan"]["size"] == 0) {
-        $dokumen_pengajuan = "";
-    }
-    else if (isset($_FILES['dokumen_pengajuan'])) {
-        $target_dir  = "../views/dokumen/pengajuan/";
-        $target_file = $_FILES["dokumen_pengajuan"]['name'];
-        $dokumen_pengajuan = $target_dir .'PENGAJUAN_'. $target_file;
-        move_uploaded_file($_FILES["dokumen_pengajuan"]["tmp_name"], $dokumen_pengajuan);
+    if($_FILES['dokumen_pengajuan']['size'][0] != 0){
+        if($_FILES["dokumen_pengajuan"]["size"] == 0) {
+            $dokumen_pengajuan = "";
+        }
+        else if (isset($_FILES['dokumen_pengajuan'])) {
+            $target_dir  = "../views/dokumen/pengajuan/";
+            $target_file = $_FILES["dokumen_pengajuan"]['name'];
+            $dokumen_pengajuan = $target_dir .'PENGAJUAN_'.$target_file.$randomstring.'.'. pathinfo($target_file,PATHINFO_EXTENSION);
+            move_uploaded_file($_FILES["dokumen_pengajuan"]["tmp_name"], $dokumen_pengajuan);
+        }
     }
     // dokumen Uploads End
 
-    $sqlpengajuanCreate = "INSERT INTO t_pengajuan
-                            (id_lokasi, 
-                            id_pengadaan, 
-                            judul_pengajuan,
-                            deskripsi_pengajuan,
-                            tanggal_pengajuan,
-                            dokumen_pengajuan,
-                            status_pengajuan)
-                            VALUE (:id_lokasi, 
-                                    :id_pengadaan, 
-                                    :judul_pengajuan,
-                                    :deskripsi_pengajuan,
-                                    :tanggal_pengajuan,
-                                    :dokumen_pengajuan,
-                                    :status_pengajuan)";
+    $sqlpengajuanUpdate = "UPDATE t_pengajuan
+                            SET id_lokasi = :id_lokasi,
+                                id_pengadaan = :id_pengadaan,
+                                judul_pengajuan = :judul_pengajuan,
+                                deskripsi_pengajuan = :deskripsi_pengajuan,
+                                tanggal_pengajuan = :tanggal_pengajuan,
+                                dokumen_pengajuan = :dokumen_pengajuan,
+                                status_pengajuan = :status_pengajuan
+                            WHERE id_pengajuan = :id_pengajuan";
     
-    $stmt = $pdo->prepare($sqlpengajuanCreate);
+    $stmt = $pdo->prepare($sqlpengajuanUpdate);
     $stmt->execute(['id_lokasi' => $id_lokasi,
                     'id_pengadaan' => $id_pengadaan,
                     'judul_pengajuan' => $judul_pengajuan,
                     'deskripsi_pengajuan' => $deskripsi_pengajuan,
                     'tanggal_pengajuan' => $tanggal_pengajuan,
                     'dokumen_pengajuan' => $dokumen_pengajuan,
-                    'status_pengajuan' => $status_pengajuan]);
+                    'status_pengajuan' => $status_pengajuan,
+                    'id_pengajuan' => $id_pengajuan]);
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
@@ -343,7 +352,7 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengajuan</h2>
+                            <h2>Edit Data Pengajuan</h2>
                         </div>
 
                         <div class="card-body">
@@ -357,7 +366,7 @@ if (isset($_POST['submit'])) {
                                             <select name="id_lokasi" required>
                                                 <option selected value="">Pilih Lokasi</option>
                                                 <?php foreach ($rowLokasi as $lokasi) { ?>
-                                                <option value="<?=$lokasi->id_lokasi?>">
+                                                <option <?php if ($lokasi->id_lokasi == $rowPengajuan->id_lokasi) echo 'selected'; ?> value="<?=$lokasi->id_lokasi?>">
                                                     <?=$lokasi->nama_lokasi?></option>
                                                 <?php } ?>
                                             </select>
@@ -368,11 +377,11 @@ if (isset($_POST['submit'])) {
                                                 <option selected value="">Pilih Pengadaan Fasilitas</option>
                                                 <?php foreach ($rowPengadaan as $pengadaan) { ?>
                                                     <?php if ($pengadaan->status_pengadaan == "Rusak") : ?>
-                                                        <option value="<?=$pengadaan->id_pengadaan?>">
+                                                        <option <?php if ($pengadaan->id_pengadaan == $rowPengajuan->id_pengadaan) echo 'selected'; ?> value="<?=$pengadaan->id_pengadaan?>">
                                                             <?=$pengadaan->pengadaan_fasilitas?> - <?=$pengadaan->status_pengadaan?>
                                                         </option>
                                                     <?php elseif ($pengadaan->status_pengadaan == "Hilang") : ?>
-                                                        <option value="<?=$pengadaan->id_pengadaan?>">
+                                                        <option <?php if ($pengadaan->id_pengadaan == $rowPengajuan->id_pengadaan) echo 'selected'; ?> value="<?=$pengadaan->id_pengadaan?>">
                                                             <?=$pengadaan->pengadaan_fasilitas?> - <?=$pengadaan->status_pengadaan?>
                                                         </option>
                                                     <?php endif ?>
@@ -381,16 +390,17 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>Judul Pengajuan:</b></span>
-                                            <input type="text" name="judul_pengajuan" placeholder="Judul Pengajuan" required>
+                                            <input type="text" name="judul_pengajuan" value="<?=$rowPengajuan->judul_pengajuan?>" placeholder="Judul Pengajuan" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>Deskripsi Pengajuan:</b></span>
-                                            <input type="text" name="deskripsi_pengajuan" placeholder="Deskripsi Pengajuan" required>
+                                            <input type="text" name="deskripsi_pengajuan" value="<?=$rowPengajuan->deskripsi_pengajuan?>" placeholder="Deskripsi Pengajuan" required>
                                         </div>
                                         <div class="input-box">
                                             <span class="details"><b>Tanggal Pengajuan:</b></span>
-                                            <input type="date" name="tanggal_pengajuan" placeholder="Tanggal Pengajuan" required>
+                                            <input type="date" name="tanggal_pengajuan" value="<?=$rowPengajuan->tanggal_pengajuan?>" placeholder="Tanggal Pengajuan" required>
                                         </div>
+                                        <?php if ($level == 2 || $level == 4) { ?>
                                         <div class="input-box">
                                             <span class="details"><b>Upload Dokumen Pengajuan:</b></span>
                                             <div style="margin-bottom: 1rem">
@@ -398,7 +408,47 @@ if (isset($_POST['submit'])) {
                                             </div> 
                                             <input class='form-control' type='file' name='dokumen_pengajuan' id='dokumen_pengajuan' accept='.doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .csv, .zip, .rar' required>
                                         </div>
+                                        <?php } ?>
+                                        <?php if ($level == 3 || $level == 4) { ?>
+                                        <div class="input-box">
+                                            <button class="button-kelola-kembali"><span class="fas fa-download"></span>
+                                                <a href="<?=$rowPengajuan->dokumen_pengajuan?>" style="color: white;">Unduh File</a>
+                                            </button>
+                                        </div>
+                                        <?php } ?>
                                     </div>
+                                    <?php if ($level == 3 || $level == 4) { ?>
+                                    <div class="detail-pilihan">
+                                        <?php if ($rowPengajuan->status_pengajuan == "Pending") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1" checked>
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2">
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3">
+                                        <?php } elseif ($rowPengajuan->status_pengajuan == "Diterima") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1">
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2" checked>
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3">
+                                        <?php } elseif ($rowPengajuan->status_pengajuan == "Ditolak") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1">
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2">
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3" checked>
+                                        <?php } ?>
+                                        <div class="pilihan-title">Status Pengajuan</div>
+                                        <div class="kategori">
+                                            <label for="dot-1">
+                                                <span class="dot satu"></span>
+                                                <span class="aktif">Pending</span>
+                                            </label>
+                                            <label for="dot-2">
+                                                <span class="dot dua"></span>
+                                                <span class="aktif">Diterima</span>
+                                            </label>
+                                            <label for="dot-3">
+                                                <span class="dot tiga"></span>
+                                                <span class="aktif">Ditolak</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <?php } ?>
                                     <div class="button-kelola-form">
                                         <input type="submit" name="submit" value="Simpan">
                                     </div>
