@@ -103,7 +103,6 @@ $rowreservasi = $stmt->fetch();
     <thead>
         <tr>
             <th scope="col">No</th>
-            <th scope="col">ID Reservasi</th>
             <th scope="col">Lokasi</th>
             <th scope="col">Nama Wisatawan</th>
             <th scope="col">Tanggal Reservasi</th>
@@ -122,13 +121,10 @@ $rowreservasi = $stmt->fetch();
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
-            <td><?=$rowitem->id_reservasi_wisata?></td>
             <td><?=$rowitem->nama_lokasi?></td>
             <td><?=$rowitem->nama_user?></td>
             <td>
-                <?=strftime('%A, %e %B %Y', $reservasidate);?><br>
-                <?php if ($rowitem->id_status_reservasi == 1) {
-                    echo alertPembayaran($rowitem->tgl_reservasi); } ?> 
+                <?=strftime('%A, %e %B %Y', $reservasidate);?>
             </td>
             
             <!-- Reservasi Pemasukan -->
@@ -258,7 +254,6 @@ $row = $stmt->fetchAll();
     <thead>
         <tr>
             <th scope="col">No</th>
-            <th scope="col">ID Pengajuan</th>
             <th scope="col">Judul Pengajuan</th>
             <th scope="col">Deskripsi Pengajuan</th>
             <th scope="col">Tanggal Pengajuan</th>
@@ -273,7 +268,6 @@ $row = $stmt->fetchAll();
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
-            <td><?=$rowitem->id_pengajuan?></td>
             <td><?=$rowitem->judul_pengajuan?></td>
             <td><?=$rowitem->deskripsi_pengajuan?></td>
             <td>
@@ -349,7 +343,6 @@ $row = $stmt->fetchAll();
     <thead>
         <tr>
             <th scope="col">No</th>
-            <th scope="col">ID Paket Wisata</th>
             <th scope="col">Nama Lokasi</th>
             <th scope="col">Nama Paket Wisata</th>
             <th scope="col">Tanggal Awal Paket</th>
@@ -367,7 +360,6 @@ $row = $stmt->fetchAll();
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
-            <td><?=$rowitem->id_paket_wisata?></td>
             <td><?=$rowitem->nama_lokasi?></td>
             <td><?=$rowitem->nama_paket_wisata?></td>
             <td>
@@ -406,7 +398,252 @@ $row = $stmt->fetchAll();
 <?php } ?>
 
 <!-- LAPORAN PERIODE ASURANSI -->
+<?php
+if ($_POST['type'] == 'load_laporan_asuransi' && !empty($_POST["start"])) {
+
+$level = $_POST['level_user'];
+
+$id_lokasi = $_POST['id_lokasi_dikelola'];
+$id_wilayah = $_POST['id_wilayah_dikelola'];
+
+$start = $_POST["start"];
+$end = $_POST["end"];
+
+if($level == 2){
+  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+}
+else if($level == 3){
+  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
+  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+}
+else if($level == 4){
+  $extra_query          = "  ";
+  $extra_query_noand    = " 1 ";
+}
+
+//Sortir berdasarkan nominal donasi
+
+// Header Paket Wisata
+$sqlasuransi = 'SELECT * FROM t_paket_wisata
+                LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
+                LEFT JOIN t_perusahaan_asuransi ON t_asuransi.id_perusahaan_asuransi = t_perusahaan_asuransi.id_perusahaan_asuransi
+                WHERE '.$extra_query_noand.' 
+                AND tgl_kontrak_asuransi BETWEEN "'.$start.'" 
+                AND "'.$end.'"';
+
+$stmt = $pdo->prepare($sqlasuransi);
+$stmt->execute();
+$row = $stmt->fetchAll();
+?>
+
+<table id="tabel_laporan_wisata">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Nama Asuransi</th>
+            <th scope="col">Biaya Asuransi</th>
+            <th scope="col">No Kontrak Asuransi</th>
+            <th scope="col">Tanggal Kontrak Asuransi</th>
+            <th scope="col">Lama Kontrak Asuransi</th>
+            <th scope="col">Aturan Kontrak Asuransi</th>
+        </tr>
+    </thead>
+    <tbody id="tbody_laporan_donasi">
+        <?php
+        $no = 1;
+        foreach ($row as $rowitem) {
+        $asuransidate = strtotime($rowitem->tgl_kontrak_asuransi);
+        ?>
+        <tr class="row_donasi">
+            <th scope="row"><?= $no ?></th>
+            <td><?=$rowitem->nama_asuransi?></td>
+            <td><?=$rowitem->biaya_asuransi?></td>
+            <td><?=$rowitem->no_kontrak_asuransi?></td>
+            <td><?=strftime('%A, %e %B %Y', $asuransidate);?></td>
+            <td><?=$rowitem->lama_kontrak_asuransi?></td>
+            <td><?=$rowitem->aturan_kontrak_asuransi?></td>
+        </tr>
+        <?php $no++;
+            }
+        ?>
+    </tbody>                    
+</table>
+
+<script>       
+    $(function() {
+        $("#tabel_laporan_wisata").tablesorter();
+    });
+</script>
+<?php } ?>
 
 <!-- LAPORAN PERIODE KERJASAMA -->
+<?php
+if ($_POST['type'] == 'load_laporan_kerjasama' && !empty($_POST["start"])) {
+
+$level = $_POST['level_user'];
+
+$id_lokasi = $_POST['id_lokasi_dikelola'];
+$id_wilayah = $_POST['id_wilayah_dikelola'];
+
+$start = $_POST["start"];
+$end = $_POST["end"];
+
+if($level == 2){
+  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+}
+else if($level == 3){
+  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
+  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+}
+else if($level == 4){
+  $extra_query          = "  ";
+  $extra_query_noand    = " 1 ";
+}
+
+//Sortir berdasarkan nominal donasi
+
+// Header Kerjasama
+$sqlkerjasama = 'SELECT * FROM t_kerjasama
+                LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
+                WHERE status_kerjasama = "Melakukan Kerjasama"
+                AND tgl_kontrak_kerjasama BETWEEN "'.$start.'" 
+                AND "'.$end.'"';
+
+$stmt = $pdo->prepare($sqlkerjasama);
+$stmt->execute();
+$row = $stmt->fetchAll();
+?>
+
+<table id="tabel_laporan_wisata">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Pihak Kerjasama</th>
+            <th scope="col">Status Kerjasama</th>
+            <th scope="col">No Kontrak Kerjasama</th>
+            <th scope="col">Tanggal Kontrak Kerjsama</th>
+            <th scope="col">Lama Kontrak Kerjasama</th>
+            <th scope="col">Aturan Kontrak Kerjasama</th>
+        </tr>
+    </thead>
+    <tbody id="tbody_laporan_donasi">
+        <?php
+        $no = 1;
+        foreach ($row as $rowitem) {
+        $kerjasamadate = strtotime($rowitem->tgl_kontrak_kerjasama);
+        ?>
+        <tr class="row_donasi">
+            <th scope="row"><?= $no ?></th>
+            <td><?=$rowitem->pihak_ketiga_kerjasama?></td>
+            <td>
+                <?php if ($rowitem->status_kerjasama == "Tidak Melakukan Kerjsama") { ?>
+                    <span class="status klee"></span>
+                    <?=$rowitem->status_kerjasama?>
+                <?php } elseif ($rowitem->status_kerjasama == "Melakukan Kerjasama") { ?>
+                    <span class="status yaoyao"></span>
+                    <?=$rowitem->status_kerjasama?>
+                <?php } ?>
+            </td>
+            <td><?=$rowitem->no_kontrak_kerjasama?></td>
+            <td><?=strftime('%A, %e %B %Y', $kerjasamadate);?></td>
+            <td><?=$rowitem->lama_kontrak_kerjasama?></td>
+            <td><?=$rowitem->aturan_kontrak_kerjasama?></td>
+        </tr>
+        <?php $no++;
+            }
+        ?>
+    </tbody>                    
+</table>
+
+<script>       
+    $(function() {
+        $("#tabel_laporan_wisata").tablesorter();
+    });
+</script>
+<?php } ?>
 
 <!-- LAPORAN PERIODE PENGADAAN FASILITAS -->
+<?php
+if ($_POST['type'] == 'load_laporan_pengadaan' && !empty($_POST["start"])) {
+
+$level = $_POST['level_user'];
+
+$id_lokasi = $_POST['id_lokasi_dikelola'];
+$id_wilayah = $_POST['id_wilayah_dikelola'];
+
+$start = $_POST["start"];
+$end = $_POST["end"];
+
+if($level == 2){
+  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+}
+else if($level == 3){
+  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
+  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+}
+else if($level == 4){
+  $extra_query          = "  ";
+  $extra_query_noand    = " 1 ";
+}
+
+//Sortir berdasarkan nominal donasi
+
+// Header Pengadaan Fasilitas
+$sqlpengadaan = 'SELECT * FROM t_pengadaan_fasilitas
+                WHERE status_pengadaan = "Baik"
+                AND tgl_pengadaan BETWEEN "'.$start.'" 
+                AND "'.$end.'"';
+
+$stmt = $pdo->prepare($sqlpengadaan);
+$stmt->execute();
+$row = $stmt->fetchAll();
+?>
+
+<table id="tabel_laporan_wisata">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Pengadaan Fasilitas</th>
+            <th scope="col">Status Pengadaan</th>
+            <th scope="col">Tanggal Pengadaan</th>
+        </tr>
+    </thead>
+    <tbody id="tbody_laporan_donasi">
+        <?php
+        $no = 1;
+        foreach ($row as $rowitem) {
+        $pengadaandate = strtotime($rowitem->tgl_pengadaan);
+        ?>
+        <tr class="row_donasi">
+            <th scope="row"><?= $no ?></th>
+            <td><?=$rowitem->pengadaan_fasilitas?></td>
+            <td>
+                <?php if ($rowitem->status_pengadaan == "Baik") { ?>
+                    <span class="status yaoyao"></span>
+                    <?=$rowitem->status_pengadaan?>
+                <?php } elseif ($rowitem->status_pengadaan == "Rusak") { ?>
+                    <span class="status diona"></span>
+                    <?=$rowitem->status_pengadaan?>
+                <?php } elseif ($rowitem->status_pengadaan == "Hilang") { ?>
+                    <span class="status klee"></span>
+                    <?=$rowitem->status_pengadaan?>
+                <?php } ?>
+            </td>
+            <td><?=strftime('%A, %e %B %Y', $pengadaandate);?></td>
+        </tr>
+        <?php $no++;
+            }
+        ?>
+    </tbody>                    
+</table>
+
+<script>       
+    $(function() {
+        $("#tabel_laporan_wisata").tablesorter();
+    });
+</script>
+<?php } ?>
