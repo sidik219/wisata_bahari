@@ -306,6 +306,104 @@ $row = $stmt->fetchAll();
 <?php } ?>
 
 <!-- LAPORAN PERIODE PAKET WISATA -->
+<?php
+if ($_POST['type'] == 'load_laporan_paket' && !empty($_POST["start"])) {
+
+$level = $_POST['level_user'];
+
+$id_lokasi = $_POST['id_lokasi_dikelola'];
+$id_wilayah = $_POST['id_wilayah_dikelola'];
+
+$start = $_POST["start"];
+$end = $_POST["end"];
+
+if($level == 2){
+  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+}
+else if($level == 3){
+  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
+  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+}
+else if($level == 4){
+  $extra_query          = "  ";
+  $extra_query_noand    = " 1 ";
+}
+
+//Sortir berdasarkan nominal donasi
+
+// Header Paket Wisata
+$sqlpaket = 'SELECT * FROM t_paket_wisata
+                LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                WHERE '.$extra_query_noand.' 
+                AND t_paket_wisata.status_paket = "Aktif"
+                AND tgl_awal_paket BETWEEN "'.$start.'" 
+                AND "'.$end.'"';
+
+$stmt = $pdo->prepare($sqlpaket);
+$stmt->execute();
+$row = $stmt->fetchAll();
+?>
+
+<table id="tabel_laporan_wisata">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">ID Paket Wisata</th>
+            <th scope="col">Nama Lokasi</th>
+            <th scope="col">Nama Paket Wisata</th>
+            <th scope="col">Tanggal Awal Paket</th>
+            <th scope="col">Tanggal Akhir Paket</th>
+            <th scope="col">Foto Paket</th>
+            <th scope="col">Status Paket</th>
+        </tr>
+    </thead>
+    <tbody id="tbody_laporan_donasi">
+        <?php
+        $no = 1;
+        foreach ($row as $rowitem) {
+        $paketawaldate = strtotime($rowitem->tgl_awal_paket);
+        $paketakhirdate = strtotime($rowitem->tgl_akhir_paket);
+        ?>
+        <tr class="row_donasi">
+            <th scope="row"><?= $no ?></th>
+            <td><?=$rowitem->id_paket_wisata?></td>
+            <td><?=$rowitem->nama_lokasi?></td>
+            <td><?=$rowitem->nama_paket_wisata?></td>
+            <td>
+                <?=strftime('%A, %e %B %Y', $paketawaldate);?>
+            </td>
+            <td>
+                <?=strftime('%A, %e %B %Y', $paketakhirdate);?>
+            </td>
+            <td>
+                <img src="<?=$rowitem->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+            </td>
+            <td>
+                <?php if ($rowitem->status_paket == "Aktif") { ?>
+                    <span class="status diona"></span>
+                    <?=$rowitem->status_paket?>
+                <?php } elseif ($rowitem->status_paket == "Tidak Aktif") { ?>
+                    <span class="status yaoyao"></span>
+                    <?=$rowitem->status_paket?>
+                <?php } elseif ($rowitem->status_paket == "Perbaikan") {?>
+                    <span class="status klee"></span>
+                    <?=$rowitem->status_paket?>
+                <?php } ?>
+            </td>
+        </tr>
+        <?php $no++;
+            }
+        ?>
+    </tbody>                    
+</table>
+
+<script>       
+    $(function() {
+        $("#tabel_laporan_wisata").tablesorter();
+    });
+</script>
+<?php } ?>
 
 <!-- LAPORAN PERIODE ASURANSI -->
 
