@@ -397,7 +397,7 @@ for($bulan = 1; $bulan < 13; $bulan++) {
         <main>
             <div class="cards">
                 <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi -->
-                <?php if ($level == 2 || $level == 3 || $level == 4) {?>
+                <?php if ($level == 2 || $level == 4) {?>
                 <!-- Reservasi Wisata -->
                 <div class="card-single2">
                     <div>
@@ -414,8 +414,11 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span class="paimon-3 fas fa-suitcase"></span>
                     </div>
                 </div>
-
-                <!-- Wisata -->
+                <?php } ?>
+                
+                <!-- Hak Akses Pengelola Wilayah -->
+                <?php if ($level == 2 || $level == 3 || $level == 4) {?>
+                <!-- Pengajuan -->
                 <div class="card-single2">
                     <div>
                         <span>
@@ -431,24 +434,47 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span class="paimon-3 fas fa-file-signature"></span>
                     </div>
                 </div>
-
-                <!-- Fasilitas Wisata -->
+                <?php } ?>
+                
+                <?php if ($level == 2 || $level == 4) {?>
+                <!-- Paket Wisata -->
                 <div class="card-single2">
                     <div>
                         <span>
                             <button class="button-kelola-kembali">
-                                <a href="laporan_periode_pengadaan" style="color: white;">
-                                    <h3>Laporan Periode Pengadaan</h3>
+                                <a href="laporan_periode_paket_wisata" style="color: white;">
+                                    <h3>Laporan Periode Paket Wisata</h3>
                                     <span class="fas fa-plus" style="color: white;"></span>
                                 </a>
                             </button>
                         </span>
                     </div>
                     <div>
-                        <span class="paimon-3 fas fa-truck-loading"></span>
+                        <span class="paimon-3 fas fa-cubes"></span>
                     </div>
                 </div>
+                <?php } ?>
 
+                <?php if ($level == 2 || $level == 4) {?>
+                <!-- Asuransi -->
+                <div class="card-single2">
+                    <div>
+                        <span>
+                            <button class="button-kelola-kembali">
+                                <a href="laporan_periode_asuransi" style="color: white;">
+                                    <h3>Laporan Periode Asuransi</h3>
+                                    <span class="fas fa-plus" style="color: white;"></span>
+                                </a>
+                            </button>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="paimon-3 fas fa-heartbeat"></span>
+                    </div>
+                </div>
+                <?php } ?>
+                
+                <?php if ($level == 2 || $level == 4) {?>
                 <!-- Kerjasama -->
                 <div class="card-single2">
                     <div>
@@ -465,21 +491,23 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         <span class="paimon-3 fas fa-handshake"></span>
                     </div>
                 </div>
+                <?php } ?>
 
-                <!-- Asuransi -->
+                <?php if ($level == 2 || $level == 4) {?>
+                <!-- Pengadaan Fasilitas -->
                 <div class="card-single2">
                     <div>
                         <span>
                             <button class="button-kelola-kembali">
-                                <a href="laporan_periode_asuransi" style="color: white;">
-                                    <h3>Laporan Periode Asuransi</h3>
+                                <a href="laporan_periode_pengadaan" style="color: white;">
+                                    <h3>Laporan Periode Pengadaan</h3>
                                     <span class="fas fa-plus" style="color: white;"></span>
                                 </a>
                             </button>
                         </span>
                     </div>
                     <div>
-                        <span class="paimon-3 fas fa-heartbeat"></span>
+                        <span class="paimon-3 fas fa-truck-loading"></span>
                     </div>
                 </div>
                 <?php } ?>
