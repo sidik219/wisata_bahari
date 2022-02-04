@@ -239,9 +239,9 @@ $rowKerjasama = $stmt->fetchAll();
             </button>
 
             <!-- Laporan Kerjasama -->  
-            <a href="all_laporan.php?type=kerjasama" class="btn-kelola-laporan">
+            <!-- <a href="all_laporan.php?type=kerjasama" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Kerjasama
-            </a>
+            </a> -->
             </div>
 
             <!-- Notifikasi -->

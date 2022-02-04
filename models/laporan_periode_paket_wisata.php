@@ -20,18 +20,17 @@ $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
 if($level == 2){
-  $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $id_wilayah           = $_SESSION['id_wilayah_dikelola'];
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 // Umum
@@ -428,7 +427,6 @@ function ageCalculator($dob){
         function updateTabelLaporan(start, end, sortir){
             // starto = start
             // endo = end
-            id_wilayah_dikelola =  <?=!empty($_SESSION['id_wilayah_dikelola']) ? $_SESSION['id_wilayah_dikelola'] : '1'?>
 
             id_lokasi_dikelola = <?=!empty($_SESSION['id_lokasi_dikelola']) ? $_SESSION['id_lokasi_dikelola'] : '1'?>
 
@@ -442,7 +440,6 @@ function ageCalculator($dob){
                         end: end,
                         sortir: sortir,
                         level_user : level_user,
-                        id_wilayah_dikelola : id_wilayah_dikelola,
                         id_lokasi_dikelola : id_lokasi_dikelola,
                         type : 'load_laporan_paket'},
                 beforeSend : function(){$('#table-container').LoadingOverlay("show");},

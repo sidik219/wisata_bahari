@@ -29,22 +29,21 @@ if ($_POST['type'] == 'load_laporan_reservasi' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi
@@ -216,22 +215,21 @@ if ($_POST['type'] == 'load_laporan_pengajuan' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi
@@ -306,22 +304,21 @@ if ($_POST['type'] == 'load_laporan_paket' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi
@@ -404,22 +401,21 @@ if ($_POST['type'] == 'load_laporan_asuransi' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi
@@ -485,22 +481,21 @@ if ($_POST['type'] == 'load_laporan_kerjasama' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi
@@ -572,22 +567,21 @@ if ($_POST['type'] == 'load_laporan_pengadaan' && !empty($_POST["start"])) {
 $level = $_POST['level_user'];
 
 $id_lokasi = $_POST['id_lokasi_dikelola'];
-$id_wilayah = $_POST['id_wilayah_dikelola'];
 
 $start = $_POST["start"];
 $end = $_POST["end"];
 
 if($level == 2){
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 //Sortir berdasarkan nominal donasi

@@ -298,9 +298,9 @@ function ageCalculator($dob){
             <!-- Button Selanjutnya -->
             <div>
             <!-- Laporan Wisata -->  
-            <a href="all_laporan.php?type=pengajuan" class="btn-kelola-laporan">
+            <!-- <a href="all_laporan.php?type=pengajuan" class="btn-kelola-laporan">
                 <span class="fas fa-file-excel"></span> Laporan Data Pengajuan
-            </a>
+            </a> -->
             </div>
 
             <!-- Notifikasi -->

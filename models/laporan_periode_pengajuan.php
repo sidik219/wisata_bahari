@@ -20,24 +20,23 @@ $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
 if($level == 2){
-  $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
-  $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-  $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
+    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-  $id_wilayah           = $_SESSION['id_wilayah_dikelola'];
-  $extra_query          = " AND t_lokasi.id_wilayah = $id_wilayah ";
-  $extra_query_noand    = " t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 else if($level == 4){
-  $extra_query          = "  ";
-  $extra_query_noand    = " 1 ";
+    $extra_query          = "  ";
+    $extra_query_noand    = " 1 ";
 }
 
 // Umum
 $sqltahunterawal = 'SELECT MIN(tanggal_pengajuan) AS tahun_terawal FROM t_pengajuan
                     LEFT JOIN t_lokasi ON t_pengajuan.id_lokasi = t_lokasi.id_lokasi
-                    WHERE status_pengajuan = "Diterima" '. $extra_query. ' LIMIT 1';
+                    WHERE status_pengajuan = "Diterima" '.$extra_query.' LIMIT 1';
 
 $stmt = $pdo->prepare($sqltahunterawal);
 $stmt->execute();
@@ -93,7 +92,7 @@ function ageCalculator($dob){
     <div class="sidebar">
         <div class="sidebar-logo">
             <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-            <?php if ($level == 2 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
             <?php } ?>
@@ -143,6 +142,55 @@ function ageCalculator($dob){
                     <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
+                </li>
+                <li>
+                    <a href="view_akun">
+                    <span class="fas fa-user-cog"></span>
+                        <span>Akun Saya</span></a>
+                </li>
+                <li>
+                    <a href="logout">
+                    <span class="fas fa-sign-out-alt"></span>
+                        <span>Log out</span></a>
+                </li>
+            </ul>
+        </div>
+        <?php } ?>
+
+        <!-- Hak Akses Pengelola Wilayah -->
+        <?php if ($level == 3) { ?>
+        <div class="sidebar-menu">
+            <ul>
+                <!-- Dahboard Admin -->
+                <li>
+                    <a href="view_dashboard_admin">
+                    <span class="icon fas fa-home"></span>
+                        <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="kelola_laporan_periode" class="paimon-active">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_pengajuan">
+                    <span class="fas fa-file-signature"></span>
+                        <span>Kelola Pengajuan</span></a>
+                </li>
+                <!-- <li>
+                    <a href="view_kelola_reservasi_wisata">
+                    <span class="fas fa-luggage-cart"></span>
+                        <span>Kelola Reservasi Wisata</span></a>
+                </li> -->
+                <li>
+                    <a href="view_kelola_lokasi">
+                    <span class="fas fa-map-marked-alt"></span>
+                        <span>Kelola Lokasi</span></a>
+                </li>
+                <li>
+                    <a href="view_kelola_wilayah">
+                    <span class="fas fa-place-of-worship"></span>
+                        <span>Kelola Wilayah</span></a>
                 </li>
                 <li>
                     <a href="view_akun">
@@ -252,7 +300,7 @@ function ageCalculator($dob){
             </div>-->
 
             <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-            <?php if ($level == 2 || $level == 4) { ?>
+            <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
                 <img src="<?=$rowUser2->foto_user?>" width="50px" height="50px" <?php if($rowUser2->foto_user == NULL) echo "style='display: none;'"; ?>>
@@ -265,7 +313,7 @@ function ageCalculator($dob){
         </header>
         
         <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
-        <?php if ($level == 2 || $level == 4) { ?>
+        <?php if ($level == 2 || $level == 3 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
@@ -428,7 +476,6 @@ function ageCalculator($dob){
         function updateTabelLaporan(start, end, sortir){
             // starto = start
             // endo = end
-            id_wilayah_dikelola =  <?=!empty($_SESSION['id_wilayah_dikelola']) ? $_SESSION['id_wilayah_dikelola'] : '1'?>
 
             id_lokasi_dikelola = <?=!empty($_SESSION['id_lokasi_dikelola']) ? $_SESSION['id_lokasi_dikelola'] : '1'?>
 
@@ -442,7 +489,6 @@ function ageCalculator($dob){
                         end: end,
                         sortir: sortir,
                         level_user : level_user,
-                        id_wilayah_dikelola : id_wilayah_dikelola,
                         id_lokasi_dikelola : id_lokasi_dikelola,
                         type : 'load_laporan_pengajuan'},
                 beforeSend : function(){$('#table-container').LoadingOverlay("show");},
