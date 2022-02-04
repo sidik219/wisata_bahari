@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
             $id_reservasi_wisata    = $_POST['id_reservasi_wisata'];
             $nama_pengeluaran       = $_POST['nama_pengeluaran'][$i];
             $biaya_pengeluaran      = $_POST['biaya_pengeluaran'][$i];
-            $tanggal_sekarang       = $_POST['tgl_pengeluaran'][$i];
+            $tgl_pengeluaran        = $_POST['tgl_pengeluaran'][$i];
 
             //Insert t_pengeluaran
             $sqlpengeluaran = "INSERT INTO t_pengeluaran (id_reservasi_wisata, nama_pengeluaran, biaya_pengeluaran, tgl_pengeluaran)

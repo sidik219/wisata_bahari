@@ -160,24 +160,21 @@ $rowreservasi = $stmt->fetch();
         <?php $no++;
             }
         ?>
-    </tbody>                    
-</table>
 
-<?php
-// $pemasukan = 15000;
-// $pengeluaran = 16000;
-$pemasukan = $rowreservasi->subtotal;
-$pengeluaran = $rowtotal->biaya_pengeluaran;
-// $total = $pemasukan - $pengeluaran;
-?>
-<table style="margin-top: 3rem">
-    <thead>
+        <?php
+        // $pemasukan = 15000;
+        // $pengeluaran = 16000;
+        $pemasukan = $rowreservasi->subtotal;
+        $pengeluaran = $rowtotal->biaya_pengeluaran;
+        // $total = $pemasukan - $pengeluaran;
+        ?>
+
         <tr>
-            <td colspan="5" style="text-align: right;">Total Jumlah Pemasukan</td>
+            <th colspan="5" style="text-align: right;">Total Jumlah Pemasukan</th>
             <td style="text-align: center;">: Rp. <?=number_format($pemasukan, 0)?></td>                          
         </tr>
         <tr>
-            <td colspan="5" style="text-align: right;">Total Biaya Pengeluaran</td>
+            <th colspan="5" style="text-align: right;">Total Biaya Pengeluaran</th>
             <td style="text-align: center;">: Rp. <?=number_format($pengeluaran, 0)?></td>                                
         </tr>
 
@@ -185,20 +182,22 @@ $pengeluaran = $rowtotal->biaya_pengeluaran;
         <?php if ($pemasukan > $pengeluaran) {
 	    $laba = $pemasukan - $pengeluaran; ?>
         <tr> <!-- Untung -->
-            <td colspan="5" style="text-align: right;"><i class="text-success fas fa-plus"></i> LABA</td>
+            <th colspan="5" style="text-align: right;"><i class="text-success fas fa-plus"></i> LABA</th>
             <td style="text-align: center;">: Rp. <?=number_format($laba, 0)?></td>                                
         </tr>
         <?php } elseif ($pengeluaran > $pemasukan) { 
         $rugi = $pengeluaran - $pemasukan; ?>
         <tr> <!-- Rugi -->
-            <td colspan="5" style="text-align: right;"><i class="text-danger fas fa-minus"></i> RUGI</td>
+            <th colspan="5" style="text-align: right;"><i class="text-danger fas fa-minus"></i> RUGI</th>
             <td style="text-align: center;">: Rp. <?=number_format($rugi, 0)?></td>                                
         </tr>
         <?php } else { ?>
-            <td colspan="5" style="text-align: right;">Tidak laba tidak rugi</td>
-            <td></td>
+        <tr>
+            <th colspan="5" style="text-align: right;">Tidak laba tidak rugi</th>
+            <th></th>
+        </tr>
         <?php } ?>
-    </thead>
+    </tbody>                    
 </table>
 
 <script>       

@@ -19,6 +19,14 @@ $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
+// Lokasi
+$sqllokasiSelect = "SELECT * FROM t_lokasi
+                    LEFT JOIN t_wilayah ON t_lokasi.id_wilayah = t_wilayah.id_wilayah";
+
+$stmt = $pdo->prepare($sqllokasiSelect);
+$stmt->execute();
+$rowLokasi = $stmt->fetch();
+
 if($level == 2){
     $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
     $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
@@ -397,14 +405,30 @@ function ageCalculator($dob){
                         </div>
 
                         <div class="card-body">
-                            <div style="margin-bottom: 2rem">
-                                <h2 style="text-align: center;">
-                                    Laporan Pengajuan
-                                </h2>
-                                <h3 style="text-align: center; font-weight: normal;">
-                                    Periode <span id="periode_laporan"></span>
-                                </h3>
-                            </div>
+                            <table style="margin-top: 2rem;">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <img src="<?=$rowLokasi->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="150px" height="150px" style="margin-left: 2rem">
+                                        </td>
+                                        <td>
+                                            <h2 style="text-align: center;">
+                                                Laporan Periode Pengajuan
+                                            </h2>
+                                            <h3 style="text-align: center; font-weight: normal;">
+                                                Periode <span id="periode_laporan"></span>
+                                            </h3>
+                                            <h5 style="text-align: center; font-weight: normal;">
+                                                <i><?=$rowLokasi->deskripsi_lokasi?></i>
+                                            </h5>
+                                        </td>
+                                        <td>
+                                            <img src="../views/img/white.jpg" width="150px" height="150px" style="margin-right: 2rem">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr style="margin-bottom: 3rem">
 
                             <div class="table-portable">
                                 <!-- Response AJAX call filter tabel laporan ditaro dalam sini -->
