@@ -35,30 +35,13 @@ else if($level == 4){
 }
 
 // Umum
-$sqltahunterawal = 'SELECT MIN(tanggal_pesan) AS tahun_terawal FROM t_reservasi_wisata
-                    LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
-                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
-                    WHERE id_status_reservasi = 2 '. $extra_query. ' LIMIT 1';
+$sqltahunterawal = 'SELECT MIN(tanggal_pengajuan) AS tahun_terawal FROM t_pengajuan
+                    LEFT JOIN t_lokasi ON t_pengajuan.id_lokasi = t_lokasi.id_lokasi
+                    WHERE status_pengajuan = "Diterima" '. $extra_query. ' LIMIT 1';
 
 $stmt = $pdo->prepare($sqltahunterawal);
 $stmt->execute();
 $tahunterawal = $stmt->fetch();
-
-// Hitung Total
-$sqlhitungtotal = 'SELECT COUNT(t_pengeluaran.id_pengeluaran) AS total_reservasi, 
-                            SUM(t_pengeluaran.biaya_pengeluaran) AS biaya_pengeluaran 
-                FROM t_pengeluaran
-                LEFT JOIN t_reservasi_wisata ON t_pengeluaran.id_reservasi_wisata = t_reservasi_wisata.id_reservasi_wisata
-                LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                LEFT JOIN t_user ON t_reservasi_wisata.id_user = t_user.id_user
-                LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
-                LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
-                WHERE '.$extra_query_noand.'
-                ORDER BY id_pengeluaran DESC';
-
-$stmt = $pdo->prepare($sqlhitungtotal);
-$stmt->execute();
-$rowtotal = $stmt->fetch();
 
 function ageCalculator($dob){
     $birthdate = new DateTime($dob);
@@ -292,10 +275,10 @@ function ageCalculator($dob){
             </div>
 
             <div class="print-hide">
-                <h3><span>Laporan Reservasi Wisata</span></h3>
+                <h3><span>Laporan Pengajuan</span></h3>
                 <small>
                     <i class="nav-icon text-info fas fa-info-circle"></i> 
-                    Daftar reservasi wisata yang telah selesai melakukan kelola biaya pengeluaran
+                    Daftar laporan pengajuan yang sudah diterima
                 </small>
             </div>
 
@@ -368,7 +351,7 @@ function ageCalculator($dob){
                         <div class="card-body">
                             <div style="margin-bottom: 2rem">
                                 <h2 style="text-align: center;">
-                                    Laporan Periode Pendapatan Reservasi Wisata
+                                    Laporan Pengajuan
                                 </h2>
                                 <h3 style="text-align: center; font-weight: normal;">
                                     Periode <span id="periode_laporan"></span>
@@ -461,7 +444,7 @@ function ageCalculator($dob){
                         level_user : level_user,
                         id_wilayah_dikelola : id_wilayah_dikelola,
                         id_lokasi_dikelola : id_lokasi_dikelola,
-                        type : 'load_laporan_reservasi'},
+                        type : 'load_laporan_pengajuan'},
                 beforeSend : function(){$('#table-container').LoadingOverlay("show");},
                 success: function(response){
                     // Attach response to target container/element
@@ -499,7 +482,7 @@ function ageCalculator($dob){
             var element = document.getElementById('clientPrintContent');
             var opt = {
                 margin:       [1.5,2,2,2],
-                filename:     `Laporan-Pendapatan_Reservasi-Wisata_Periode-${periode_laporan}_Diunduh-Pada${dateTime}.pdf`,
+                filename:     `Laporan-Pengajuan_Periode-${periode_laporan}_Diunduh-Pada${dateTime}.pdf`,
                 image:        { type: 'jpeg', quality: 0.95 },
                 html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'cm', format: 'a4', orientation: 'landscape' }
