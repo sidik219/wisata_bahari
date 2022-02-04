@@ -9,6 +9,8 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
+$id_reservasi_wisata = $_GET['id_reservasi_wisata'];
+
 $defaultpic = "../views/img/image_default.jpg";
 
 // Select All Data User
@@ -19,29 +21,77 @@ $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
+// Reservasi Wisata
+$sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
+                    WHERE id_reservasi_wisata = :id_reservasi_wisata';
+
+$stmt = $pdo->prepare($sqlreservasiSelect);
+$stmt->execute(['id_reservasi_wisata' => $id_reservasi_wisata]);
+$rowReservasi = $stmt->fetch();
+
+// Pengeluaran
+$sqlpengeluaranSelect = 'SELECT * FROM t_pengeluaran
+                    LEFT JOIN t_reservasi_wisata ON t_pengeluaran.id_reservasi_wisata = t_reservasi_wisata.id_reservasi_wisata
+                    WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata
+                    ORDER BY id_pengeluaran DESC';
+
+$stmt = $pdo->prepare($sqlpengeluaranSelect);
+$stmt->execute(['id_reservasi_wisata' => $id_reservasi_wisata]);
+$rowPengeluaran = $stmt->fetchAll();
+
 if (isset($_POST['submit'])) {
     if ($_POST['submit'] == 'Simpan') {
         $i = 0;
-        foreach ($_POST['pengadaan_fasilitas'] as $pengadaan_fasilitas) {
-            $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'][$i];
-            $status_pengadaan       = $_POST['status_pengadaan'][$i];
+        foreach ($_POST['nama_pengeluaran'] as $nama_pengeluaran) {
+            $id_reservasi_wisata    = $_POST['id_reservasi_wisata'];
+            $nama_pengeluaran       = $_POST['nama_pengeluaran'][$i];
+            $biaya_pengeluaran      = $_POST['biaya_pengeluaran'][$i];
+            $tanggal_sekarang       = $_POST['tgl_pengeluaran'][$i];
 
-            $sqlasuransiCreate = "INSERT INTO t_pengadaan_fasilitas
-                                (pengadaan_fasilitas, status_pengadaan)
-                                VALUE (:pengadaan_fasilitas, :status_pengadaan)";
-            
-            $stmt = $pdo->prepare($sqlasuransiCreate);
-            $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
-                            'status_pengadaan' => $status_pengadaan]);
-            
+            //Insert t_pengeluaran
+            $sqlpengeluaran = "INSERT INTO t_pengeluaran (id_reservasi_wisata, nama_pengeluaran, biaya_pengeluaran, tgl_pengeluaran)
+                                                VALUES (:id_reservasi_wisata, :nama_pengeluaran, :biaya_pengeluaran, :tgl_pengeluaran)";
+
+            $stmt = $pdo->prepare($sqlpengeluaran);
+            $stmt->execute([
+                'id_reservasi_wisata' => $id_reservasi_wisata,
+                'nama_pengeluaran' => $nama_pengeluaran,
+                'biaya_pengeluaran' => $biaya_pengeluaran,
+                'tgl_pengeluaran' => $tgl_pengeluaran
+            ]);
+
             $affectedrows = $stmt->rowCount();
             if ($affectedrows == '0') {
-                header("Location: create_data_pengadaan?status=tambahGagal");
+                header("Location: kelola_laporan_pengeluaran.php?status=tambahGagal");
             } else {
-                header("Location: view_kelola_pengadaan?status=tambahBerhasil");
+                //echo "HAHAHAAHA GREAT SUCCESSS !";
+                // echo "<meta http-equiv='refresh' content='0'>";
+                header('Location: kelola_laporan_pengeluaran.php?id_reservasi_wisata=' . $id_reservasi_wisata . '&status=tambahBerhasil');
             }
             $i++;
-        }
+        } //End Foreach
+    } else {
+        echo '<script>alert("Harap inputkan nama pengeluaran yang akan ditambahkan")</script>';
+    }
+}
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
     }
 }
 ?>
@@ -67,7 +117,7 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
+            <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
             <?php if ($level == 2 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
@@ -95,7 +145,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Pengajuan</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_reservasi_wisata">
+                    <a href="view_kelola_reservasi_wisata" class="paimon-active">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
@@ -115,7 +165,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -154,7 +204,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Pengajuan</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_reservasi_wisata">
+                    <a href="view_kelola_reservasi_wisata" class="paimon-active">
                     <span class="fas fa-luggage-cart"></span>
                         <span>Kelola Reservasi Wisata</span></a>
                 </li>
@@ -174,7 +224,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -226,7 +276,7 @@ if (isset($_POST['submit'])) {
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
+            <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
             <?php if ($level == 2 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
@@ -246,20 +296,8 @@ if (isset($_POST['submit'])) {
             <!-- Button Kembali -->
             <div>
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
-            <a href="view_kelola_pengadaan" style="color: white;">Kembali</a></button>
+                <a href="view_kelola_reservasi_wisata" style="color: white;">Kembali</a></button>
             </div>
-
-            <!-- Notifikasi -->
-            <?php
-                if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'tambahGagal'){
-                        echo '<div class="notif-gagal" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data pengadaan gagal ditambahkan.
-                        </div>';
-                    }
-                }
-            ?>
 
             <!-- Full Area -->
             <div class="full-area-kelola">
@@ -267,33 +305,28 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengadaan Fasilitas</h2>
+                            <h2>Data Pengeluaran Reservasi Wisata</h2>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
                                 <form action="#" method="POST" enctype="multipart/form-data">
-                                    
+                                    <input type="hidden" name="id_reservasi_wisata" value="<?=$rowReservasi->id_reservasi_wisata?>">    
+
                                     <!-- Form Create Fasilitas Wisata -->
-                                    <div class="kelola-detail">
+                                    <div class="kelola-detail fieldGroup">
                                         <div class="input-box">
-                                            <div class="fieldGroup">
-                                                <div class="">
-                                                    <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                                    <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                                    <select name="status_pengadaan[]" required>
-                                                        <option selected value="">Pilih Status Pengadaan</option>
-                                                        <option value="Baik">Baik</option>
-                                                        <option value="Rusak">Rusak</option>
-                                                        <option value="Hilang">Hilang</option>
-                                                    </select>
-                                                </div>
-                                                <div class="input-box">
-                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
-                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah pengadaan
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            <span class="details"><b>Nama Pengeluaran:</b></span>
+                                            <input type="text" name="nama_pengeluaran[]" placeholder="Nama Pengeluaran" required>
+                                            <span class="details"><b>Biaya Pengeluaran:</b></span>
+                                            <input type="text" name="biaya_pengeluaran[]" placeholder="Biaya Pengeluaran" required>
+                                            <span class="details"><b>Tanggal Pengeluaran:</b></span>
+                                            <input type="date" name="tgl_pengeluaran[]" placeholder="Tanggal Pengeluaran" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
+                                                <span class="fas fas fa-plus" aria-hidden="true"></span> Add Pengeluaran
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">
@@ -303,26 +336,82 @@ if (isset($_POST['submit'])) {
 
                                 </form>
 
-                                <!-- copy pengadaan -->
-                                <div class="input-box">
-                                    <div class="fieldGroupCopy" style="display: none;">
-                                        <div class="">
-                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                            <select name="status_pengadaan[]" required>
-                                                <option selected value="">Pilih Status Pengadaan</option>
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-box">
-                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
-                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
-                                            </a>
-                                        </div>
+                                <!-- copy of input fields group -->
+                                <div class="kelola-detail fieldGroupCopy" style="display: none;">
+                                    <div class="input-box">
+                                        <span class="details"><b>Nama Pengeluaran:</b></span>
+                                        <input type="text" name="nama_pengeluaran[]" placeholder="Nama Pengeluaran" required>
+                                        <span class="details"><b>Biaya Pengeluaran:</b></span>
+                                        <input type="text" name="biaya_pengeluaran[]" placeholder="Biaya Pengeluaran" required>
+                                        <span class="details"><b>Tanggal Pengeluaran:</b></span>
+                                        <input type="date" name="tgl_pengeluaran[]" placeholder="Tanggal Pengeluaran" required>
+                                    </div>
+                                    <div class="input-box">
+                                        <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
+                                            <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus Pengeluaran
+                                        </a>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-portable">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td>ID Pengeluaran</td>
+                                            <td>ID Reservasi</td>
+                                            <td>Nama Pengeluaran</td>
+                                            <td>Biaya Pengeluaran</td>
+                                            <td>Tanggal Pengeluaran</td>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <?php
+                                        $sum_reservasi = 0;
+                                        $sum_pengeluaran = 0;
+                                        foreach ($rowPengeluaran as $pengeluaran) {
+                                        $pengeluarandate = strtotime($pengeluaran->tgl_pengeluaran);
+                                        $sum_pengeluaran += $pengeluaran->biaya_pengeluaran; ?>
+                                        <tr>
+                                            <td><?=$pengeluaran->id_pengeluaran?></td>
+                                            <td><?=$pengeluaran->id_reservasi_wisata?></td>
+                                            <td><?=$pengeluaran->nama_pengeluaran?></td>
+                                            <td>Rp. <?=number_format($pengeluaran->biaya_pengeluaran, 0)?></td>
+                                            <td><?=strftime('%A, %d %B %Y', $pengeluarandate);?></td>
+                                            <td>
+                                                <?php if ($level == 2 || $level == 4) { ?>
+                                                <button class="button-kelola-hapus">
+                                                    <a href="all_hapus?type=pengeluaran&id_pengeluaran=<?=$pengeluaran->id_pengeluaran?>&id_reservasi_wisata=<?=$id_reservasi_wisata?>" style="color: #fff" onclick="return konfirmasiHapus(event)">Hapus</button>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+
+                                        <!-- Hasil -->
+                                        <?php
+                                        $sum_reservasi = $rowReservasi->total_reservasi; // get data dari DB t_reservasi_wisata
+                                        $total_saldo = $sum_reservasi - $sum_pengeluaran;
+                                        ?>
+                                        <tr>
+                                            <th colspan="4"></th>
+                                            <th>Biaya Reservasi</th>
+                                            <td>: Rp. <?= number_format($rowReservasi->total_reservasi, 0) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4"></th>
+                                            <th>Biaya Pengeluaran</th>
+                                            <td>: Rp. <?= number_format($sum_pengeluaran, 0) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4"></th>
+                                            <th>Total Sisa Biaya</th>
+                                            <td>: Rp. <?= number_format($total_saldo, 0) ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -341,7 +430,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
     <!-- All Javascript -->
     <!-- Menambah jumlah form input -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -353,10 +441,10 @@ if (isset($_POST['submit'])) {
         //add more fields group
         $(".addMore").click(function(){
             if($('body').find('.fieldGroup').length < maxGroup){
-                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
+                var fieldHTML = '<div class="kelola-detail fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
                 $('body').find('.fieldGroup:last').after(fieldHTML);
             }else{
-                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
+                alert('Maksimal '+maxGroup+' pengeluaran yang boleh dibuat.');
             }
         });
 
@@ -365,6 +453,24 @@ if (isset($_POST['submit'])) {
             $(this).parents(".fieldGroup").remove();
         });
     });
+    </script>
+
+    <!-- Konfirmasi Hapus -->
+    <script>
+        function konfirmasiHapus(event){
+        jawab = true
+        jawab = confirm('Yakin ingin menghapus? Data Pengajuan akan hilang permanen!')
+
+        if (jawab){
+            // alert('Lanjut.')
+            return true
+        }
+        else{
+            event.preventDefault()
+            return false
+
+        }
+    }
     </script>
 
 </body>

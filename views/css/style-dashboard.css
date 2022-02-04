@@ -364,6 +364,70 @@ main.main-login {
   color: #fff;
 }
 
+/* Kelola Laporan Periode */
+.card-single2 {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-single2 span:first-child {
+  font-size: 1.3rem;
+}
+
+.card-single2 span:last-child {
+  color: gray;
+  font-size: 1.2rem;
+}
+
+.card-single2 div:last-child span.paimon-1 {
+  color: #fbbb7b;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-2 {
+  color: #0ec7a3;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-3 {
+  color: #32025a;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-4 {
+  color: #2999ff;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-5 {
+  color: #fea1ff;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-6 {
+  color: #f01c58;
+  font-size: 3rem;
+}
+
+.card-single2 div:last-child span.paimon-7 {
+  color: #333333;
+  font-size: 3rem;
+}
+
+.card-single2:first-child {
+  background: #fff;
+}
+
+.card-single2:first-child h1,
+.card-single2:first-child span:first-child,
+.card-single2:first-child span:last-child {
+  color: #fff;
+}
+
 .full-area {
   margin-top: 3.5rem;
   display: grid;

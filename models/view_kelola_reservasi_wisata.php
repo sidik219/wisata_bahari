@@ -110,6 +110,11 @@ function alertPembayaran($dob)
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_pengajuan">
                     <span class="fas fa-file-signature"></span>
                         <span>Kelola Pengajuan</span></a>
@@ -164,6 +169,11 @@ function alertPembayaran($dob)
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_pengajuan">
                     <span class="fas fa-file-signature"></span>
                         <span>Kelola Pengajuan</span></a>
@@ -206,6 +216,11 @@ function alertPembayaran($dob)
                     <a href="view_dashboard_admin">
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_pengajuan">
@@ -390,7 +405,7 @@ function alertPembayaran($dob)
                                                     <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
-                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_pengeluaran?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
 
                                                     <br><i class="fas fa-exclamation-circle" style="color: #ec8707;"></i><small> Laporan Pengeluaran Belum Dibuat.</small>
                                                     <?php endif ?>
@@ -403,7 +418,7 @@ function alertPembayaran($dob)
                                                     <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
-                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_pengeluaran?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
                                                     
                                                     <br><i class="fas fa-exclamation-circle" style="color: #0ec7a3;"></i><small> Cek Kembali Laporan Pengeluaran.</small>
                                                     <?php endif ?>
@@ -416,7 +431,7 @@ function alertPembayaran($dob)
                                                     <?php if ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) : ?>
                                                     <!-- Laporan Pengeluaran -->
                                                     <br><button class="button-kelola-pengeluaran">
-                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_wisata?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
+                                                    <i class="fas fa-file-excel"></i> <a href="kelola_laporan_pengeluaran?id_reservasi_wisata=<?=$reservasi->id_reservasi_wisata?>" style="color: #fff">Kelola Laporan Pengeluaran</a></button>
 
                                                     <br><i class="fas fa-exclamation-circle" style="color: #d43334;"></i><small> Jangan Melakukan Pengisian Laporan Pengeluaran, Dikarenakan Reservasi Bermasalah.</small>
                                                     <?php endif ?>

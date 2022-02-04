@@ -77,6 +77,11 @@ if (isset($_POST['submit'])) {
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_pengajuan">
                     <span class="fas fa-file-signature"></span>
                         <span>Kelola Pengajuan</span></a>

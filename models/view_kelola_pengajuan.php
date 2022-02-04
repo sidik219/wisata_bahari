@@ -88,6 +88,11 @@ function ageCalculator($dob){
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_pengajuan" class="paimon-active">
                     <span class="fas fa-file-signature"></span>
                         <span>Kelola Pengajuan</span></a>
@@ -142,6 +147,11 @@ function ageCalculator($dob){
                         <span>Dashboard Admin</span></a>
                 </li>
                 <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
+                </li>
+                <li>
                     <a href="view_kelola_pengajuan" class="paimon-active">
                     <span class="fas fa-file-signature"></span>
                         <span>Kelola Pengajuan</span></a>
@@ -184,6 +194,11 @@ function ageCalculator($dob){
                     <a href="view_dashboard_admin">
                     <span class="icon fas fa-home"></span>
                         <span>Dashboard Admin</span></a>
+                </li>
+                <li>
+                    <a href="kelola_laporan_periode">
+                    <span class="icon far fa-file-alt"></span>
+                        <span>Kelola Laporan Periode</span></a>
                 </li>
                 <li>
                     <a href="view_kelola_pengajuan" class="paimon-active">
