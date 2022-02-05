@@ -1,5 +1,6 @@
 <?php 
-include '../app/database/koneksi.php'; 
+include '../app/database/koneksi.php';
+session_start();
 
 function ageCalculator($dob){
     $birthdate = new DateTime($dob);
@@ -117,6 +118,7 @@ $rowreservasi = $stmt->fetch();
         $sum_pemasukan = 0;
         foreach ($row as $rowitem) {
         $reservasidate = strtotime($rowitem->tgl_reservasi);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
@@ -170,26 +172,26 @@ $rowreservasi = $stmt->fetch();
         ?>
 
         <tr>
-            <th colspan="5" style="text-align: right;">Total Jumlah Pemasukan</th>
-            <td style="text-align: center;">: Rp. <?=number_format($pemasukan, 0)?></td>                          
+            <th colspan="5" style="text-align: right;">Total Jumlah Pemasukan:</th>
+            <td style="text-align: center;">Rp. <?=number_format($pemasukan, 0)?></td>                          
         </tr>
         <tr>
-            <th colspan="5" style="text-align: right;">Total Biaya Pengeluaran</th>
-            <td style="text-align: center;">: Rp. <?=number_format($pengeluaran, 0)?></td>                                
+            <th colspan="5" style="text-align: right;">Total Biaya Pengeluaran:</th>
+            <td style="text-align: center;">Rp. <?=number_format($pengeluaran, 0)?></td>                                
         </tr>
 
         <!-- Untung Rugi -->
         <?php if ($pemasukan > $pengeluaran) {
 	    $laba = $pemasukan - $pengeluaran; ?>
         <tr> <!-- Untung -->
-            <th colspan="5" style="text-align: right;"><i class="text-success fas fa-plus"></i> LABA</th>
-            <td style="text-align: center;">: Rp. <?=number_format($laba, 0)?></td>                                
+            <th colspan="5" style="text-align: right;"><i class="text-success fas fa-plus"></i> LABA:</th>
+            <td style="text-align: center;">Rp. <?=number_format($laba, 0)?></td>                                
         </tr>
         <?php } elseif ($pengeluaran > $pemasukan) { 
         $rugi = $pengeluaran - $pemasukan; ?>
         <tr> <!-- Rugi -->
-            <th colspan="5" style="text-align: right;"><i class="text-danger fas fa-minus"></i> RUGI</th>
-            <td style="text-align: center;">: Rp. <?=number_format($rugi, 0)?></td>                                
+            <th colspan="5" style="text-align: right;"><i class="text-danger fas fa-minus"></i> RUGI:</th>
+            <td style="text-align: center;">Rp. <?=number_format($rugi, 0)?></td>                                
         </tr>
         <?php } else { ?>
         <tr>
@@ -197,7 +199,69 @@ $rowreservasi = $stmt->fetch();
             <th></th>
         </tr>
         <?php } ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>               
 </table>
 
 <script>       
@@ -262,6 +326,7 @@ $row = $stmt->fetchAll();
         $no = 1;
         foreach ($row as $rowitem) {
         $pengajuandate = strtotime($rowitem->tanggal_pengajuan);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
@@ -272,13 +337,13 @@ $row = $stmt->fetchAll();
             </td>
             <td>
                 <?php if ($rowitem->status_pengajuan == "Pending") { ?>
-                    <span class="status diona"></span>
+                    <span class="status diona print-hide"></span>
                     <?=$rowitem->status_pengajuan?>
                 <?php } elseif ($rowitem->status_pengajuan == "Diterima") { ?>
-                    <span class="status yaoyao"></span>
+                    <span class="status yaoyao print-hide"></span>
                     <?=$rowitem->status_pengajuan?>
                 <?php } elseif ($rowitem->status_pengajuan == "Ditolak") {?>
-                    <span class="status klee"></span>
+                    <span class="status klee print-hide"></span>
                     <?=$rowitem->status_pengajuan?>
                 <?php } ?>
             </td>
@@ -286,7 +351,69 @@ $row = $stmt->fetchAll();
         <?php $no++;
             }
         ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>                    
 </table>
 
 <script>       
@@ -353,6 +480,7 @@ $row = $stmt->fetchAll();
         foreach ($row as $rowitem) {
         $paketawaldate = strtotime($rowitem->tgl_awal_paket);
         $paketakhirdate = strtotime($rowitem->tgl_akhir_paket);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
@@ -369,13 +497,13 @@ $row = $stmt->fetchAll();
             </td>
             <td>
                 <?php if ($rowitem->status_paket == "Aktif") { ?>
-                    <span class="status diona"></span>
+                    <span class="status diona print-hide"></span>
                     <?=$rowitem->status_paket?>
                 <?php } elseif ($rowitem->status_paket == "Tidak Aktif") { ?>
-                    <span class="status yaoyao"></span>
+                    <span class="status yaoyao print-hide"></span>
                     <?=$rowitem->status_paket?>
                 <?php } elseif ($rowitem->status_paket == "Perbaikan") {?>
-                    <span class="status klee"></span>
+                    <span class="status klee print-hide"></span>
                     <?=$rowitem->status_paket?>
                 <?php } ?>
             </td>
@@ -383,7 +511,71 @@ $row = $stmt->fetchAll();
         <?php $no++;
             }
         ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>     
 </table>
 
 <script>       
@@ -450,6 +642,7 @@ $row = $stmt->fetchAll();
         $no = 1;
         foreach ($row as $rowitem) {
         $asuransidate = strtotime($rowitem->tgl_kontrak_asuransi);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
@@ -463,7 +656,71 @@ $row = $stmt->fetchAll();
         <?php $no++;
             }
         ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>                     
 </table>
 
 <script>       
@@ -528,16 +785,17 @@ $row = $stmt->fetchAll();
         $no = 1;
         foreach ($row as $rowitem) {
         $kerjasamadate = strtotime($rowitem->tgl_kontrak_kerjasama);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
             <td><?=$rowitem->pihak_ketiga_kerjasama?></td>
             <td>
                 <?php if ($rowitem->status_kerjasama == "Tidak Melakukan Kerjsama") { ?>
-                    <span class="status klee"></span>
+                    <span class="status klee print-hide"></span>
                     <?=$rowitem->status_kerjasama?>
                 <?php } elseif ($rowitem->status_kerjasama == "Melakukan Kerjasama") { ?>
-                    <span class="status yaoyao"></span>
+                    <span class="status yaoyao print-hide"></span>
                     <?=$rowitem->status_kerjasama?>
                 <?php } ?>
             </td>
@@ -549,7 +807,71 @@ $row = $stmt->fetchAll();
         <?php $no++;
             }
         ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>           
 </table>
 
 <script>       
@@ -610,19 +932,20 @@ $row = $stmt->fetchAll();
         $no = 1;
         foreach ($row as $rowitem) {
         $pengadaandate = strtotime($rowitem->tgl_pengadaan);
+        $laporandate = strtotime(date('d-m-Y'));
         ?>
         <tr class="row_donasi">
             <th scope="row"><?= $no ?></th>
             <td><?=$rowitem->pengadaan_fasilitas?></td>
             <td>
                 <?php if ($rowitem->status_pengadaan == "Baik") { ?>
-                    <span class="status yaoyao"></span>
+                    <span class="status yaoyao print-hide"></span>
                     <?=$rowitem->status_pengadaan?>
                 <?php } elseif ($rowitem->status_pengadaan == "Rusak") { ?>
-                    <span class="status diona"></span>
+                    <span class="status diona print-hide"></span>
                     <?=$rowitem->status_pengadaan?>
                 <?php } elseif ($rowitem->status_pengadaan == "Hilang") { ?>
-                    <span class="status klee"></span>
+                    <span class="status klee print-hide"></span>
                     <?=$rowitem->status_pengadaan?>
                 <?php } ?>
             </td>
@@ -631,7 +954,67 @@ $row = $stmt->fetchAll();
         <?php $no++;
             }
         ?>
-    </tbody>                    
+    </tbody>
+    <tfoot> <!-- Ada Perubahan -->
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?=strftime('%A, %e %B %Y', $laporandate);?>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" style="text-align: center;">
+                <?php echo $_SESSION['nama_user']; ?>
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>    
 </table>
 
 <script>       

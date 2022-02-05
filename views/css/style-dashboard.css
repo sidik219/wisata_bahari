@@ -451,6 +451,13 @@ main.main-login {
   grid-template-columns: 66% auto;
 }
 
+/* Kelola Laporan */
+.full-area-laporan {
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: 100% auto;
+}
+
 .card {
   background: #fff;
   border-radius: 12px;
@@ -953,6 +960,10 @@ footer h2.footer-paimon {
   .full-area-reservasi {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  .full-area-laporan {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -965,6 +976,10 @@ footer h2.footer-paimon {
   }
 
   .full-area-reservasi {
+    grid-template-columns: 100%;
+  }
+
+  .full-area-laporan {
     grid-template-columns: 100%;
   }
 
@@ -1150,6 +1165,15 @@ footer h2.footer-paimon {
 
 /* Reservasi Wisata */
 .full-area-reservasi form .kelola-detail-reservasi {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+/* Laporan */
+.full-area-laporan form .kelola-detail-reservasi {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

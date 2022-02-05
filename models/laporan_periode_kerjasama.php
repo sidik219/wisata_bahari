@@ -347,34 +347,34 @@ function ageCalculator($dob){
             </div>
 
             <!-- Full Area -->
-            <div class="full-area-kelola">
+            <div class="full-area-laporan"> <!-- Ada Perubahan -->
                 <!-- Area A -->
                 <div class="area-A">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header print-hide"> <!-- Ada Perubahan -->
                             <!-- Kosong -->
                         </div>
 
                         <div class="card-body">
-                            <table style="margin-top: 2rem;">
+                            <table> <!-- Ada Perubahan -->
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <img src="<?=$rowLokasi->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="150px" height="150px" style="margin-left: 2rem">
+                                            <img src="<?=$rowLokasi->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px" height="100px">
                                         </td>
                                         <td>
-                                            <h2 style="text-align: center;">
+                                            <h3 style="text-align: center;">
                                                 Laporan Periode Kerjasama
-                                            </h2>
-                                            <h3 style="text-align: center; font-weight: normal;">
-                                                Periode <span id="periode_laporan"></span>
                                             </h3>
                                             <h5 style="text-align: center; font-weight: normal;">
-                                                <i><?=$rowLokasi->deskripsi_lokasi?></i>
+                                                Periode <span id="periode_laporan"></span>
                                             </h5>
+                                            <h6 style="text-align: center; font-weight: normal;">
+                                                <i><?=$rowLokasi->deskripsi_lokasi?></i>
+                                            </h6>
                                         </td>
                                         <td>
-                                            <img src="../views/img/white.jpg" width="150px" height="150px" style="margin-right: 2rem">
+                                            <img src="../views/img/white.jpg" width="100px" height="100px">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -502,11 +502,11 @@ function ageCalculator($dob){
 
             var element = document.getElementById('clientPrintContent');
             var opt = {
-                margin:       [1.5,2,2,2],
+                margin:       [0,0,1,0], // Ada Perubahan
                 filename:     `Laporan-Kerjasama_Periode-${periode_laporan}_Diunduh-Pada${dateTime}.pdf`,
                 image:        { type: 'jpeg', quality: 0.95 },
                 html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'cm', format: 'a4', orientation: 'landscape' }
+                jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' } // Ada Perubahan
             };
 
             // New Promise-based usage:
