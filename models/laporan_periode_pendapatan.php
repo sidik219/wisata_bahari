@@ -28,17 +28,18 @@ $stmt->execute();
 $rowLokasi = $stmt->fetch();
 
 if($level == 2){
-    $id_lokasi            = $_SESSION['id_lokasi_dikelola'];
-    $extra_query          = " AND t_lokasi.id_lokasi = $id_lokasi ";
-    $extra_query_noand    = " t_lokasi.id_lokasi = $id_lokasi ";
+    $id_lokasi          = $_SESSION['id_lokasi_dikelola'];
+    $extra_query        = " AND t_lokasi.id_lokasi = $id_lokasi ";
+    $extra_query_noand  = " t_lokasi.id_lokasi = $id_lokasi ";
 }
 else if($level == 3){
-    $extra_query          = "  ";
-    $extra_query_noand    = " 1 ";
+    $id_wilayah         = $_SESSION['id_wilayah_dikelola'];
+    $extra_query        = " AND t_lokasi.id_wilayah = $id_wilayah ";
+    $extra_query_noand  = " t_lokasi.id_wilayah = $id_wilayah ";
 }
 else if($level == 4){
-    $extra_query          = "  ";
-    $extra_query_noand    = " 1 ";
+    $extra_query        = "  ";
+    $extra_query_noand  = " 1 ";
 }
 
 // Umum
@@ -302,7 +303,7 @@ function ageCalculator($dob){
                 <h3><span>Laporan Reservasi Wisata</span></h3>
                 <small>
                     <i class="nav-icon text-info fas fa-info-circle"></i> 
-                    Daftar reservasi wisata yang telah selesai melakukan kelola biaya pengeluaran
+                    Daftar reservasi wisata yang sudah dibuat
                 </small>
             </div>
 
@@ -380,12 +381,9 @@ function ageCalculator($dob){
                                             <img src="<?=$rowLokasi->foto_wilayah?>?<?php if ($status='nochange'){echo time();}?>" width="100px" height="100px">
                                         </td>
                                         <td>
-                                            <h3 style="text-align: center;">
-                                                Laporan Periode Pendapatan Reservasi Wisata
-                                            </h3>
-                                            <h5 style="text-align: center; font-weight: normal;">
-                                                Periode <span id="periode_laporan"></span>
-                                            </h5>
+                                            <h2 style="text-align: center;">
+                                                Wisata Bahari Pantai Tangkolak
+                                            </h2>
                                             <h6 style="text-align: center; font-weight: normal;">
                                                 <i><?=$rowLokasi->deskripsi_lokasi?></i>
                                             </h6>
@@ -396,7 +394,27 @@ function ageCalculator($dob){
                                     </tr>
                                 </tbody>
                             </table>
-                            <hr style="margin-bottom: 3rem">
+                            <hr style="margin-bottom: 1rem">
+                            <table style="margin-bottom: 2rem">
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <h3 style="text-align: center;">
+                                            Laporan Periode Pendapatan Reservasi Wisata
+                                        </h3>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <h5 style="text-align: center; font-weight: normal;">
+                                            Periode <span id="periode_laporan"></span>
+                                        </h5>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
 
                             <div class="table-portable">
                                 <!-- Response AJAX call filter tabel laporan ditaro dalam sini -->
@@ -470,6 +488,8 @@ function ageCalculator($dob){
             // endo = end
 
             id_lokasi_dikelola = <?=!empty($_SESSION['id_lokasi_dikelola']) ? $_SESSION['id_lokasi_dikelola'] : '1'?>
+            
+            id_wilayah_dikelola =  <?=!empty($_SESSION['id_wilayah_dikelola']) ? $_SESSION['id_wilayah_dikelola'] : '1'?>
 
             level_user = <?=$_SESSION['level_user']?>
 
@@ -482,6 +502,7 @@ function ageCalculator($dob){
                         sortir: sortir,
                         level_user : level_user,
                         id_lokasi_dikelola : id_lokasi_dikelola,
+                        id_wilayah_dikelola : id_wilayah_dikelola,
                         type : 'load_laporan_reservasi'},
                 beforeSend : function(){$('#table-container').LoadingOverlay("show");},
                 success: function(response){

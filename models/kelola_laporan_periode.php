@@ -18,131 +18,6 @@ $sqluserSelect = "SELECT * FROM t_user
 $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
-
-// Select Reservasi "Total Reservasi Wisata"
-$sqlreservasiSelect = "SELECT COUNT(id_reservasi_wisata) 
-                        AS total_reservasi
-                        FROM t_reservasi_wisata";
-
-$stmt = $pdo->prepare($sqlreservasiSelect);
-$stmt->execute();
-$rowReservasi = $stmt->fetchAll();
-
-// Select Status Reservasi wisata lama
-$sqlstatusSelect = "SELECT * FROM t_status_reservasi
-                    WHERE id_status_reservasi = 2";
-
-$stmt = $pdo->prepare($sqlstatusSelect);
-$stmt->execute();
-$rowStatus2 = $stmt->fetchAll();
-
-// Select Status Reservasi wisata Baru
-$sqlstatusSelect = "SELECT * FROM t_status_reservasi
-                    WHERE id_status_reservasi = 1";
-
-$stmt = $pdo->prepare($sqlstatusSelect);
-$stmt->execute();
-$rowStatus1 = $stmt->fetchAll();
-
-// Select Paket "Total Paket Wisata"
-$sqlpaketSelect = "SELECT COUNT(id_paket_wisata) 
-                        AS total_paket
-                        FROM t_paket_wisata";
-
-$stmt = $pdo->prepare($sqlpaketSelect);
-$stmt->execute();
-$rowPaket = $stmt->fetchAll();
-
-// Select Wisata "Total Wisata"
-$sqlwisataSelect = "SELECT COUNT(id_wisata) 
-                        AS total_wisata
-                        FROM t_wisata";
-
-$stmt = $pdo->prepare($sqlwisataSelect);
-$stmt->execute();
-$rowWisata = $stmt->fetchAll();
-
-// Select Fasilitas "Total Fasilitas"
-$sqlfasilitasSelect = "SELECT COUNT(id_fasilitas_wisata) 
-                        AS total_fasilitas
-                        FROM t_fasilitas_wisata";
-
-$stmt = $pdo->prepare($sqlfasilitasSelect);
-$stmt->execute();
-$rowFasilitas = $stmt->fetchAll();
-
-// Select Asuransi "Total Asuransi"
-$sqlasuransiSelect = "SELECT COUNT(id_asuransi) 
-                        AS total_asuransi
-                        FROM t_asuransi";
-
-$stmt = $pdo->prepare($sqlasuransiSelect);
-$stmt->execute();
-$rowAsuransi = $stmt->fetchAll();
-
-// Select Kerjasama "Total Kerjasama"
-$sqlkerjasamaSelect = "SELECT COUNT(id_kerjasama) 
-                        AS total_kerjasama
-                        FROM t_kerjasama";
-
-$stmt = $pdo->prepare($sqlkerjasamaSelect);
-$stmt->execute();
-$rowKerjasama = $stmt->fetchAll();
-
-// Select Pengadaan "Total Pengadaan"
-$sqlpengadaanSelect = "SELECT COUNT(id_pengadaan) 
-                        AS total_pengadaan
-                        FROM t_pengadaan_fasilitas";
-
-$stmt = $pdo->prepare($sqlpengadaanSelect);
-$stmt->execute();
-$rowPengadaan = $stmt->fetchAll();
-
-// Select User "Total User"
-$sqluserSelect = "SELECT COUNT(id_user) 
-                        AS total_user
-                        FROM t_user";
-
-$stmt = $pdo->prepare($sqluserSelect);
-$stmt->execute();
-$rowUser = $stmt->fetchAll();
-
-// ChartJS
-$label = ["Januari",
-            "Februari",
-            "Maret",
-            "April",
-            "Mei",
-            "Juni",
-            "Juli",
-            "Agustus",
-            "September",
-            "Oktober",
-            "November",
-            "Desember"];
-
-for($bulan = 1; $bulan < 13; $bulan++) {
-
-    // Wisatawan
-    $sqlreservasiSelect = 'SELECT COUNT(id_reservasi_wisata) AS total_wisatawan FROM t_reservasi_wisata
-                            WHERE MONTH(tgl_reservasi) = :bulan';
-
-    $stmt = $pdo->prepare($sqlreservasiSelect);
-    $stmt->execute(['bulan' => $bulan]);
-    $totalWisatawan = $stmt->fetch();
-
-    $total_wisatawan[] = $totalWisatawan->total_wisatawan;
-
-    // Pendapatan Reservasi Wisata
-    $sqlreservasiSelect = 'SELECT SUM(total_reservasi) AS pendapatan_reservasi FROM t_reservasi_wisata
-                            WHERE MONTH(tgl_reservasi) = :bulan';
-
-    $stmt = $pdo->prepare($sqlreservasiSelect);
-    $stmt->execute(['bulan' => $bulan]);
-    $totalReservasi = $stmt->fetch();
-
-    $pendapatan_reservasi[] = $totalReservasi->pendapatan_reservasi;
-}
 ?>
 
 <!DOCTYPE html>
@@ -411,7 +286,26 @@ for($bulan = 1; $bulan < 13; $bulan++) {
                         </span>
                     </div>
                     <div>
-                        <span class="paimon-3 fas fa-suitcase"></span>
+                        <span class="paimon-3 fas fa-hand-holding-usd"></span>
+                    </div>
+                </div>
+                <?php } ?>
+
+                <?php if ($level == 2 || $level == 4) {?>
+                <!-- Reservasi Wisata -->
+                <div class="card-single2">
+                    <div>
+                        <span>
+                            <button class="button-kelola-kembali">
+                                <a href="laporan_periode_pengeluaran" style="color: white;">
+                                    <h3>Laporan Periode Pengeluaran</h3>
+                                    <span class="fas fa-plus" style="color: white;"></span>
+                                </a>
+                            </button>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="paimon-3 fas fa-money-bill-wave"></span>
                     </div>
                 </div>
                 <?php } ?>

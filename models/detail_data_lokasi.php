@@ -259,15 +259,15 @@ $rowLokasi = $stmt->fetch();
                                             <input type="text" value="<?=$rowLokasi->kontak_lokasi?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nama Bank:</b></span>
+                                            <span class="details"><b>Nama Bank Perusahaan:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nama_bank?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nama Rekening:</b></span>
+                                            <span class="details"><b>Nama Rekening Perusahaan:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nama_rekening?>" readonly>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nomor Rekening:</b></span>
+                                            <span class="details"><b>Nomor Rekening Perusahaan:</b></span>
                                             <input type="text" value="<?=$rowLokasi->nomor_rekening?>" readonly>
                                         </div>
                                     </div>

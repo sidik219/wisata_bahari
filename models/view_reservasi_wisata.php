@@ -406,19 +406,19 @@ if (isset($_POST['submit'])) {
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-bank fas fa-hashtag"></i>    
-                                                            Nama Bank</div>
+                                                            Nama Bank Perusahaan</div>
                                                         <div class="divTableCell">: <?=$paket->nama_bank?></div>
                                                     </div>
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-nama fas fa-user-tie"></i>    
-                                                            Nama Rekening</div>
+                                                            Nama Rekening Perusahaan</div>
                                                         <div class="divTableCell">: <?=$paket->nama_rekening?></div>
                                                     </div>
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-nomor fas fa-university"></i>    
-                                                            Nomor Rekening</div>
+                                                            Nomor Rekening Perusahaan</div>
                                                         <div class="divTableCell">: <?=$paket->nomor_rekening?></div>
                                                     </div>
                                                 </div>

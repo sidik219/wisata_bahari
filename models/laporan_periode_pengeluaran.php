@@ -43,9 +43,11 @@ else if($level == 4){
 }
 
 // Umum
-$sqltahunterawal = 'SELECT MIN(tgl_kontrak_kerjasama) AS tahun_terawal FROM t_kerjasama
-                    LEFT JOIN t_pengadaan_fasilitas ON t_kerjasama.id_pengadaan = t_pengadaan_fasilitas.id_pengadaan
-                    WHERE status_kerjasama = "Melakukan Kerjasama" LIMIT 1';
+$sqltahunterawal = 'SELECT MIN(tgl_pengeluaran) AS tahun_terawal FROM t_pengeluaran
+                    LEFT JOIN t_reservasi_wisata ON t_pengeluaran.id_reservasi_wisata = t_reservasi_wisata.id_reservasi_wisata
+                    LEFT JOIN t_paket_wisata ON t_reservasi_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                    LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
+                    WHERE '.$extra_query_noand. ' LIMIT 1';
 
 $stmt = $pdo->prepare($sqltahunterawal);
 $stmt->execute();
@@ -283,10 +285,10 @@ function ageCalculator($dob){
             </div>
 
             <div class="print-hide">
-                <h3><span>Laporan Kerjasama</span></h3>
+                <h3><span>Laporan Reservasi Wisata</span></h3>
                 <small>
                     <i class="nav-icon text-info fas fa-info-circle"></i> 
-                    Daftar laporan kerjasama yang sudah dibuat
+                    Daftar reservasi wisata yang telah selesai melakukan kelola biaya pengeluaran
                 </small>
             </div>
 
@@ -383,7 +385,7 @@ function ageCalculator($dob){
                                     <td></td>
                                     <td>
                                         <h3 style="text-align: center;">
-                                            Laporan Periode Kerjasama
+                                            Laporan Periode Laba/Rugi Reservasi Wisata
                                         </h3>
                                     </td>
                                     <td></td>
@@ -471,7 +473,7 @@ function ageCalculator($dob){
             // endo = end
 
             id_lokasi_dikelola = <?=!empty($_SESSION['id_lokasi_dikelola']) ? $_SESSION['id_lokasi_dikelola'] : '1'?>
-
+            
             id_wilayah_dikelola =  <?=!empty($_SESSION['id_wilayah_dikelola']) ? $_SESSION['id_wilayah_dikelola'] : '1'?>
 
             level_user = <?=$_SESSION['level_user']?>
@@ -486,7 +488,7 @@ function ageCalculator($dob){
                         level_user : level_user,
                         id_lokasi_dikelola : id_lokasi_dikelola,
                         id_wilayah_dikelola : id_wilayah_dikelola,
-                        type : 'load_laporan_kerjasama'},
+                        type : 'load_laporan_pengeluaran'},
                 beforeSend : function(){$('#table-container').LoadingOverlay("show");},
                 success: function(response){
                     // Attach response to target container/element
@@ -524,7 +526,7 @@ function ageCalculator($dob){
             var element = document.getElementById('clientPrintContent');
             var opt = {
                 margin:       [0,0,1,0], // Ada Perubahan
-                filename:     `Laporan-Kerjasama_Periode-${periode_laporan}_Diunduh-Pada${dateTime}.pdf`,
+                filename:     `Laporan-Pengeluaran_Reservasi-Wisata_Periode-${periode_laporan}_Diunduh-Pada${dateTime}.pdf`,
                 image:        { type: 'jpeg', quality: 0.95 },
                 html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' } // Ada Perubahan

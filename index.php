@@ -45,12 +45,24 @@ if (isset($_POST['login'])) {
                 }
                 // Jarak
             } elseif ($rowUser->level_user == "3") { // Pengelola Wilayah
-                $_SESSION['id_user']                = $rowUser->id_user; // cek ada
-                $_SESSION['nama_user']              = $rowUser->nama_user; // cek ada
-                $_SESSION['level_user']             = $rowUser->level_user; // cek ada
-                $_SESSION['username']               = $rowUser->username; // cek ada
+                $sql  = "SELECT t_pengelola_wilayah.id_wilayah, nama_wilayah FROM t_pengelola_wilayah 
+                        LEFT JOIN t_wilayah ON t_wilayah.id_wilayah = t_pengelola_wilayah.id_wilayah
+                        WHERE id_user=:id_user";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['id_user' => $rowUser->id_user]);
+                $rowWilayah = $stmt->fetch();
 
-                header("Location: models/view_dashboard_admin?status=login_berhasil");
+                if($stmt->rowCount() != 0){
+                    $_SESSION['id_user']                = $rowUser->id_user; // cek ada
+                    $_SESSION['nama_user']              = $rowUser->nama_user; // cek ada
+                    $_SESSION['level_user']             = $rowUser->level_user; // cek ada
+                    $_SESSION['username']               = $rowUser->username; // cek ada
+                    $_SESSION['id_wilayah_dikelola']    = $rowWilayah->id_wilayah; // cek ada
+
+                    header('Location: models/view_dashboard_admin?status=login_berhasil&id_wilayah='.$rowWilayah->id_wilayah);
+                } else {
+                    header('Location: index.php?status=akun_belum_diberi_akses');
+                }
                 // Jarak
             } elseif ($rowUser->level_user == "4") { //Pengelola Provinsi
                 $_SESSION['id_user']    = $rowUser->id_user;

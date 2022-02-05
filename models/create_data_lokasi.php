@@ -421,15 +421,15 @@ if (isset($_POST['submit'])) {
                                             <input type="text" name="kontak_lokasi" placeholder="Kontak Lokasi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nama Bank:</b></span>
+                                            <span class="details"><b>Nama Bank Perusahaan:</b></span>
                                             <input type="text" name="nama_bank" placeholder="Nama Bank" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nama Rekening:</b></span>
+                                            <span class="details"><b>Nama Rekening Perusahaan:</b></span>
                                             <input type="text" name="nama_rekening" placeholder="Nama Rekening" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details"><b>Nomor Rekening:</b></span>
+                                            <span class="details"><b>Nomor Rekening Perusahaan:</b></span>
                                             <input type="text" name="nomor_rekening" placeholder="Nomor Rekening" required>
                                         </div>
 
