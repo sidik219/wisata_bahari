@@ -10,6 +10,7 @@ if (!$_SESSION['level_user']) {
 }
 
 $id_pengajuan = $_GET['id_pengajuan'];
+$status_pengajuan = "Pending";
 
 $defaultpic = "../views/img/image_default.jpg";
 
@@ -55,14 +56,14 @@ if (isset($_POST['submit'])) {
     $randomstring           = substr(md5(rand()), 0, 7);
 
     // dokumen Uploads
-    if($_FILES['dokumen_pengajuan']['size'][0] != 0){
+    if($_FILES['dokumen_pengajuan']['size'] != 0){
         if($_FILES["dokumen_pengajuan"]["size"] == 0) {
             $dokumen_pengajuan = "";
         }
         else if (isset($_FILES['dokumen_pengajuan'])) {
             $target_dir  = "../views/dokumen/pengajuan/";
             $target_file = $_FILES["dokumen_pengajuan"]['name'];
-            $dokumen_pengajuan = $target_dir .'PENGAJUAN_'.$target_file.$randomstring.'.'. pathinfo($target_file,PATHINFO_EXTENSION);
+            $dokumen_pengajuan = $target_dir .'PENGAJUAN_'.$target_file;
             move_uploaded_file($_FILES["dokumen_pengajuan"]["tmp_name"], $dokumen_pengajuan);
         }
     }
@@ -90,7 +91,7 @@ if (isset($_POST['submit'])) {
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
-        header("Location: create_data_pengajuan?status=tambahGagal");
+        header("Location: edit_data_pengajuan?status=tambahGagal&id_pengajuan=$id_pengajuan");
     } else {
         header("Location: view_kelola_pengajuan?status=tambahBerhasil");
     }
@@ -373,7 +374,7 @@ if (isset($_POST['submit'])) {
                         <div class="card-body">
                             <div class="table-portable">
                                 <form action="#" method="POST" enctype="multipart/form-data">
-                                    
+
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail">
                                         <div class="input-box">
@@ -432,6 +433,38 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <?php } ?>
                                     </div>
+                                    <?php if ($level == 2) { ?>
+                                    <div class="detail-pilihan" style="display: none;">
+                                        <?php if ($rowPengajuan->status_pengajuan == "Pending") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1" checked>
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2">
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3">
+                                        <?php } elseif ($rowPengajuan->status_pengajuan == "Diterima") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1" checked>
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2">
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3">
+                                        <?php } elseif ($rowPengajuan->status_pengajuan == "Ditolak") { ?>
+                                            <input type="radio" name="status_pengajuan" value="Pending" id="dot-1" checked>
+                                            <input type="radio" name="status_pengajuan" value="Diterima" id="dot-2">
+                                            <input type="radio" name="status_pengajuan" value="Ditolak" id="dot-3">
+                                        <?php } ?>
+                                        <div class="pilihan-title">Status Pengajuan</div>
+                                        <div class="kategori">
+                                            <label for="dot-1">
+                                                <span class="dot satu"></span>
+                                                <span class="aktif">Pending</span>
+                                            </label>
+                                            <label for="dot-2">
+                                                <span class="dot dua"></span>
+                                                <span class="aktif">Diterima</span>
+                                            </label>
+                                            <label for="dot-3">
+                                                <span class="dot tiga"></span>
+                                                <span class="aktif">Ditolak</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <?php } ?>
                                     <?php if ($level == 3 || $level == 4) { ?>
                                     <div class="detail-pilihan">
                                         <?php if ($rowPengajuan->status_pengajuan == "Pending") { ?>
