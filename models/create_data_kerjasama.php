@@ -33,19 +33,31 @@ if (isset($_POST['submit'])) {
     $pembagian_kerjasama        = $_POST['pembagian_kerjasama'];
     $biaya_kerjasama            = $_POST['biaya_kerjasama'];
     $pembagian_hasil_kerjasama  = $_POST['pembagian_hasil_kerjasama'];
+    $no_kontrak_kerjasama       = $_POST['no_kontrak_kerjasama'];
+    $tgl_kontrak_kerjasama      = $_POST['tgl_kontrak_kerjasama'];
+    $lama_kontrak_kerjasama     = $_POST['lama_kontrak_kerjasama'];
+    $perihal_kontrak_kerjasama  = $_POST['perihal_kontrak_kerjasama'];
     
     $sqlkerjasama = "INSERT INTO t_kerjasama (id_pengadaan, 
                                             status_kerjasama,
                                             pihak_ketiga_kerjasama,
                                             pembagian_kerjasama, 
                                             biaya_kerjasama, 
-                                            pembagian_hasil_kerjasama)
+                                            pembagian_hasil_kerjasama,
+                                            no_kontrak_kerjasama,
+                                            tgl_kontrak_kerjasama,
+                                            lama_kontrak_kerjasama,
+                                            perihal_kontrak_kerjasama)
                     VALUES (:id_pengadaan, 
                             :status_kerjasama,
                             :pihak_ketiga_kerjasama,
                             :pembagian_kerjasama, 
                             :biaya_kerjasama, 
-                            :pembagian_hasil_kerjasama)";
+                            :pembagian_hasil_kerjasama,
+                            :no_kontrak_kerjasama,
+                            :tgl_kontrak_kerjasama,
+                            :lama_kontrak_kerjasama,
+                            :perihal_kontrak_kerjasama)";
 
     $stmt = $pdo->prepare($sqlkerjasama);
     $stmt->execute(['id_pengadaan'   => $id_pengadaan,
@@ -53,7 +65,11 @@ if (isset($_POST['submit'])) {
                     'pihak_ketiga_kerjasama' => $pihak_ketiga_kerjasama,
                     'pembagian_kerjasama'  => $pembagian_kerjasama,
                     'biaya_kerjasama'  => $biaya_kerjasama,
-                    'pembagian_hasil_kerjasama'  => $pembagian_hasil_kerjasama]);
+                    'pembagian_hasil_kerjasama'  => $pembagian_hasil_kerjasama,
+                    'no_kontrak_kerjasama'  => $no_kontrak_kerjasama,
+                    'tgl_kontrak_kerjasama'  => $tgl_kontrak_kerjasama,
+                    'lama_kontrak_kerjasama'  => $lama_kontrak_kerjasama,
+                    'perihal_kontrak_kerjasama'  => $perihal_kontrak_kerjasama]);
 
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
@@ -326,6 +342,22 @@ if (isset($_POST['submit'])) {
                                             <span class="details"><b>Pihak Kerjasama:</b></span>
                                             <input type="text" name="pihak_ketiga_kerjasama" placeholder="Pihak Kerjasama" required>
                                             <small style="color: red;">*Jika tidak melakukan kerjasama, maka nama pihak kerjasama bisa dikosongkan dengan (-)</small>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>No Kontrak Kerjasama:</b></span>
+                                            <input type="text" name="no_kontrak_kerjasama" placeholder="No Kontrak Kerjasama" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Tanggal Kontrak Kerjasama:</b></span>
+                                            <input type="date" name="tgl_kontrak_kerjasama" placeholder="Tanggal Kontrak Kerjasama">
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Lama Kontrak Kerjasama:</b></span>
+                                            <input type="text" name="lama_kontrak_kerjasama" placeholder="Lama Kontrak Kerjasama" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Perihal Kontrak Kerjasama:</b></span>
+                                            <input type="text" name="perihal_kontrak_kerjasama" placeholder="Perihal Kontrak Kerjasama" required>
                                         </div>
                                         <div class="input-box">
                                             <div class="fieldGroup">

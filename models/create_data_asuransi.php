@@ -20,18 +20,38 @@ $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
 if (isset($_POST['submit'])) {
-    $nama_asuransi          = $_POST['nama_asuransi'];
-    $biaya_asuransi         = $_POST['biaya_asuransi'];
-    $id_perusahaan_asuransi = $_POST['nama_pihak'];
+    $id_perusahaan_asuransi     = $_POST['nama_pihak'];
+    $nama_asuransi              = $_POST['nama_asuransi'];
+    $biaya_asuransi             = $_POST['biaya_asuransi'];
+    $no_kontrak_asuransi        = $_POST['no_kontrak_asuransi'];
+    $tgl_kontrak_asuransi       = $_POST['tgl_kontrak_asuransi'];
+    $lama_kontrak_asuransi      = $_POST['lama_kontrak_asuransi'];
+    $perihal_kontrak_asuransi   = $_POST['perihal_kontrak_asuransi'];
 
     $sqlasuransiCreate = "INSERT INTO t_asuransi
-                        (nama_asuransi, biaya_asuransi, id_perusahaan_asuransi)
-                        VALUE (:nama_asuransi, :biaya_asuransi, :id_perusahaan_asuransi)";
+                        (id_perusahaan_asuransi,
+                        nama_asuransi, 
+                        biaya_asuransi, 
+                        no_kontrak_asuransi,
+                        tgl_kontrak_asuransi,
+                        lama_kontrak_asuransi,
+                        perihal_kontrak_asuransi)
+                        VALUE (:id_perusahaan_asuransi, 
+                                :nama_asuransi, 
+                                :biaya_asuransi,
+                                :no_kontrak_asuransi,
+                                :tgl_kontrak_asuransi,
+                                :lama_kontrak_asuransi,
+                                :perihal_kontrak_asuransi)";
     
     $stmt = $pdo->prepare($sqlasuransiCreate);
-    $stmt->execute(['nama_asuransi' => $nama_asuransi,
+    $stmt->execute(['id_perusahaan_asuransi' => $id_perusahaan_asuransi,
+                    'nama_asuransi' => $nama_asuransi,
                     'biaya_asuransi' => $biaya_asuransi,
-                    'id_perusahaan_asuransi' => $id_perusahaan_asuransi]);
+                    'no_kontrak_asuransi' => $no_kontrak_asuransi,
+                    'tgl_kontrak_asuransi' => $tgl_kontrak_asuransi,
+                    'lama_kontrak_asuransi' => $lama_kontrak_asuransi,
+                    'perihal_kontrak_asuransi' => $perihal_kontrak_asuransi]);
     
     $affectedrows = $stmt->rowCount();
     if ($affectedrows == '0') {
@@ -303,6 +323,22 @@ if (isset($_POST['submit'])) {
                                                     </option>
                                                 <?php } ?>
                                             </select>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>No Kontrak Asuransi:</b></span>
+                                            <input type="text" name="no_kontrak_asuransi" placeholder="No Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Tanggal Kontrak Asuransi:</b></span>
+                                            <input type="date" name="tgl_kontrak_asuransi" placeholder="Tanggal Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Lama Kontrak Asuransi:</b></span>
+                                            <input type="text" name="lama_kontrak_asuransi" placeholder="Lama Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Perihal Kontrak Asuransi:</b></span>
+                                            <input type="text" name="perihal_kontrak_asuransi" placeholder="Perihal Kontrak Asuransi" required>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">

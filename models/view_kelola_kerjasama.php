@@ -26,6 +26,26 @@ $sqlkerjasamaSelect = "SELECT * FROM t_kerjasama
 $stmt = $pdo->prepare($sqlkerjasamaSelect);
 $stmt->execute();
 $rowKerjasama = $stmt->fetchAll();
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -284,19 +304,19 @@ $rowKerjasama = $stmt->fetchAll();
                                         <tr>
                                             <td>ID Kerjasama</td>
                                             <td>Pihak Kerjasama</td>
-                                            <td>Pengadaan Fasilitas</td>
+                                            <td>No Kontrak Kerjasama</td>
+                                            <td>Tanggal Kontrak Kerjasama</td>
+                                            <td>Lama Kontrak Kerjasama</td>
+                                            <td>Perihal Kontrak Kerjasama</td>
                                             <td>Status Kerjasama</td>
-                                            <td>Pembagian Kerjasama</td>
-                                            <td>Biaya Kerjasama</td>
-                                            <td>Pembagian Hasil</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <?php 
-                                        foreach ($rowKerjasama as $kerjasama) {
-                                        $pembagian_kerjasama = round($kerjasama->pembagian_kerjasama * 100, 2);
+                                            foreach ($rowKerjasama as $kerjasama) {
+                                            $kerjasamadate = strtotime($kerjasama->tgl_kontrak_kerjasama);
                                         ?>
                                         <tr>
                                             <td><?=$kerjasama->id_kerjasama?></td>
@@ -307,7 +327,10 @@ $rowKerjasama = $stmt->fetchAll();
                                             <?php else : ?>
                                                 <td>Data Kosong</td>
                                             <?php endif ?>
-                                            <td><?=$kerjasama->pengadaan_fasilitas?></td>
+                                            <td><?=$kerjasama->no_kontrak_kerjasama?></td>
+                                            <td><?=strftime('%A, %d %B %Y', $kerjasamadate);?></td>
+                                            <td><?=$kerjasama->lama_kontrak_kerjasama?></td>
+                                            <td><?=$kerjasama->perihal_kontrak_kerjasama?></td>
                                             <td>
                                                 <?php 
                                                     if ($kerjasama->status_kerjasama == "Melakukan Kerjasama") { ?>
@@ -318,10 +341,9 @@ $rowKerjasama = $stmt->fetchAll();
                                                     <?=$kerjasama->status_kerjasama?>
                                                 <?php } ?>
                                             </td>
-                                            <td><?= $pembagian_kerjasama ?>%</td>
-                                            <td>Rp. <?=number_format($kerjasama->biaya_kerjasama, 0)?></td>
-                                            <td>Rp. <?=number_format($kerjasama->pembagian_hasil_kerjasama, 0)?></td>
                                             <td>
+                                                <button class="modol-btn button-kelola-detail">
+                                                    <a href="detail_data_kerjasama?id_kerjasama=<?=$kerjasama->id_kerjasama?>" style="color: #fff">Detail</button>
                                                 <button class="button-kelola-edit ">
                                                     <a href="edit_data_kerjasama?id_kerjasama=<?=$kerjasama->id_kerjasama?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">

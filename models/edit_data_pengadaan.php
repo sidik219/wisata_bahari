@@ -33,15 +33,18 @@ if (isset($_POST['submit'])) {
     if ($_POST['submit'] == 'Simpan') {
         $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'];
         $status_pengadaan       = $_POST['status_pengadaan'];
+        $tgl_pengadaan          = $_POST['tgl_pengadaan'];
 
         $sqlasuransiCreate = "UPDATE t_pengadaan_fasilitas
                             SET pengadaan_fasilitas = :pengadaan_fasilitas,
-                                status_pengadaan = :status_pengadaan
+                                status_pengadaan = :status_pengadaan,
+                                tgl_pengadaan = :tgl_pengadaan
                             WHERE id_pengadaan = :id_pengadaan";
         
         $stmt = $pdo->prepare($sqlasuransiCreate);
         $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
                         'status_pengadaan' => $status_pengadaan,
+                        'tgl_pengadaan' => $tgl_pengadaan,
                         'id_pengadaan' => $id_pengadaan]);
         
         $affectedrows = $stmt->rowCount();
@@ -295,6 +298,7 @@ if (isset($_POST['submit'])) {
                                                         <option value="Rusak">Rusak</option>
                                                         <option value="Hilang">Hilang</option>
                                                     </select>
+                                                    <input type="date" name="tgl_pengadaan" value="<?= $rowPengadaan->tgl_pengadaan ?>" placeholder="Tanggal Pengadaan" style="margin-top: 0.3rem;" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -305,27 +309,6 @@ if (isset($_POST['submit'])) {
                                     <!-- End Form -->
 
                                 </form>
-
-                                <!-- copy pengadaan -->
-                                <div class="input-box">
-                                    <div class="fieldGroupCopy" style="display: none;">
-                                        <div class="">
-                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                            <select name="status_pengadaan[]" required>
-                                                <option selected value="">Pilih Status Pengadaan</option>
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-box">
-                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
-                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -348,27 +331,6 @@ if (isset($_POST['submit'])) {
     <!-- All Javascript -->
     <!-- Menambah jumlah form input -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-        //group add limit
-        var maxGroup = 10;
-
-        //add more fields group
-        $(".addMore").click(function(){
-            if($('body').find('.fieldGroup').length < maxGroup){
-                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
-                $('body').find('.fieldGroup:last').after(fieldHTML);
-            }else{
-                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
-            }
-        });
-
-        //remove fields group
-        $("body").on("click",".remove",function(){
-            $(this).parents(".fieldGroup").remove();
-        });
-    });
-    </script>
 
 </body>
 </html>

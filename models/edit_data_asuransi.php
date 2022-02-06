@@ -36,16 +36,24 @@ if (isset($_POST['submit'])) {
     $notlp_perusahaan_asuransi  = $_POST['notlp_perusahaan_asuransi'];
 
     // Asuransi
-    $id_asuransi = $_POST["id_asuransi"];
-    $nama_asuransi = $_POST['nama_asuransi'];
-    $biaya_asuransi = $_POST['biaya_asuransi'];
+    $id_asuransi                = $_POST["id_asuransi"];
+    $nama_asuransi              = $_POST['nama_asuransi'];
+    $biaya_asuransi             = $_POST['biaya_asuransi'];
+    $no_kontrak_asuransi        = $_POST['no_kontrak_asuransi'];
+    $tgl_kontrak_asuransi       = $_POST['tgl_kontrak_asuransi'];
+    $lama_kontrak_asuransi      = $_POST['lama_kontrak_asuransi'];
+    $perihal_kontrak_asuransi   = $_POST['perihal_kontrak_asuransi'];
 
     $hitung = count($id_asuransi);
     for ($x = 0; $x < $hitung; $x++) {
         $sqlasuransi = "UPDATE t_asuransi
         SET id_perusahaan_asuransi = :id_perusahaan_asuransi,
             nama_asuransi = :nama_asuransi,
-            biaya_asuransi = :biaya_asuransi
+            biaya_asuransi = :biaya_asuransi,
+            no_kontrak_asuransi = :no_kontrak_asuransi,
+            tgl_kontrak_asuransi = :tgl_kontrak_asuransi,
+            lama_kontrak_asuransi = :lama_kontrak_asuransi,
+            perihal_kontrak_asuransi = :perihal_kontrak_asuransi
         WHERE id_asuransi = :id_asuransi";
 
         $stmt = $pdo->prepare($sqlasuransi);
@@ -53,6 +61,10 @@ if (isset($_POST['submit'])) {
             'id_asuransi' => $id_asuransi[$x],
             'nama_asuransi' => $nama_asuransi[$x],
             'biaya_asuransi' => $biaya_asuransi[$x],
+            'no_kontrak_asuransi' => $no_kontrak_asuransi[$x],
+            'tgl_kontrak_asuransi' => $tgl_kontrak_asuransi[$x],
+            'lama_kontrak_asuransi' => $lama_kontrak_asuransi[$x],
+            'perihal_kontrak_asuransi' => $perihal_kontrak_asuransi[$x],
             'id_perusahaan_asuransi' => $id_perusahaan_asuransi
         ]);
     }
@@ -308,17 +320,17 @@ if (isset($_POST['submit'])) {
                                         <input type="hidden" name="id_asuransi" value="<?= $rowAsuransi->id_asuransi ?>">
 
                                         <div class="input-box">
-                                            <span class="details">Nama Asuransi</span>
+                                            <span class="details"><b>Nama Asuransi:</b></span>
                                             <input type="text" name="nama_asuransi[]" value="<?=$rowAsuransi->nama_asuransi?>" placeholder="Nama Asuransi" required>
                                         </div>
                                         <div class="input-box">
-                                            <span class="details">Biaya Asuransi</span>
+                                            <span class="details"><b>Biaya Asuransi:</b></span>
                                             <input type="text" name="biaya_asuransi[]" value="<?=$rowAsuransi->biaya_asuransi?>" placeholder="Biaya Asuransi" required>
                                         </div>
 
                                         <!-- Perusahaan Asuransi -->
                                         <div class="input-box">
-                                            <span class="details">Perusahaan Asuransi</span>
+                                            <span class="details"><b>Perusahaan Asuransi:</b></span>
                                             <select name="nama_pihak" required>
                                                 <option selected value="">Pilih Perusahaan Asuransi:</option>
                                                 <?php
@@ -342,6 +354,22 @@ if (isset($_POST['submit'])) {
                                         <div class="input-box">
                                             <span class="details"><b>No Telp Perusahaan:</b></span>
                                             <input type="tel" name="notlp_perusahaan_asuransi" value="<?=$rowAsuransi->notlp_perusahaan_asuransi?>" placeholder="No Telp Perusahaan" pattern="^[0-9-+\s()]*$" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>No Kontrak Asuransi:</b></span>
+                                            <input type="text" name="no_kontrak_asuransi[]" value="<?=$rowAsuransi->no_kontrak_asuransi?>" placeholder="No Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Tanggal Kontrak Asuransi:</b></span>
+                                            <input type="date" name="tgl_kontrak_asuransi[]" value="<?=$rowAsuransi->tgl_kontrak_asuransi?>" placeholder="Tanggal Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details"><b>Lama Kontrak Asuransi:</b></span>
+                                            <input type="text" name="lama_kontrak_asuransi[]" value="<?=$rowAsuransi->lama_kontrak_asuransi?>" placeholder="Lama Kontrak Asuransi" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <span class="details">Perihal Kontrak Asuransi:</span>
+                                            <input type="text" name="perihal_kontrak_asuransi[]" value="<?=$rowAsuransi->perihal_kontrak_asuransi?>" placeholder="Perihal Kontrak Asuransi" required>
                                         </div>
                                     </div>
                                     <div class="button-kelola-form">

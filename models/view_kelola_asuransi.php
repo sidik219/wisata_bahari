@@ -26,6 +26,26 @@ $sqlasuransiSelect = "SELECT * FROM t_asuransi
 $stmt = $pdo->prepare($sqlasuransiSelect);
 $stmt->execute();
 $rowAsuransi = $stmt->fetchAll();
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -283,11 +303,13 @@ $rowAsuransi = $stmt->fetchAll();
                                     <thead>
                                         <tr>
                                             <td>ID Asuransi</td>
-                                            <td>Nama Asuransi</td>
-                                            <td>Biaya Asuransi</td>
                                             <td>Perusahaan Asuransi</td>
                                             <td>Alamat Perusahaan</td>
                                             <td>No Telp Perusahaan</td>
+                                            <td>No Kontrak Asuransi</td>
+                                            <td>Tanggal Kontrak Asuransi</td>
+                                            <td>Lama Kontrak Asuransi</td>
+                                            <td>Perihal Kontrak Asuransi</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
@@ -295,15 +317,20 @@ $rowAsuransi = $stmt->fetchAll();
                                     <tbody>
                                         <?php 
                                             foreach ($rowAsuransi as $asuransi) {
+                                            $asuransidate = strtotime($asuransi->tgl_kontrak_asuransi);
                                         ?>
                                         <tr>
                                             <td><?=$asuransi->id_asuransi?></td>
-                                            <td><?=$asuransi->nama_asuransi?></td>
-                                            <td>Rp. <?=number_format($asuransi->biaya_asuransi, 0)?></td>
                                             <td><?=$asuransi->nama_perusahaan_asuransi?></td>
                                             <td><?=$asuransi->alamat_perusahaan_asuransi?></td>
                                             <td><?=$asuransi->notlp_perusahaan_asuransi?></td>
+                                            <td><?=$asuransi->no_kontrak_asuransi?></td>
+                                            <td><?=strftime('%A, %d %B %Y', $asuransidate);?></td>
+                                            <td><?=$asuransi->lama_kontrak_asuransi?></td>
+                                            <td><?=$asuransi->perihal_kontrak_asuransi?></td>
                                             <td>
+                                                <button class="modol-btn button-kelola-detail">
+                                                    <a href="detail_data_asuransi?id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Detail</button>
                                                 <button class="button-kelola-edit ">
                                                     <a href="edit_data_asuransi?id_asuransi=<?=$asuransi->id_asuransi?>" style="color: #fff">Edit</a></button>
                                                 <button class="button-kelola-hapus">

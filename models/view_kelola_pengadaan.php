@@ -25,6 +25,26 @@ $sqlpengadaanSelect = "SELECT * FROM t_pengadaan_fasilitas
 $stmt = $pdo->prepare($sqlpengadaanSelect);
 $stmt->execute();
 $rowPengadaan = $stmt->fetchAll();
+
+function ageCalculator($dob){
+    $birthdate = new DateTime($dob);
+    $today   = new DateTime('today');
+    $ag = $birthdate->diff($today)->y;
+    $mn = $birthdate->diff($today)->m;
+    $dy = $birthdate->diff($today)->d;
+    if ($mn == 0)
+    {
+        return "$dy Hari";
+    }
+    elseif ($ag == 0)
+    {
+        return "$mn Bulan  $dy Hari";
+    }
+    else
+    {
+        return "$ag Tahun $mn Bulan $dy Hari";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -279,6 +299,7 @@ $rowPengadaan = $stmt->fetchAll();
                                             <td>ID Pengadaan Fasilitas</td>
                                             <td>Pengadaan Fasilitas</td>
                                             <td>Status Pengadaan</td>
+                                            <td>Tanggal Pengadaan</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
@@ -286,11 +307,13 @@ $rowPengadaan = $stmt->fetchAll();
                                     <tbody>
                                         <?php 
                                             foreach ($rowPengadaan as $pengadaan) {
+                                            $pengadaandate = strtotime($pengadaan->tgl_pengadaan);
                                         ?>
                                         <tr>
                                             <td><?=$pengadaan->id_pengadaan?></td>
                                             <td><?=$pengadaan->pengadaan_fasilitas?></td>
                                             <td><?=$pengadaan->status_pengadaan?></td>
+                                            <td><?=strftime('%A, %d %B %Y', $pengadaandate);?></td>
                                             <td>
                                                 <button class="button-kelola-edit ">
                                                     <a href="edit_data_pengadaan?id_pengadaan=<?=$pengadaan->id_pengadaan?>" style="color: #fff">Edit</a></button>

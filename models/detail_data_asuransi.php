@@ -9,6 +9,8 @@ if (!$_SESSION['level_user']) {
     $level      = $_SESSION['level_user'];
 }
 
+$id_asuransi = $_GET['id_asuransi'];
+
 $defaultpic = "../views/img/image_default.jpg";
 
 // Select All Data User
@@ -19,33 +21,12 @@ $stmt = $pdo->prepare($sqluserSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
 $rowUser2 = $stmt->fetch();
 
-if (isset($_POST['submit'])) {
-    if ($_POST['submit'] == 'Simpan') {
-        $i = 0;
-        foreach ($_POST['pengadaan_fasilitas'] as $pengadaan_fasilitas) {
-            $pengadaan_fasilitas    = $_POST['pengadaan_fasilitas'][$i];
-            $status_pengadaan       = $_POST['status_pengadaan'][$i];
-            $tgl_pengadaan          = $_POST['tgl_pengadaan'][$i];
+$sqlasuransiSelect = 'SELECT * FROM t_asuransi
+                WHERE t_asuransi.id_asuransi = :id_asuransi';
 
-            $sqlasuransiCreate = "INSERT INTO t_pengadaan_fasilitas
-                                (pengadaan_fasilitas, status_pengadaan, tgl_pengadaan)
-                                VALUE (:pengadaan_fasilitas, :status_pengadaan, :tgl_pengadaan)";
-            
-            $stmt = $pdo->prepare($sqlasuransiCreate);
-            $stmt->execute(['pengadaan_fasilitas' => $pengadaan_fasilitas,
-                            'status_pengadaan' => $status_pengadaan,
-                            'tgl_pengadaan' => $tgl_pengadaan]);
-            
-            $affectedrows = $stmt->rowCount();
-            if ($affectedrows == '0') {
-                header("Location: create_data_pengadaan?status=tambahGagal");
-            } else {
-                header("Location: view_kelola_pengadaan?status=tambahBerhasil");
-            }
-            $i++;
-        }
-    }
-}
+$stmt = $pdo->prepare($sqlasuransiSelect);
+$stmt->execute(['id_asuransi' => $_GET['id_asuransi']]);
+$rowAsuransi = $stmt->fetch();
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +50,7 @@ if (isset($_POST['submit'])) {
     <input type="checkbox" id="tombol-gacha"> 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
+            <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
             <?php if ($level == 2 || $level == 4) { ?>
             <h2><a href="view_dashboard_admin" style="color: #fff"><span class="fas fa-atom"></span>
             <span>Wisata Bahari</span></a></h2>
@@ -107,7 +88,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
+                    <a href="view_kelola_asuransi" class="paimon-active">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
@@ -117,7 +98,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -166,7 +147,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Paket Wisata</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_asuransi">
+                    <a href="view_kelola_asuransi" class="paimon-active">
                     <span class="fas fa-heartbeat"></span>
                         <span>Kelola Asuransi</span></a>
                 </li>
@@ -176,7 +157,7 @@ if (isset($_POST['submit'])) {
                         <span>Kelola Kerjasama</span></a>
                 </li>
                 <li>
-                    <a href="view_kelola_pengadaan" class="paimon-active">
+                    <a href="view_kelola_pengadaan">
                     <span class="fas fa-truck-loading"></span>
                         <span>Kelola Pengadaan</span></a>
                 </li>
@@ -228,7 +209,7 @@ if (isset($_POST['submit'])) {
                 <input type="text" placeholder="Cari lokasi pantai">
             </div>-->
 
-            <!-- Hak Akses Pengelola Wilayah atau Provinsi-->
+            <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
             <?php if ($level == 2 || $level == 4) { ?>
             <div class="user-wrapper">
                 <!-- <img src="../views/img/paimon-5.png" width="50px" height="50px" alt=""> -->
@@ -241,27 +222,15 @@ if (isset($_POST['submit'])) {
             <?php } ?>
         </header>
         
-        <!-- Hak Akses Pengelola Wilayah atau Provinsi -->
+        <!-- Hak Akses Pengelola Lokasi atau Wilayah atau Provinsi-->
         <?php if ($level == 2 || $level == 4) { ?>
         <!-- Main -->
         <main>
             <!-- Button Kembali -->
             <div>
             <button class="button-kelola-kembali"><span class="fas fa-arrow-left"></span>
-            <a href="view_kelola_pengadaan" style="color: white;">Kembali</a></button>
+            <a href="view_kelola_asuransi" style="color: white;">Kembali</a></button>
             </div>
-
-            <!-- Notifikasi -->
-            <?php
-                if(!empty($_GET['status'])){
-                    if($_GET['status'] == 'tambahGagal'){
-                        echo '<div class="notif-gagal" role="alert">
-                        <i class="fa fa-exclamation"></i>
-                            Data pengadaan gagal ditambahkan.
-                        </div>';
-                    }
-                }
-            ?>
 
             <!-- Full Area -->
             <div class="full-area-kelola">
@@ -269,64 +238,25 @@ if (isset($_POST['submit'])) {
                 <div class="area-A">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Input Data Pengadaan Fasilitas</h2>
+                            <h2>Detail Data Asuransi</h2>
                         </div>
 
                         <div class="card-body">
                             <div class="table-portable">
                                 <form action="#" method="POST" enctype="multipart/form-data">
-                                    
                                     <!-- Form Create Fasilitas Wisata -->
-                                    <div class="kelola-detail">
+                                    <div class="kelola-detail-paket">
                                         <div class="input-box">
-                                            <div class="fieldGroup">
-                                                <div class="">
-                                                    <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                                    <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                                    <select name="status_pengadaan[]" required>
-                                                        <option selected value="">Pilih Status Pengadaan</option>
-                                                        <option value="Baik">Baik</option>
-                                                        <option value="Rusak">Rusak</option>
-                                                        <option value="Hilang">Hilang</option>
-                                                    </select>
-                                                    <input type="date" name="tgl_pengadaan[]" placeholder="Tanggal Pengadaan" style="margin-top: 0.3rem;" required />
-                                                </div>
-                                                <div class="input-box">
-                                                    <a href="javascript:void(0)" class="btn-tambah-fasilitas addMore">
-                                                        <span class="fas fas fa-plus" aria-hidden="true"></span> Tambah pengadaan
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            <span class="details"><b>Nama Asuransi:</b></span>
+                                            <input type="text" value="<?=$rowAsuransi->nama_asuransi?>" readonly>
                                         </div>
-                                    </div>
-                                    <div class="button-kelola-form">
-                                        <input type="submit" name="submit" value="Simpan">
+                                        <div class="input-box">
+                                            <span class="details"><b>Biaya Asuransi:</b></span>
+                                            <input type="text" value=" Rp. <?=number_format($rowAsuransi->biaya_asuransi, 0)?>" readonly>
+                                        </div>
                                     </div>
                                     <!-- End Form -->
-
                                 </form>
-
-                                <!-- copy pengadaan -->
-                                <div class="input-box">
-                                    <div class="fieldGroupCopy" style="display: none;">
-                                        <div class="">
-                                            <span class="details"><b>Pengadaan Fasilitas:</b></span>
-                                            <input type="text" name="pengadaan_fasilitas[]" placeholder="Pengadaan Fasilitas" style="margin-bottom: 0.3rem;" required />
-                                            <select name="status_pengadaan[]" required>
-                                                <option selected value="">Pilih Status Pengadaan</option>
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                            <input type="date" name="tgl_pengadaan[]" placeholder="Tanggal Pengadaan" style="margin-top: 0.3rem;" required />
-                                        </div>
-                                        <div class="input-box">
-                                            <a href="javascript:void(0)" class="btn-hapus-fasilitas remove">
-                                                <span class="fas fas fa-minus" aria-hidden="true"></span> Hapus pengadaan
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,31 +275,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Bootstrap 5 JS -->
     <script src="../plugins/bootstrap-5/js/bootstrap.js"></script>
-
-    <!-- All Javascript -->
-    <!-- Menambah jumlah form input -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-        //group add limit
-        var maxGroup = 10;
-
-        //add more fields group
-        $(".addMore").click(function(){
-            if($('body').find('.fieldGroup').length < maxGroup){
-                var fieldHTML = '<div class="fieldGroup">'+$(".fieldGroupCopy").html()+'</div>';
-                $('body').find('.fieldGroup:last').after(fieldHTML);
-            }else{
-                alert('Maksimal '+maxGroup+' pengadaan fasilitas yang boleh dibuat.');
-            }
-        });
-
-        //remove fields group
-        $("body").on("click",".remove",function(){
-            $(this).parents(".fieldGroup").remove();
-        });
-    });
-    </script>
 
 </body>
 </html>
