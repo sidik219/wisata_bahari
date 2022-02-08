@@ -387,11 +387,13 @@ function alertPembayaran($dob)
                                                     $tanggal_pesan  = new DateTime($reservasi->tanggal_pesan);
                                                     $today          = new DateTime('today');
 
-                                                    if (($tanggal_pesan->diff($today))->d > 2 && ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) && ($reservasi->id_status_reservasi == 1)) { ?>
+                                                    if (($tanggal_pesan->diff($today))->d > 1 && ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) && ($reservasi->id_status_reservasi == 1)) { ?>
                                                         <!--Tombol batalkan reservasi -->
-                                                        <a href="all_hapus.php?type=reservasi_wisata&id_reservasi_wisata=<?= $reservasi->id_reservasi_wisata ?>" class="button-kelola-hapus" onclick="return konfirmasiHapus(event)">
-                                                            <i class="fas fa-times"></i> Batalkan Reservasi
-                                                        </a>
+                                                        <button class="button-kelola-hapus">
+                                                            <a href="all_hapus.php?type=reservasi_wisata&id_reservasi_wisata=<?= $reservasi->id_reservasi_wisata ?>" style="color: #fff;" onclick="return konfirmasiHapus(event)">
+                                                                <i class="fas fa-times"></i> Batalkan Reservasi
+                                                            </a>
+                                                        </button>
                                                     <?php } ?>
                                                 </div>
                                             </td>
