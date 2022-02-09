@@ -25,7 +25,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                         WHERE t_reservasi_wisata.id_user = :id_user
-                        ORDER BY update_terakhir DESC';
+                        ORDER BY tanggal_pesan DESC';
 
 $stmt = $pdo->prepare($sqlreservasiSelect);
 $stmt->execute(['id_user' => $_SESSION['id_user']]);
@@ -177,7 +177,7 @@ function ageCalculator($dob){
                         <?php 
                             foreach ($rowReservasi as $reservasi) {
 
-                            $truedate = strtotime($reservasi->update_terakhir);
+                            $truedate = strtotime($reservasi->tanggal_pesan);
                             $reservasidate = strtotime($reservasi->tgl_reservasi);
                         ?>
                         <div class="cards-detail">
@@ -221,7 +221,7 @@ function ageCalculator($dob){
                                     <b>Status Reservasi:</b><br>
                                     <i class="detail-reservasi-status far fa-bell"></i>
                                     <?=$reservasi->nama_status_reservasi?><br>
-                                    <small style="color: rgba(0, 0, 0, 0.5);"><b>Update Terakhir:</b>
+                                    <small style="color: rgba(0, 0, 0, 0.5);"><b>Tanggal Pesan:</b>
                                     <br><small><?=strftime('%A, %d %B %Y', $truedate);?></small></small><br>
                                 </p>
                                 <p class="cards-detail__text">

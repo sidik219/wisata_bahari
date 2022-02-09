@@ -25,7 +25,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                        ORDER BY update_terakhir DESC';
+                        ORDER BY tanggal_pesan DESC';
 
 $stmt = $pdo->prepare($sqlreservasiSelect);
 $stmt->execute();
@@ -369,7 +369,7 @@ function alertPembayaran($dob)
                                     <?php
                                         foreach ($rowReservasi as $reservasi) {
 
-                                        $truedate = strtotime($reservasi->update_terakhir);
+                                        $truedate = strtotime($reservasi->tanggal_pesan);
                                         $reservasidate = strtotime($reservasi->tgl_reservasi);
                                     ?>
                                         <tr>

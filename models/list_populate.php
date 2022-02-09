@@ -438,6 +438,9 @@ $rowreservasi = $stmt->fetch();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>
@@ -591,6 +594,9 @@ $row = $stmt->fetchAll();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>
@@ -753,6 +759,9 @@ $row = $stmt->fetchAll();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>
@@ -899,6 +908,9 @@ $row = $stmt->fetchAll();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>
@@ -1051,6 +1063,9 @@ $row = $stmt->fetchAll();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>
@@ -1197,6 +1212,9 @@ $row = $stmt->fetchAll();
             <td></td>
             <td></td>
             <td></td>
+            <?php
+            $laporandate = strtotime(date('d-m-Y'));
+            ?>
             <td colspan="2" style="text-align: center;">
                 <?=strftime('%A, %e %B %Y', $laporandate);?>
             </td>

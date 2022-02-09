@@ -44,7 +44,6 @@ if (isset($_POST['submit'])) {
         $nomor_rekening_wisatawan   = $_POST['nomor_rekening_wisatawan'];
 
         //var_dump($jumlah_donasi); exit();
-        $tanggal_sekarang = date ('Y-m-d H:i:s', time());
         $tanggal_pesan = date('Y-m-d', time());
 
         $sqlreservasiCreate = "INSERT INTO t_reservasi_wisata (id_user,
@@ -57,8 +56,7 @@ if (isset($_POST['submit'])) {
                                                             keterangan_reservasi,
                                                             nama_bank_wisatawan,
                                                             nama_rekening_wisatawan,
-                                                            nomor_rekening_wisatawan,
-                                                            update_terakhir)
+                                                            nomor_rekening_wisatawan)
                                 VALUES (:id_user,
                                         :id_paket_wisata,
                                         :id_status_reservasi,
@@ -69,8 +67,7 @@ if (isset($_POST['submit'])) {
                                         :keterangan_reservasi,
                                         :nama_bank_wisatawan,
                                         :nama_rekening_wisatawan,
-                                        :nomor_rekening_wisatawan,
-                                        :update_terakhir)";
+                                        :nomor_rekening_wisatawan)";
         
         $stmt = $pdo->prepare($sqlreservasiCreate);
         $stmt->execute(['id_user' => $id_user,
@@ -83,8 +80,7 @@ if (isset($_POST['submit'])) {
                         'keterangan_reservasi' => $keterangan_reservasi,
                         'nama_bank_wisatawan' => $nama_bank_wisatawan,
                         'nama_rekening_wisatawan' => $nama_rekening_wisatawan,
-                        'nomor_rekening_wisatawan' => $nomor_rekening_wisatawan,
-                        'update_terakhir' => $tanggal_sekarang]);
+                        'nomor_rekening_wisatawan' => $nomor_rekening_wisatawan]);
         
         $affectedrows = $stmt->rowCount();
         if ($affectedrows == '0') {

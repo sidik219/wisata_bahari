@@ -23,21 +23,25 @@ if (isset($_POST['submit'])) {
     if ($_POST['submit'] == 'Simpan') {
         $i = 0;
         foreach ($_POST['nama_fasilitas'] as $nama_fasilitas) {
-            $id_wisata          = $_POST['id_wisata'];
-            $id_kerjasama       = $_POST['nama_fasilitas'][$i];
-            $tanggal_sekarang   = date ('Y-m-d H:i:s', time());
+            $id_wisata              = $_POST['id_wisata'];
+            $id_kerjasama           = $_POST['nama_fasilitas'][$i];
+            $kode_fasilitas_wisata  = $_POST['kode_fasilitas_wisata'][$i];
+            $tanggal_sekarang       = date ('Y-m-d H:i:s', time());
 
             $sqlasuransiCreate = "INSERT INTO t_fasilitas_wisata
                                 (id_wisata,
                                 id_kerjasama,
+                                kode_fasilitas_wisata,
                                 update_terakhir)
                                 VALUE (:id_wisata,
                                         :id_kerjasama,
+                                        :kode_fasilitas_wisata,
                                         :update_terakhir)";
             
             $stmt = $pdo->prepare($sqlasuransiCreate);
             $stmt->execute(['id_wisata' => $id_wisata,
                             'id_kerjasama' => $id_kerjasama,
+                            'kode_fasilitas_wisata' => $kode_fasilitas_wisata,
                             'update_terakhir' => $tanggal_sekarang]);
             
             $affectedrows = $stmt->rowCount();
@@ -285,7 +289,9 @@ if (isset($_POST['submit'])) {
                                     <!-- Form Create Fasilitas Wisata -->
                                     <div class="kelola-detail fieldGroup">
                                         <div class="input-box">
-                                            <span class="details"><b>Nama Fasilitas:</b></span>
+                                            <span class="details"><b>Kode Wisata Fasilitas:</b></span>
+                                            <input type="text" name="kode_fasilitas_wisata[]" placeholder="Kode Fasilitas Wisata" style="margin-bottom: 0.3rem;" required />
+                                            <span class="details"><b>Nama Wisata:</b></span>
                                             <select name="nama_fasilitas[]" required>
                                                 <option selected value="">Pilih Fasilitas Wisata</option>
                                                 <?php
@@ -326,6 +332,8 @@ if (isset($_POST['submit'])) {
                                 <!-- copy of input fields group -->
                                 <div class="kelola-detail fieldGroupCopy" style="display: none;">
                                     <div class="input-box">
+                                        <span class="details"><b>Kode Fasilitas Wisata:</b></span>
+                                        <input type="text" name="kode_fasilitas_wisata[]" placeholder="Kode Fasilitas Wisata" style="margin-bottom: 0.3rem;" required />
                                         <span class="details"><b>Nama Fasilitas:</b></span>
                                         <select name="nama_fasilitas[]" required>
                                             <option selected value="">Pilih Fasilitas Wisata</option>

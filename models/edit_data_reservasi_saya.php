@@ -27,7 +27,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
                         WHERE t_reservasi_wisata.id_reservasi_wisata = :id_reservasi_wisata
-                        ORDER BY update_terakhir DESC';
+                        ORDER BY tanggal_pesan DESC';
 
 $stmt = $pdo->prepare($sqlreservasiSelect);
 $stmt->execute(['id_reservasi_wisata' => $_GET['id_reservasi_wisata']]);
