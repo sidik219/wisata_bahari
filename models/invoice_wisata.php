@@ -5,12 +5,13 @@ include '../app/database/koneksi.php';
 class myPDF extends FPDF{
     function header(){
         global $pdo;
+        $this->Image('../views/img/Karawang.png', 10, 3, -2500); //Logo, Kiri-Atas,Kanan-Bawah
         //$this->Image('../views/img/KKPlogo.png', 10, 3, -2500); //Logo, Kiri-Atas,Kanan-Bawah
         //$this->Image('images/bg-invoice.png', 5, 30, 287, -550); //Bg-Invoice, Kiri-Atas,Kanan-Bawah
         $this->Image('../views/img/bg-invoice-line.png', 8, 34, 158, -2400); //Line-Invoice-kiri, Kiri-Atas,Kanan-Bawah
         $this->Image('../views/img/bg-invoice-line.png', 168, 34, 121, -2400); //Line-Invoice-kanan, Kiri-Atas,Kanan-Bawah
         $this->SetFont('Arial', 'B', 14);
-        $this->cell(276, 5, 'INVOICE RESERVASI WISATA', 0, 0, 'C');
+        $this->cell(276, 5, 'WISATA BAHARI PANTAI TANGOLAK', 0, 0, 'C');
         $this->Ln();
         $this->SetFont('Times', '', 12);
 
@@ -31,6 +32,9 @@ class myPDF extends FPDF{
         $this->Cell(276, 10, $rowitem->deskripsi_lokasi, 0, 0, 'C');
         }
         $this->Ln(20);
+        $this->SetFont('Arial', 'B', 12);
+        $this->cell(276, 5, 'INVOICE', 0, 100, 'C');
+        $this->Ln(15);
     }
 
     function footer(){
@@ -101,7 +105,7 @@ class myPDF extends FPDF{
             $this->Cell(55, 5, 'Status Reservasi', 0, 0);
             $this->Cell(117, 5, ': '.$rowitem->nama_status_reservasi, 0, 1);
 
-            $this->Line(10, 55, 286, 55); //Line Tengah
+            $this->Line(10, 75, 286, 75); //Line Tengah
 
             $this->Ln(10);
             $this->Cell(55, 5, 'Nama Rekening Pengelola', 0, 0);
@@ -111,7 +115,7 @@ class myPDF extends FPDF{
             $this->Cell(55, 5, 'Nomor Rekening Pengelola ', 0, 0);
             $this->Cell(117, 5, ': '.$rowitem->nomor_rekening, 0, 1);
 
-            $this->Line(10, 85, 286, 85); //Line Bawah
+            $this->Line(10, 100, 286, 100); //Line Bawah
 
             $this->Ln(10);
             $this->Cell(55, 5, 'Keterangan', 0, 0);

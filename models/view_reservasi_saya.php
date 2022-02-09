@@ -182,7 +182,24 @@ function ageCalculator($dob){
                         ?>
                         <div class="cards-detail">
                             <div class="cards-detail__img">
-                                <img src="<?=$reservasi->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100px">
+                                <!-- carousel -->
+                                <div class="pic-ctn-2">
+                                    <img src="<?=$reservasi->foto_paket_wisata?>?<?php if ($status='nochange'){echo time();}?>" width="100%">
+
+                                    <!-- Select Wisata -->
+                                    <?php
+                                    $sqlpaketSelect = 'SELECT * FROM t_wisata
+                                                    LEFT JOIN t_paket_wisata ON t_wisata.id_paket_wisata = t_paket_wisata.id_paket_wisata
+                                                    WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
+
+                                    $stmt = $pdo->prepare($sqlpaketSelect);
+                                    $stmt->execute(['id_paket_wisata' => $reservasi->id_paket_wisata]);
+                                    $rowWisata = $stmt->fetchAll();
+
+                                    foreach ($rowWisata as $wisata) { ?>
+                                    <img class="pic" src="<?=$wisata->foto_wisata?>" width="100%" height="100%">
+                                    <?php } ?>
+                                </div>
                             </div>
                             <div class="cards-detail__info">
                                 <div class="cards-detail__date">
