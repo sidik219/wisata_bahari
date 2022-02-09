@@ -233,11 +233,11 @@ $rowPaket = $stmt->fetchAll();
                                 <!-- Asuransi -->
                                 <p class="cards-detail__text">
                                     <span style="font-weight:normal; font-size: 1.2rem;">
-                                        <b>Asuransi: </b><?=$paket->nama_asuransi?>
+                                        <b>Asuransi: </b>
                                     </span><br>
 
                                     <?php
-                                    $sqlasuransiSelect = 'SELECT biaya_asuransi FROM t_paket_wisata
+                                    $sqlasuransiSelect = 'SELECT * FROM t_paket_wisata
                                                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                                                         WHERE t_paket_wisata.id_paket_wisata = :id_paket_wisata';
 
@@ -247,7 +247,7 @@ $rowPaket = $stmt->fetchAll();
 
                                     foreach ($rowAsuransi as $asuransi) { ?>
                                     <i class="detail-paket-asuransi fas fa-heartbeat"></i>
-                                    <small>Rp. <?=number_format($asuransi->biaya_asuransi, 0)?></small>
+                                    <small><?=$paket->nama_asuransi?></small>
                                     <?php } ?>
                                 </p>
 

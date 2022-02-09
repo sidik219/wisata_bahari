@@ -327,7 +327,7 @@ if (isset($_POST['submit'])) {
                                         <!-- Asuransi -->
                                         <div class="input-box">
                                             <span class="details">
-                                                <b>Asuransi: </b><?=$paket->nama_asuransi?>
+                                                <b>Asuransi: </b>
                                             </span>
                                             <?php
                                             $sqlasuransiSelect = 'SELECT biaya_asuransi FROM t_paket_wisata
@@ -343,7 +343,7 @@ if (isset($_POST['submit'])) {
                                             <input type="hidden" id="biaya_asuransi" value="<?=$asuransi->biaya_asuransi?>">
 
                                             <i class="detail-reservasi-asuransi fas fa-heartbeat"></i>
-                                            Rp. <?=number_format($asuransi->biaya_asuransi, 0)?><br>
+                                            <?=$paket->nama_asuransi?><br>
                                             <?php } ?>
                                         </div>
 
