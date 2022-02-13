@@ -197,7 +197,7 @@ if (isset($_POST['submit'])) {
                                             
                                             <p><br><i class="detail-reservasi-metode fas fa-chevron-circle-right"></i>
                                             Bank Transfer (Konfirmasi Manual)
-                                            <br><small style="color: red;">Harap cek email anda dan upload bukti transfer agar reservasi wisata segera diproses pengelola lokasi.</small>
+                                            <!-- <br><small style="color: red;">Harap cek email anda dan upload bukti transfer agar reservasi wisata segera diproses pengelola lokasi.</small> -->
                                         </div>
 
                                         <hr class="jarak">
@@ -252,19 +252,19 @@ if (isset($_POST['submit'])) {
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-bank fas fa-hashtag"></i>    
-                                                            Nama Bank</div>
+                                                            Nama Bank Perusahaan</div>
                                                         <div class="divTableCell">: <?=$reservasi->nama_bank?></div>
                                                     </div>
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-nama fas fa-user-tie"></i>    
-                                                            Nama Rekening</div>
+                                                            Nama Rekening Perusahaan</div>
                                                         <div class="divTableCell">: <?=$reservasi->nama_rekening?></div>
                                                     </div>
                                                     <div class="divTableRow">
                                                         <div class="divTableCell">
                                                             <i class="detail-reservasi-nomor fas fa-university"></i>    
-                                                            Nomor Rekening</div>
+                                                            Nomor Rekening Perusahaan</div>
                                                         <div class="divTableCell">: <?=$reservasi->nomor_rekening?></div>
                                                     </div>
                                                 </div>

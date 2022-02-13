@@ -393,7 +393,7 @@ if (isset($_POST['submit'])) {
                                             
                                             <p><br><i class="detail-reservasi-metode fas fa-chevron-circle-right"></i>
                                             Bank Transfer (Konfirmasi Manual)
-                                            <br><small style="color: red;">Harap cek email anda dan upload bukti transfer agar reservasi wisata segera diproses pengelola lokasi.</small>
+                                            <!-- <br><small style="color: red;">Harap cek email anda dan upload bukti transfer agar reservasi wisata segera diproses pengelola lokasi.</small> -->
                                         </div>
 
                                         <div class="input-box">

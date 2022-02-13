@@ -422,7 +422,7 @@ if (isset($_POST['submit'])) {
                                             <div style="margin-bottom: 1rem">
                                                 <small>Hanya Menerima Bentuk File .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .csv, .zip, .rar</small>
                                             </div> 
-                                            <input class='form-control' type='file' name='dokumen_pengajuan' id='dokumen_pengajuan' accept='.doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .csv, .zip, .rar' required>
+                                            <input class='form-control' type='file' name='dokumen_pengajuan' id='dokumen_pengajuan' accept='.doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .csv, .zip, .rar'>
                                         </div>
                                         <?php } ?>
                                         <?php if ($level == 3 || $level == 4) { ?>

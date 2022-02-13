@@ -25,7 +25,7 @@ $sqlreservasiSelect = 'SELECT * FROM t_reservasi_wisata
                         LEFT JOIN t_lokasi ON t_paket_wisata.id_lokasi = t_lokasi.id_lokasi
                         LEFT JOIN t_asuransi ON t_paket_wisata.id_asuransi = t_asuransi.id_asuransi
                         LEFT JOIN t_status_reservasi ON t_reservasi_wisata.id_status_reservasi = t_status_reservasi.id_status_reservasi
-                        ORDER BY tanggal_pesan DESC';
+                        ORDER BY id_reservasi_wisata DESC';
 
 $stmt = $pdo->prepare($sqlreservasiSelect);
 $stmt->execute();
@@ -387,7 +387,7 @@ function alertPembayaran($dob)
                                                     $tanggal_pesan  = new DateTime($reservasi->tanggal_pesan);
                                                     $today          = new DateTime('today');
 
-                                                    if (($tanggal_pesan->diff($today))->d > 1 && ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) && ($reservasi->id_status_reservasi == 1)) { ?>
+                                                    if (($tanggal_pesan->diff($today))->d > 0 && ($_SESSION['level_user'] == 2 || $_SESSION['level_user'] == 4) && ($reservasi->id_status_reservasi == 1)) { ?>
                                                         <!--Tombol batalkan reservasi -->
                                                         <button class="button-kelola-hapus">
                                                             <a href="all_hapus.php?type=reservasi_wisata&id_reservasi_wisata=<?= $reservasi->id_reservasi_wisata ?>" style="color: #fff;" onclick="return konfirmasiHapus(event)">
