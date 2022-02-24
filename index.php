@@ -233,9 +233,9 @@ include 'app/database/koneksi.php';
                 <div class="row align-items-center">
                   <div class="col-12 col-xxl-7 px-2">
                     <div class="carousel-inner">
-                      <div class="carousel-item active"> <!-- h-100 -->
+                      <div class="carousel-item active h-100">
                         <div class="player" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY">
-                          <iframe width="420" height="650" src="assets/video/footage-wisata-bahari.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="width: 100%"></iframe>
+                          <iframe width="100%" height="650" src="assets/video/footage-wisata-bahari.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="width: 100%"></iframe>
                         </div>
                       </div>
                       <div class="carousel-item">
