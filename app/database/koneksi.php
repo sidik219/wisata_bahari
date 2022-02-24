@@ -1,8 +1,8 @@
 <?php
     $host        = "localhost";                             //localhost server
-    $db_user     = "id18449532_root";                                  //database username
-    $db_password = "S*Wd!1v|CL{oF}>$";                                      //database password
-    $db_name     = "id18449532_db_wisata_bahari";                      //database name
+    $db_user     = "root";                                  //database username
+    $db_password = "";                                      //database password
+    $db_name     = "db_wisata_bahari";                      //database name
     $dsn = 'mysql:host=' . $host . ';dbname=' . $db_name;
 
     global $pdo;

@@ -49,6 +49,16 @@ $rowPaket = $stmt->fetchAll();
     <link rel="stylesheet" href="../views/css/style-dashboard.css">
     <!-- Bootstrap 5 -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicons/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicons/favicon.ico">
+    <link rel="manifest" href="../assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="../assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
     <!-- Menu -->

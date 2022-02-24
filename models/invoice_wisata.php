@@ -129,11 +129,11 @@ class myPDF extends FPDF{
             //$this->SetTextColor(0, 0, 0);
             $this->Line(234, 170, 286, 170); //Line TTD
 
-            $this->Ln(50);
+            $this->Ln(30);
             //$this->Cell(224, 5, '', 0, 0);
             //$this->Cell(52, 5, $rowitem->nama_rekening, 0, 1, 'C');
             $this->Cell(224, 5, '', 0, 0);
-            $this->Cell(52, 5, 'Pengelola, '.$rowitem->nama_lokasi, 0, 1, 'C');
+            $this->Cell(52, 5, 'Pengelola '.$rowitem->nama_lokasi, 0, 1, 'C');
         }
     }
 }
